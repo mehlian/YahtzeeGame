@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace Yahtzee.UnitTests
+namespace Yahtzee.Core
 {
-    public class Class1
+    public enum DiceStatus
     {
+        Locked,
+        UnLocked
     }
 }
