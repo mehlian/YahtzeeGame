@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ChiSquared.cs" />
+    <Compile Include="ChiSquaredTests.cs" />
+    <Compile Include="DiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,9 +53,6 @@
       <Project>{42eacad1-58eb-4ca4-bb1a-6955b47d86fd}</Project>
       <Name>Yahtzee.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

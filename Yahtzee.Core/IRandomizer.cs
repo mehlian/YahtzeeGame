@@ -2,6 +2,6 @@
 {
     public interface IRandomizer
     {
-        int GetRandomInt();
+        int GetRandomInt(int minNumber, int maxNumber);
     }
 }

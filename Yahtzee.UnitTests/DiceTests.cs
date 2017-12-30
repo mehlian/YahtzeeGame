@@ -7,6 +7,9 @@ namespace Yahtzee.UnitTests
     [TestFixture]
     public class DiceTests
     {
+        private const int MIN_NUMBER = 1;
+        private const int MAX_NUMBER = 6;
+
         public Dice Make_Dice()
         {
             IRandomizer fakeRandomizer = Substitute.For<IRandomizer>();
@@ -33,7 +36,7 @@ namespace Yahtzee.UnitTests
         {
             IRandomizer fakeRandomizer = Substitute.For<IRandomizer>();
             Dice dice = new Dice(fakeRandomizer);
-            fakeRandomizer.GetRandomInt().Returns(expected);
+            fakeRandomizer.GetRandomInt(MIN_NUMBER, MAX_NUMBER).Returns(expected);
 
             int result = dice.Roll();
 
@@ -45,12 +48,13 @@ namespace Yahtzee.UnitTests
         {
             IRandomizer fakeRandomizer = Substitute.For<IRandomizer>();
             Dice dice = new Dice(fakeRandomizer);
-            fakeRandomizer.GetRandomInt().Returns(1);
+            int randomNumber = 1;
+            fakeRandomizer.GetRandomInt(MIN_NUMBER, MAX_NUMBER).Returns(randomNumber);
 
             dice.Roll();
             int result = dice.Result;
 
-            Assert.AreEqual(1, result);
+            Assert.AreEqual(randomNumber, result);
         }
 
     }
