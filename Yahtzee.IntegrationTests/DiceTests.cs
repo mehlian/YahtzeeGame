@@ -27,9 +27,9 @@ namespace Yahtzee.IntegrationTests
                 observed[dice.Result - 1]++;
             }
 
-            bool DieIsFair = chiSquared.CheckPValue(observed, expected, alfa);
+            bool dieIsFair = chiSquared.CheckPValue(observed, expected, alfa);
 
-            Assert.IsTrue(DieIsFair);
+            Assert.That(dieIsFair);
         }
     }
 }
