@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.Core", "Yahtzee.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.IntegrationTests", "Yahtzee.IntegrationTests\Yahtzee.IntegrationTests.csproj", "{D7A056C7-ECA0-403A-9269-9755F3E0DDFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.WinClient", "Yahtzee.WinClient\Yahtzee.WinClient.csproj", "{7DF37D15-6366-4374-B6CA-4A9D0A466F93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D7A056C7-ECA0-403A-9269-9755F3E0DDFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7A056C7-ECA0-403A-9269-9755F3E0DDFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7A056C7-ECA0-403A-9269-9755F3E0DDFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DF37D15-6366-4374-B6CA-4A9D0A466F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DF37D15-6366-4374-B6CA-4A9D0A466F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DF37D15-6366-4374-B6CA-4A9D0A466F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DF37D15-6366-4374-B6CA-4A9D0A466F93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

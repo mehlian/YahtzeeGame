@@ -18,7 +18,7 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
-        public void MethodToTest()
+        public void New_()
         {
 
         }
