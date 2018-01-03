@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Yahtzee.WinClient"
         mc:Ignorable="d"
         Title="Yahtzee Game" Height="250" Width="400"
-        MinHeight="250" MinWidth="400" ResizeMode="CanMinimize">
+        MinHeight="250" MinWidth="400" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Grid Background="AliceBlue">
         <TabControl>
             <TabItem x:Name="welcomeTab" Focusable="False" IsHitTestVisible="False" IsSelected="True" Visibility="Collapsed">
@@ -41,6 +41,31 @@
                     <TextBox Width="200" Height="20" Text=""/>
                     <Button Margin="0 36 0 10" Width="100" Content="Ok" Command=""/>
                     <Button Margin="10" Width="100" Content="Back" Command=""/>
+                </StackPanel>
+            </TabItem>
+            <TabItem x:Name="scoresTab" Focusable="False" IsHitTestVisible="False" IsSelected="True" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock  Margin="0 0 0 0" Text="Scores:" FontSize="20" HorizontalAlignment="Center"/>
+                    <ListView Height="140" ItemsSource="{Binding namea}" Margin="5">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="#" Width="20" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Player 1" Width="60" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Player 2" Width="60" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Player 3" Width="60" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Player 4" Width="60" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Date" Width="80" DisplayMemberBinding="{Binding Name}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Margin="0 5 0 10" Width="100" Content="Details" Command=""/>
+                        <Button Grid.Column="1" Margin="0 5 0 10" Width="100" Content="Back" Command=""/>
+                    </Grid>
                 </StackPanel>
             </TabItem>
         </TabControl>
