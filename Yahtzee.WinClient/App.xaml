@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:Yahtzee.WinClient"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Paragraph">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12px"/>
+        </Style>
     </Application.Resources>
 </Application>

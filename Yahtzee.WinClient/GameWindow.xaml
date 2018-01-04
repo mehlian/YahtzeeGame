@@ -1,0 +1,551 @@
+﻿<Window x:Class="Yahtzee.WinClient.GameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Yahtzee.WinClient"
+        mc:Ignorable="d"
+        Title="GameWindow" Height="430" Width="650" ResizeMode="NoResize">
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Margin="5">
+            <TextBlock Text="Player's 1 Turn:" FontSize="26" HorizontalAlignment="Center" Margin="10"/>
+            <Button Margin="0 5 0 10" Width="100" Content="Roll Dice" Command=""/>
+            
+            <!-- Roll results section-->
+            <Border BorderBrush="Black" BorderThickness="1">
+                <Grid Height="50" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Result:"/>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die1"/>
+                    <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die2"/>
+                    <TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die3"/>
+                    <TextBlock Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die4"/>
+                    <TextBlock Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die5"/>
+                </Grid>
+            </Border>
+
+            <!-- Dice pickup section-->
+            <Border BorderBrush="Black" BorderThickness="1,0,1,1">
+                <Grid Height="50" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Keep:"/>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die1"/>
+                    <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die2"/>
+                    <TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die3"/>
+                    <TextBlock Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die4"/>
+                    <TextBlock Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die5"/>
+                </Grid>
+            </Border>
+            <TextBlock Margin="0 10" Text="Select available category on the table to score."/>
+
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <FlowDocumentScrollViewer Padding="0">
+                <FlowDocumentScrollViewer.VerticalScrollBarVisibility>
+                    <ScrollBarVisibility>
+                        0
+                    </ScrollBarVisibility>
+                </FlowDocumentScrollViewer.VerticalScrollBarVisibility>
+                <FlowDocument>
+                    <Table CellSpacing="0">
+                        <Table.Columns>
+                            <TableColumn Width="100"/>
+                            <TableColumn/>
+                            <TableColumn/>
+                            <TableColumn/>
+                            <TableColumn/>
+                        </Table.Columns>
+
+                        <TableRowGroup>
+                            <!-- Header -->
+                            <TableRow>
+                                <TableCell/>
+                                <TableCell Background="LightGoldenrodYellow" TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="Player 1"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell Background="LightGoldenrodYellow" TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="Player 2"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell Background="LightGoldenrodYellow" TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="Player 3"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell Background="LightGoldenrodYellow" TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="Player 4"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+
+                            <!-- Data - Main Category -->
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Aces"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow Background="AliceBlue">
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Twos"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Threes"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow Background="AliceBlue">
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Fours"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Fives"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow Background="AliceBlue">
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Sixes"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="SUM"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="(bonus)"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="(0)"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="(0)"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="(0)"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="(0)"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph/>
+                                </TableCell>
+                            </TableRow>
+
+                            <!-- Data - Second Part -->
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="3 of a kind"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow Background="AliceBlue">
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="4 of a kind"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Full house"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow Background="AliceBlue">
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Small straight"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Large straight"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow Background="AliceBlue">
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Yahtzee"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Paragraph>
+                                        <TextBlock Text="Chance"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="TOTAL"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="0"/>
+                                    </Paragraph>
+                                </TableCell>
+                            </TableRow>
+                        </TableRowGroup>
+                    </Table>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>
+            <Button HorizontalAlignment="Right" Margin="20" Width="100" Content="Quit Game" Command=""/>
+
+        </StackPanel>
+    </Grid>
+</Window>
