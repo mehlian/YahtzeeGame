@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Yahtzee.Core
 {
-    public class Table
+    public class Table : ITable
     {
         public int Aces { get; set; }
         public int Twos { get; set; }
