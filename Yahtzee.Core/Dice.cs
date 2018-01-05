@@ -5,6 +5,7 @@
         private const int MIN_NUMBER = 1;
         private const int MAX_NUMBER = 6;
         private readonly IRandomizer _randomizer;
+
         public DiceStatus Status { get; set; } = DiceStatus.UnLocked;
         public int Result { get; set; }
 
