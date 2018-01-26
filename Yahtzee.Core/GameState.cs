@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Yahtzee.Core
 {
-    public class Game
+    public class GameState
     {
-        public Game()
-        {
-
-        }
     }
 }

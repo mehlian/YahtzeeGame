@@ -12,15 +12,20 @@ namespace Yahtzee.UnitTests
     public class GameTests
     {
         [Test]
-        public void Game_CanBeInitialized()
+        public void Game_ForGivenPlayersNames_CanBeInitialized()
         {
             Game game = new Game();
         }
 
-        [Test]
-        public void New_()
-        {
+        //[Test]
+        //public void AddPlayer_ForGivenPlayerName_AddPlayerToListOfPlayers()
+        //{
+        //    Game game = new Game();
+        //    string playerToAdd = "A";
+        //    List<string>
+        //    game.AddPlayer(playerToAdd);
 
-        }
+        //    Assert.AreEqual(playerToAdd, game.Players);
+        //}
     }
 }

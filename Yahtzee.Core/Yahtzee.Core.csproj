@@ -43,6 +43,7 @@
     <Compile Include="Dice.cs" />
     <Compile Include="DiceStatus.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameState.cs" />
     <Compile Include="IDice.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="IRandomizer.cs" />

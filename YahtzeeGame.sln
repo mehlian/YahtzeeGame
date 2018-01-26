@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.IntegrationTests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.WinClient", "Yahtzee.WinClient\Yahtzee.WinClient.csproj", "{7DF37D15-6366-4374-B6CA-4A9D0A466F93}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CDA56780-F73D-4181-92EA-A21C937FD706}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{CDA56780-F73D-4181-92EA-A21C937FD706}"
 	ProjectSection(SolutionItems) = preProject
 		docs\Yahtzee Game.docx = docs\Yahtzee Game.docx
 	EndProjectSection
