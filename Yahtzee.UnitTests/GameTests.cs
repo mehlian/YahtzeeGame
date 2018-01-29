@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NSubstitute;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using Yahtzee.Core;
@@ -8,18 +9,14 @@ namespace Yahtzee.UnitTests
     [TestFixture]
     public class GameTests
     {
+        private IRandomizer randomizer;
         private Game game;
 
         [SetUp]
         public void SetUp()
         {
-            game = new Game();
-        }
-
-        [Test]
-        public void Game_CanBeCreated()
-        {
-            Game game = new Game();
+            randomizer = Substitute.For<IRandomizer>();
+            game = new Game(randomizer);
         }
 
         [Test]
@@ -58,5 +55,17 @@ namespace Yahtzee.UnitTests
 
             Assert.Throws<ArgumentException>(result);
         }
+
+        [Test]
+        public void Roll_GivenPlayersNumber_ReturnsInteger()
+        {
+            randomizer.Roll(1, 6).Returns(1);
+
+            int result = game.Roll();
+            int expectedFakeRollResult = 1;
+
+            Assert.AreEqual(expectedFakeRollResult, result);
+        }
+
     }
 }
