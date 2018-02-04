@@ -4,20 +4,17 @@ namespace Yahtzee.Core
 {
     public class Dice
     {
-        private int result;
+        public bool IsUnlocked { get; protected set; } = true;
+        public double Result { get; set; }
 
-        public int Result
+        public void Lock()
         {
-            get
-            {
-                return result;
-            }
-            set
-            {
-                if (!IsLocked)
-                    result = value;
-            }
+            IsUnlocked = false;
         }
-        public bool IsLocked { get; set; }
+
+        public void Unlock()
+        {
+            IsUnlocked = true;
+        }
     }
 }

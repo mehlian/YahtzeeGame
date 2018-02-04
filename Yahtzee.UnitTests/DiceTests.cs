@@ -26,28 +26,38 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
-        public void IsLocked_DefaultValue_ReturnsFalse()
+        public void IsUnlocked_InitialState_ReturnsTrue()
         {
-            Assert.AreEqual(false, dice.IsLocked);
+            bool result = dice.IsUnlocked;
+
+            Assert.IsTrue(result);
         }
 
         [Test]
-        public void GetResult_DefaultValue_ReturnsZero()
+        public void Lock_ChangeDiceStateToLocked_IsUnlockedReturnsFalse()
         {
-            var result = dice.Result;
+            dice.Lock();
+            bool result = dice.IsUnlocked;
 
-            Assert.AreEqual(0, dice.Result);
+            Assert.AreEqual(false, result);
         }
 
         [Test]
-        public void SetResult_WhenIsLocked_ValueIsNotStored()
+        public void Unlock_ChangeDiceStateToUnlocked_IsUnlockedReturnsTrue()
+        {
+            dice.Lock();
+            dice.Unlock();
+            bool result = dice.IsUnlocked;
+
+            Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void Result_GivenNumberAsRollResult_NumberIsSaved()
         {
             dice.Result = 1;
-            dice.IsLocked = true;
-            dice.Result = 2;
 
             Assert.AreEqual(1, dice.Result);
         }
-
     }
 }
