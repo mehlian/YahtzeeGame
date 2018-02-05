@@ -13,6 +13,18 @@ namespace Yahtzee.UnitTests
         private Game _game;
         private IRandomizer _randomizer;
 
+        private List<Dice> MakeNewDiceSet()
+        {
+            return new List<Dice>
+            {
+                new Dice(),
+                new Dice(),
+                new Dice(),
+                new Dice(),
+                new Dice()
+            };
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -33,42 +45,28 @@ namespace Yahtzee.UnitTests
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public void RollDice_GivenListOfDicesThatAreUnlocked_ReturnsListOfDicesWithNewResults(int expected)
+        public void RollDice_GivenListOfDicesThatAreUnlocked_RollResultsAreSaved(int expected)
         {
             _randomizer.Roll(1, 6).Returns(expected);
-            List<Dice> dices = new List<Dice>
-            {
-                new Dice(),
-                new Dice(),
-                new Dice(),
-                new Dice(),
-                new Dice()
-            };
+            List<Dice> dices = MakeNewDiceSet();
 
-            List<Dice> result = _game.RollDice(dices);
+            _game.RollDice(dices);
 
-            Assert.That(result.Any(d => d.Result == expected));
+            Assert.That(_game.RollResult.All(d => d.Result == expected));
         }
 
         [Test]
         public void RollDice_GivenListOfDicesThatAreLocked_ReturnsListOfDicesWithOldResults()
         {
             _randomizer.Roll(1, 6).Returns(1);
-            List<Dice> dices = new List<Dice>
-            {
-                new Dice(),
-                new Dice(),
-                new Dice(),
-                new Dice(),
-                new Dice()
-            };
+            List<Dice> dices = MakeNewDiceSet();
 
             _game.RollDice(dices);
             dices.ForEach(d => d.Lock());
             _randomizer.Roll(1, 6).Returns(2);
-            List<Dice> result = _game.RollDice(dices);
+            _game.RollDice(dices);
 
-            Assert.IsTrue(result.Any(d => d.Result == 1));
+            Assert.IsTrue(_game.RollResult.All(d => d.Result == 1));
         }
 
         [Test]
@@ -98,22 +96,36 @@ namespace Yahtzee.UnitTests
             Assert.Throws<ArgumentException>(result);
         }
 
-        //[Test]
-        //public void NewGame_PlayerNameAsString_CreatesNewTableWithCategoriesForThatPlayer()
-        //{
-        //    string[] playerName = { "A" };
-        //    _game.NewGame(playerName);
+        [Test]
+        public void NewGame_PlayerNameAsString_CreatesNewColumnForThatPlayer()
+        {
+            string[] playerName = { "A" };
+            List<Dice> dice = MakeNewDiceSet();
 
-        //    Assert.IsTrue(_game.Players.All(x => x == "A"));
-        //}
+            _game.NewGame(playerName);
+            _game.RollDice(dice);
+            var result = _game.GetAvailableOptions(playerName[0]);
 
-        //[Test]
-        //public void ShowAvailableOptions_PlayerNameAsString_ReturnsUpdatedTable()
-        //{
-        //    string playerName = "A";
-        //    var result = _game.ShowAvailableOptions(playerName);
+            Assert.IsNotNull(_game.Table[playerName[0]]);
+        }
 
-        //}
+        [Test]
+        public void GetAvailableOptions_PlayerNameAsString_ReturnsDictionaryWithCalculatedScores()
+        {
+            string[] playerName = { "A" };
+            _randomizer.Roll(1, 6).Returns(1);
+            List<Dice> dice = MakeNewDiceSet();
+
+            _game.NewGame(playerName);
+            _game.RollDice(dice);
+            var result = _game.GetAvailableOptions(playerName[0]);
+            Dictionary<Category, int> expected = new Dictionary<Category, int>
+            {
+                { Category.Aces, 5 }
+            };
+
+            Assert.AreEqual(expected, result);
+        }
 
     }
 }
