@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Yahtzee.Core;
 using NSubstitute;
+using System;
 
 namespace Yahtzee.UnitTests
 {
@@ -69,6 +70,50 @@ namespace Yahtzee.UnitTests
 
             Assert.IsTrue(result.Any(d => d.Result == 1));
         }
+
+        [Test]
+        public void NewGame_PlayerNameAsString_PlayerIsAddedToTheGame()
+        {
+            string[] playerName = { "A" };
+            _game.NewGame(playerName);
+
+            Assert.IsTrue(_game.Players.All(x => x == "A"));
+        }
+
+        [Test]
+        public void NewGame_PlayerNamesAsStringArray_PlayersAreAdded()
+        {
+            string[] playersName = { "A", "B", "C", "D" };
+            _game.NewGame(playersName);
+
+            Assert.IsTrue(_game.Players == playersName);
+        }
+
+        [Test]
+        public void NewGame_ArrayOfPlayerNamesIsLongerThan4_Throws()
+        {
+            string[] playersName = { "1", "2", "3", "4", "5" };
+            TestDelegate result = () => _game.NewGame(playersName);
+
+            Assert.Throws<ArgumentException>(result);
+        }
+
+        //[Test]
+        //public void NewGame_PlayerNameAsString_CreatesNewTableWithCategoriesForThatPlayer()
+        //{
+        //    string[] playerName = { "A" };
+        //    _game.NewGame(playerName);
+
+        //    Assert.IsTrue(_game.Players.All(x => x == "A"));
+        //}
+
+        //[Test]
+        //public void ShowAvailableOptions_PlayerNameAsString_ReturnsUpdatedTable()
+        //{
+        //    string playerName = "A";
+        //    var result = _game.ShowAvailableOptions(playerName);
+
+        //}
 
     }
 }

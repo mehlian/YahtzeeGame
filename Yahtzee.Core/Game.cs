@@ -9,9 +9,19 @@ namespace Yahtzee.Core
         private const int MAX_VALUE = 6;
         private IRandomizer _randomizer;
 
+        public string[] Players { get; protected set; }
+
         public Game(IRandomizer randomizer)
         {
             _randomizer = randomizer;
+        }
+
+        public void NewGame(string[] playerName)
+        {
+            if (playerName.Length>4)
+                throw new ArgumentException("Max number of players is 4.");
+
+            Players = playerName;
         }
 
         public List<Dice> RollDice(List<Dice> dice)
