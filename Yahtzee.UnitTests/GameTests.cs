@@ -108,24 +108,49 @@ namespace Yahtzee.UnitTests
 
             Assert.IsNotNull(_game.Table[playerName[0]]);
         }
-
+                
         [Test]
-        public void GetAvailableOptions_PlayerNameAsString_ReturnsDictionaryWithCalculatedScores()
+        [TestCase(1, 1, 1, 1, 1, Category.Aces, 5)]
+        [TestCase(1, 1, 2, 2, 3, Category.Aces, 2)]
+        [TestCase(2, 2, 2, 2, 2, Category.Twos, 10)]
+        [TestCase(2, 2, 3, 3, 4, Category.Twos, 4)]
+        [TestCase(3, 3, 3, 3, 3, Category.Threes, 15)]
+        [TestCase(3, 3, 4, 4, 5, Category.Threes, 6)]
+        [TestCase(4, 4, 4, 4, 4, Category.Fours, 20)]
+        [TestCase(4, 4, 5, 5, 6, Category.Fours, 8)]
+        [TestCase(5, 5, 5, 5, 5, Category.Fives, 25)]
+        [TestCase(5, 5, 6, 6, 1, Category.Fives, 10)]
+        [TestCase(6, 6, 6, 6, 6, Category.Sixes, 30)]
+        [TestCase(6, 6, 1, 1, 2, Category.Sixes, 12)]
+        [TestCase(1, 1, 1, 2, 2, Category.ThreeOfKind, 7)]
+        [TestCase(1, 1, 1, 2, 3, Category.ThreeOfKind, 8)]
+        [TestCase(1, 1, 1, 1, 2, Category.FourOfKind, 6)]
+        [TestCase(1, 1, 1, 1, 3, Category.FourOfKind, 7)]
+        [TestCase(1, 1, 2, 2, 2, Category.FullHouse, 25)]
+        [TestCase(1, 1, 2, 2, 3, Category.FullHouse, 0)]
+        [TestCase(1, 2, 3, 4, 1, Category.SmallStraight, 30)]
+        [TestCase(2, 3, 4, 5, 2, Category.SmallStraight, 30)]
+        [TestCase(2, 3, 4, 6, 2, Category.SmallStraight, 0)]
+        [TestCase(1, 2, 3, 4, 5, Category.LargeStraight, 40)]
+        [TestCase(1, 2, 3, 4, 6, Category.LargeStraight, 0)]
+        [TestCase(1, 1, 1, 1, 1, Category.Chance, 5)]
+        [TestCase(1, 2, 1, 1, 3, Category.Chance, 8)]
+        [TestCase(1, 1, 1, 1, 1, Category.Yahtzee, 50)]
+        [TestCase(6, 6, 6, 6, 6, Category.Yahtzee, 50)]
+        [TestCase(1, 1, 1, 1, 2, Category.Yahtzee, 0)]
+        [TestCase(2, 2, 3, 1, 5, Category.Yahtzee, 0)]
+        public void GetAvailableOptions_PlayerRollsFiveDices_ReturnsDictionaryWithCalculatedScoreForEachCategory(
+            int die1, int die2, int die3, int die4, int die5, Category categoryToCheck, int expectedScore)
         {
             string[] playerName = { "A" };
-            _randomizer.Roll(1, 6).Returns(1);
+            _randomizer.Roll(1, 6).Returns(die1, die2, die3, die4, die5);
             List<Dice> dice = MakeNewDiceSet();
 
             _game.NewGame(playerName);
             _game.RollDice(dice);
             var result = _game.GetAvailableOptions(playerName[0]);
-            Dictionary<Category, int> expected = new Dictionary<Category, int>
-            {
-                { Category.Aces, 5 }
-            };
 
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expectedScore, result[categoryToCheck]);
         }
-
     }
 }

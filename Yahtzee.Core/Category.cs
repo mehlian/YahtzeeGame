@@ -2,6 +2,18 @@
 {
     public enum Category
     {
-        Aces
+        Aces,
+        Twos,
+        Threes,
+        Fours,
+        Fives,
+        Sixes,
+        ThreeOfKind,
+        FourOfKind,
+        FullHouse,
+        SmallStraight,
+        LargeStraight,
+        Chance,
+        Yahtzee
     }
 }
