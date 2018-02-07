@@ -56,60 +56,19 @@ namespace Yahtzee.Core
             int fivesScore = (int)RollResult.Where(x => x.Result == 5).Sum(x => x.Result);
             int sixesScore = (int)RollResult.Where(x => x.Result == 6).Sum(x => x.Result);
 
-            var threeOfKind = RollResult.GroupBy(x => x.Result);
-            int threeOfKindScore = 0;
-            foreach (var group in threeOfKind)
-            {
-                if (group.Count() == 3)
-                {
-                    threeOfKindScore = (int)RollResult.Sum(x => x.Result);
-                    break;
-                }
-            }
+            int threeOfKindScore = RollResult.GroupBy(x => x.Result).Where(x => x.Count() == 3) != null ? (int)RollResult.Sum(x => x.Result) : 0;
+            int fourOfKindScore = RollResult.GroupBy(x => x.Result).Where(x => x.Count() == 4) != null ? (int)RollResult.Sum(x => x.Result) : 0;
+            int fullHouseScore = RollResult.GroupBy(x => x.Result).Count() == 2 ? 25 : 0;
 
-            var fourOfKind = RollResult.GroupBy(x => x.Result);
-            int fourOfKindScore = 0;
-            foreach (var group in fourOfKind)
-            {
-                if (group.Count() == 4)
-                {
-                    fourOfKindScore = (int)RollResult.Sum(x => x.Result);
-                    break;
-                }
-            }
-
-            var fullHouse = RollResult.GroupBy(x => x.Result).Count();
-            int fullHouseScore = 0;
-            if (fullHouse == 2)
-            {
-                fullHouseScore = 25;
-            }
-
-            var smallStraight = RollResult.Select(x => x.Result).Distinct().OrderByDescending(x => x).ToArray();
-            int smallStraightScore = 0;
-            if (smallStraight.SequenceEqual(new double[] { 4, 3, 2, 1 }) || 
-                smallStraight.SequenceEqual(new double[] { 5, 4, 3, 2 }) || 
-                smallStraight.SequenceEqual(new double[] { 6, 5, 4, 3 }))
-            {
-                smallStraightScore = 30;
-            }
-
-            var largeStraight = RollResult.Select(x => x.Result).Distinct().OrderByDescending(x => x).ToArray();
-            int largeStraightScore = 0;
-            if (largeStraight.SequenceEqual(new double[] { 5, 4, 3, 2, 1 }) ||
-                largeStraight.SequenceEqual(new double[] { 6, 5, 4, 3,2 }))
-            {
-                largeStraightScore = 40;
-            }
+            var master = new double[] { 1, 2, 3, 4, 5, 6 };
+            var sub = RollResult.Select(x => x.Result).Distinct().OrderBy(x => x).ToArray();
+            int smallStraightScore = master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
+                .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 30 : 0;
+            int largeStraightScore = master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
+                .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
 
             int chanceScore = (int)RollResult.Sum(x => x.Result);
-
-            int yahtzee = RollResult.GroupBy(x => x.Result).Count();
-            int yahtzeeScore = 0;
-            if (yahtzee==1)
-            {
-                yahtzeeScore = 50;
-            }
+            int yahtzeeScore = RollResult.GroupBy(x => x.Result).Count() == 1 ? 50 : 0;
 
             return new Dictionary<Category, int>
             {

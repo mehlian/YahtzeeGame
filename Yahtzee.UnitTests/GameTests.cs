@@ -38,7 +38,6 @@ namespace Yahtzee.UnitTests
             Game game = new Game(_randomizer);
         }
 
-        [Test]
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
@@ -109,7 +108,6 @@ namespace Yahtzee.UnitTests
             Assert.IsNotNull(_game.Table[playerName[0]]);
         }
                 
-        [Test]
         [TestCase(1, 1, 1, 1, 1, Category.Aces, 5)]
         [TestCase(1, 1, 2, 2, 3, Category.Aces, 2)]
         [TestCase(2, 2, 2, 2, 2, Category.Twos, 10)]
@@ -131,6 +129,7 @@ namespace Yahtzee.UnitTests
         [TestCase(1, 2, 3, 4, 1, Category.SmallStraight, 30)]
         [TestCase(2, 3, 4, 5, 2, Category.SmallStraight, 30)]
         [TestCase(2, 3, 4, 6, 2, Category.SmallStraight, 0)]
+        [TestCase(1, 2, 3, 4, 5, Category.SmallStraight, 30)]
         [TestCase(1, 2, 3, 4, 5, Category.LargeStraight, 40)]
         [TestCase(1, 2, 3, 4, 6, Category.LargeStraight, 0)]
         [TestCase(1, 1, 1, 1, 1, Category.Chance, 5)]
