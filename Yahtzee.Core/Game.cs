@@ -9,17 +9,18 @@ namespace Yahtzee.Core
         private const int MIN_VALUE = 1;
         private const int MAX_VALUE = 6;
         private IRandomizer _randomizer;
-        // private IDictionary<Category, int> _column;
-        private IDictionary<string, Table> _table;
+        //private IDictionary<Category, int>[] _column;
+        //private IDictionary<string, Table> _table;
 
         public string[] Players { get; protected set; }
+        public string ActivePlayer { get; protected set; }
         public List<Dice> RollResult { get; protected set; }
-        public IDictionary<string, Table> Table { get; protected set; }
+        //public IDictionary<string, Table> Table { get; protected set; }
 
         public Game(IRandomizer randomizer)
         {
             _randomizer = randomizer;
-            _table = new Dictionary<string, Table>();
+            //_table = new Dictionary<string, Table>();
         }
 
         public void NewGame(string[] playerName)
@@ -28,11 +29,12 @@ namespace Yahtzee.Core
                 throw new ArgumentException("Max number of players is 4.");
 
             Players = playerName;
-            for (int i = 0; i < playerName.Length; i++)
-            {
-                _table.Add(playerName[i], new Table());
-            }
-            Table = _table;
+            ActivePlayer = Players.First();
+            //for (int i = 0; i < playerName.Length; i++)
+            //{
+            //    _table.Add(playerName[i], new Table());
+            //}
+            //Table = _table;
         }
 
         public void RollDice(List<Dice> dice)
@@ -86,6 +88,9 @@ namespace Yahtzee.Core
                 { Category.Chance, chanceScore },
                 { Category.Yahtzee, yahtzeeScore },
             };
+
         }
+
+
     }
 }

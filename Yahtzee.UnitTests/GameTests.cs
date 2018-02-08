@@ -96,18 +96,15 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
-        public void NewGame_PlayerNameAsString_CreatesNewColumnForThatPlayer()
+        public void NewGame_ArrayOfPlayersIsAdded_FirstPlayerFromArrayIsActive()
         {
-            string[] playerName = { "A" };
-            List<Dice> dice = MakeNewDiceSet();
+            string[] playersName = { "A", "B", "C", "D" };
+            _game.NewGame(playersName);
+            string result = _game.ActivePlayer;
 
-            _game.NewGame(playerName);
-            _game.RollDice(dice);
-            var result = _game.GetAvailableOptions(playerName[0]);
-
-            Assert.IsNotNull(_game.Table[playerName[0]]);
+            Assert.AreEqual("A", result);
         }
-                
+
         [TestCase(1, 1, 1, 1, 1, Category.Aces, 5)]
         [TestCase(1, 1, 2, 2, 3, Category.Aces, 2)]
         [TestCase(2, 2, 2, 2, 2, Category.Twos, 10)]
@@ -151,5 +148,32 @@ namespace Yahtzee.UnitTests
 
             Assert.AreEqual(expectedScore, result[categoryToCheck]);
         }
+
+        //[Test]
+        //public void GetScore_AllCategoriesInitialScoreForPlayer_ReturnsZero()
+        //{
+        //    string[] playerName = { "A" };
+
+        //    _game.NewGame(playerName);
+        //    var result = _game.GetScore(playerName[0]);
+
+        //    Assert.IsNotNull(_game.Table[playerName[0]]);
+        //}
+
+        //[Test]
+        //public void AddPoints_ForGivenCategory_PointsAreStored()
+        //{
+        //    string[] playerName = { "A" };
+        //    _randomizer.Roll(1, 6).Returns(1);
+        //    List<Dice> dice = MakeNewDiceSet();
+
+        //    _game.NewGame(playerName);
+        //    _game.RollDice(dice);
+        //    _game.AddPoints(category);
+
+        //    var result = _game.Table[playerName[0]];
+
+        //    Assert.AreEqual(6, result.GetScore());
+        //}
     }
 }
