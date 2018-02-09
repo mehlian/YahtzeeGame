@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.UnitTests", "Yahtzee.UnitTests\Yahtzee.UnitTests.csproj", "{B51A96B3-3A9C-448E-AB3E-3E2666A244B0}"
 EndProject
@@ -15,6 +15,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	ProjectSection(SolutionItems) = preProject
 		docs\Yahtzee Game.docx = docs\Yahtzee Game.docx
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.ViewModels.UnitTests", "Yahtzee.ViewModels.UnitTests\Yahtzee.ViewModels.UnitTests.csproj", "{3C97051B-B16C-4B2B-9BB3-AD506EDE72C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.ViewModels", "Yahtzee.ViewModels\Yahtzee.ViewModels.csproj", "{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahttzee.CoreModule", "Yahttzee.CoreModule\Yahttzee.CoreModule.csproj", "{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.Randomizer", "Yahtzee.Randomizer\Yahtzee.Randomizer.csproj", "{2C48A58D-4214-4738-A177-D733821176A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +46,22 @@ Global
 		{7DF37D15-6366-4374-B6CA-4A9D0A466F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DF37D15-6366-4374-B6CA-4A9D0A466F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DF37D15-6366-4374-B6CA-4A9D0A466F93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C97051B-B16C-4B2B-9BB3-AD506EDE72C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C97051B-B16C-4B2B-9BB3-AD506EDE72C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C97051B-B16C-4B2B-9BB3-AD506EDE72C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C97051B-B16C-4B2B-9BB3-AD506EDE72C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C48A58D-4214-4738-A177-D733821176A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C48A58D-4214-4738-A177-D733821176A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C48A58D-4214-4738-A177-D733821176A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C48A58D-4214-4738-A177-D733821176A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

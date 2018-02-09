@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Yahtzee.WinClient"
+        xmlns:vm="clr-namespace:Yahtzee.ViewModels;assembly=Yahtzee.ViewModels"
         mc:Ignorable="d"
         Title="GameWindow" Height="430" Width="650" ResizeMode="NoResize">
+    <Window.DataContext>
+        <vm:GameWindowViewModel/>
+    </Window.DataContext>
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -13,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Margin="5">
             <TextBlock Text="Player's 1 Turn:" FontSize="26" HorizontalAlignment="Center" Margin="10"/>
-            <Button Margin="0 5 0 10" Width="100" Content="Roll Dice" Command=""/>
+            <Button Margin="0 5 0 10" Width="100" Content="Roll Dice" Command="{Binding RollDiceCommand}"/>
             
             <!-- Roll results section-->
             <Border BorderBrush="Black" BorderThickness="1">
@@ -27,7 +31,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Result:"/>
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die1"/>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Die1}"/>
                     <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die2"/>
                     <TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die3"/>
                     <TextBlock Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die4"/>

@@ -107,5 +107,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Yahtzee.Core\Yahtzee.Core.csproj">
+      <Project>{42EACAD1-58EB-4CA4-BB1A-6955B47D86FD}</Project>
+      <Name>Yahtzee.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahtzee.ViewModels\Yahtzee.ViewModels.csproj">
+      <Project>{38e4bc4e-42e5-46d1-9134-08a54f16e4e5}</Project>
+      <Name>Yahtzee.ViewModels</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
