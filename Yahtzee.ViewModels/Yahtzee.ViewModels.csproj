@@ -62,7 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BindingModule.cs" />
     <Compile Include="GameWindowViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -71,17 +70,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Yahttzee.CoreModule\Yahttzee.CoreModule.csproj">
-      <Project>{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}</Project>
-      <Name>Yahttzee.CoreModule</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Yahtzee.Core\Yahtzee.Core.csproj">
       <Project>{42eacad1-58eb-4ca4-bb1a-6955b47d86fd}</Project>
       <Name>Yahtzee.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Yahtzee.Randomizer\Yahtzee.Randomizer.csproj">
-      <Project>{2C48A58D-4214-4738-A177-D733821176A4}</Project>
-      <Name>Yahtzee.Randomizer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

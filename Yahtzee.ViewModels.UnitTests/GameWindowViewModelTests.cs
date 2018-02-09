@@ -20,7 +20,7 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void GameWindowViewModel_CanBeCreated()
         {
-            GameWindowViewModel viewModel = new GameWindowViewModel( _randomizer);
+            GameWindowViewModel viewModel = new GameWindowViewModel();
         }
 
         [Test]

@@ -20,10 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.ViewModels.UnitTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.ViewModels", "Yahtzee.ViewModels\Yahtzee.ViewModels.csproj", "{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahttzee.CoreModule", "Yahttzee.CoreModule\Yahttzee.CoreModule.csproj", "{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.Randomizer", "Yahtzee.Randomizer\Yahtzee.Randomizer.csproj", "{2C48A58D-4214-4738-A177-D733821176A4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,14 +50,6 @@ Global
 		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0B21BA5-628F-4578-910E-BA9CBE0BA39F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C48A58D-4214-4738-A177-D733821176A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C48A58D-4214-4738-A177-D733821176A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C48A58D-4214-4738-A177-D733821176A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C48A58D-4214-4738-A177-D733821176A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
