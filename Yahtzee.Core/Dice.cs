@@ -1,6 +1,6 @@
 ﻿namespace Yahtzee.Core
 {
-    public class Dice
+    public class Dice : IDice
     {
         public bool IsUnlocked { get; protected set; }
         public int Result { get; set; }
