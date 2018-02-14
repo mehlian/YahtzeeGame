@@ -1,9 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Yahtzee.Core;
 
 namespace Yahtzee.UnitTests
@@ -23,6 +18,14 @@ namespace Yahtzee.UnitTests
         public void Dice_CanBeCreated()
         {
             Dice dice = new Dice();
+        }
+
+        [Test]
+        public void Dice_SideNumber_Returns6()
+        {
+            var result = dice.SideNumber;
+
+            Assert.AreEqual(6, result);
         }
 
         [Test]

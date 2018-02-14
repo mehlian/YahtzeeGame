@@ -65,8 +65,8 @@ namespace Yahtzee.ViewModels
             }
         }
 
-        private double[] _rollResult;
-        public double[] RollResult
+        private int[] _rollResult;
+        public int[] RollResult
         {
             get
             {

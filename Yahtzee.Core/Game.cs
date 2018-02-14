@@ -75,7 +75,7 @@ namespace Yahtzee.Core
             int fourOfKindScore = RollResult.GroupBy(x => x.Result).Where(x => x.Count() == 4) != null ? (int)RollResult.Sum(x => x.Result) : 0;
             int fullHouseScore = RollResult.GroupBy(x => x.Result).Count() == 2 ? 25 : 0;
 
-            var master = new double[] { 1, 2, 3, 4, 5, 6 };
+            var master = new int[] { 1, 2, 3, 4, 5, 6 };
             var sub = RollResult.Select(x => x.Result).Distinct().OrderBy(x => x).ToArray();
             int smallStraightScore = master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
                 .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 30 : 0;

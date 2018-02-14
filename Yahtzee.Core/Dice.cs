@@ -1,11 +1,16 @@
-﻿using System;
-
-namespace Yahtzee.Core
+﻿namespace Yahtzee.Core
 {
     public class Dice
     {
-        public bool IsUnlocked { get; protected set; } = true;
-        public double Result { get; set; }
+        public bool IsUnlocked { get; protected set; }
+        public int Result { get; set; }
+        public int SideNumber { get; }
+
+        public Dice()
+        {
+            SideNumber = 6;
+            IsUnlocked = true;
+        }
 
         public void Lock()
         {
