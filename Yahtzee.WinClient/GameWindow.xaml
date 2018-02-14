@@ -31,11 +31,11 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Result:"/>
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Die1}"/>
-                    <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die2"/>
-                    <TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die3"/>
-                    <TextBlock Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die4"/>
-                    <TextBlock Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Die5"/>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding RollResult[0]}"/>
+                    <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding RollResult[1]}"/>
+                    <TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding RollResult[2]}"/>
+                    <TextBlock Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding RollResult[3]}"/>
+                    <TextBlock Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding RollResult[4]}"/>
                 </Grid>
             </Border>
 
@@ -113,7 +113,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[Aces]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -140,7 +140,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[Twos]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -167,7 +167,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[Threes]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -194,7 +194,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[Fours]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -221,7 +221,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[Fives]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -248,12 +248,12 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][Sixes]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[1][Sixes]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -336,12 +336,14 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[ThreeOfKind]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="{Binding RollDiceCommand}" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="0"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -363,7 +365,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[FourOfKind]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -390,7 +392,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[FullHouse]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -417,7 +419,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[SmallStraight]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -444,7 +446,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[LargeStraight]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -471,7 +473,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[Yahtzee]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -498,7 +500,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding UpdateTable[Chance]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">

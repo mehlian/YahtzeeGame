@@ -5,6 +5,8 @@ using Yahtzee.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
 using NSubstitute;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Yahtzee.ViewModels
 {
@@ -18,8 +20,9 @@ namespace Yahtzee.ViewModels
             if (_randomizer == null)
             {
                 _randomizer = Substitute.For<IRandomizer>();
-                _randomizer.Roll(1, 6).Returns(-1,-2);
+                _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1, 6, 6, 3, 3, 3);
             }
+            UpdateTable = new Dictionary<Category, int>[4];
 
             _dice = new List<Dice>
             {
@@ -33,8 +36,18 @@ namespace Yahtzee.ViewModels
             _rollDiceCommand = new DelegateCommand(() =>
               {
                   Game game = new Game(_randomizer);
+                  game.NewGame(new[] { "Bob" });
+                  
                   game.RollDice(_dice);
-                  Die1 = game.RollResult[0].Result;
+                  RollResult = game.RollResult.Select(x => x.Result).ToArray();
+                  UpdateTable[0] = game.GetAvailableOptions("Bob");
+                  game.RollDice(_dice);
+                  UpdateTable[1] = game.GetAvailableOptions("Bob");
+
+                  //UpdateTable = UpdateTable;
+                  //Category co = (Category)Enum.Parse(typeof(Category), "Aces");
+                  PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
+
               });
         }
 
@@ -52,21 +65,33 @@ namespace Yahtzee.ViewModels
             }
         }
 
-        private double _die1;
-        public double Die1
+        private double[] _rollResult;
+        public double[] RollResult
         {
             get
             {
-                return _die1;
+                return _rollResult;
             }
 
             set
             {
-                _die1 = value;
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Die1)));
-                }
+                _rollResult = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RollResult)));
+            }
+        }
+
+        private Dictionary<Category,int>[] _updateTable;
+        public Dictionary<Category, int>[] UpdateTable
+        {
+            get
+            {
+                return _updateTable;
+            }
+
+            set
+            {
+                _updateTable = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
             }
         }
 

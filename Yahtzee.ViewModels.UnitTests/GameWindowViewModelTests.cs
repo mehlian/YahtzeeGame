@@ -42,17 +42,35 @@ namespace Yahtzee.ViewModels.UnitTests
 
             command.Execute(null);
 
-            Assert.AreEqual(rollResult, viewModel.Die1);
+            Assert.AreEqual(rollResult, viewModel.RollResult[0]);
         }
 
         [Test]
-        public void Die1_PropChangedNotify_IsFired()
+        public void RollResult_PropertyChanged_IsFired()
         {
             GameWindowViewModel viewModel = new GameWindowViewModel(_randomizer);
             bool hasFired = false;
             viewModel.PropertyChanged += (sender,args) =>
             {
-                if (args.PropertyName == "Die1")
+                if (args.PropertyName == nameof(viewModel.RollResult))
+                    hasFired = true;
+            };
+            _randomizer.Roll(1, 6).Returns(1);
+            ICommand command = viewModel.RollDiceCommand;
+
+            command.Execute(null);
+
+            Assert.IsTrue(hasFired);
+        }
+
+        [Test]
+        public void UpdateTable_PropertyChanged_IsFired()
+        {
+            GameWindowViewModel viewModel = new GameWindowViewModel(_randomizer);
+            bool hasFired = false;
+            viewModel.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(viewModel.UpdateTable))
                     hasFired = true;
             };
             _randomizer.Roll(1, 6).Returns(1);
