@@ -9,32 +9,45 @@ namespace Yahtzee.Core
         private const int MIN_VALUE = 1;
         private const int MAX_VALUE = 6;
         private IRandomizer _randomizer;
-        //private IDictionary<Category, int>[] _column;
-        //private IDictionary<string, Table> _table;
+        private Dictionary<Category, CategoryStatus>[] _gameStatus;
 
         public string[] Players { get; protected set; }
-        public string ActivePlayer { get; protected set; }
+        public int ActivePlayer { get; protected set; }
         public List<Dice> RollResult { get; protected set; }
-        //public IDictionary<string, Table> Table { get; protected set; }
 
         public Game(IRandomizer randomizer)
         {
             _randomizer = randomizer;
-            //_table = new Dictionary<string, Table>();
         }
 
-        public void NewGame(string[] playerName)
+        public void NewGame(params string[] playerName)
         {
             if (playerName.Length > 4)
                 throw new ArgumentException("Max number of players is 4.");
 
             Players = playerName;
-            ActivePlayer = Players.First();
-            //for (int i = 0; i < playerName.Length; i++)
-            //{
-            //    _table.Add(playerName[i], new Table());
-            //}
-            //Table = _table;
+            ActivePlayer = 0;
+
+            _gameStatus = new Dictionary<Category, CategoryStatus>[playerName.Length];
+            for (int i = 0; i < playerName.Length; i++)
+            {
+                _gameStatus[i] = new Dictionary<Category, CategoryStatus>
+                {
+                    { Category.Aces, new CategoryStatus() },
+                    { Category.Twos, new CategoryStatus() },
+                    { Category.Threes, new CategoryStatus() },
+                    { Category.Fours, new CategoryStatus() },
+                    { Category.Fives, new CategoryStatus() },
+                    { Category.Sixes, new CategoryStatus() },
+                    { Category.ThreeOfKind, new CategoryStatus() },
+                    { Category.FourOfKind, new CategoryStatus() },
+                    { Category.FullHouse, new CategoryStatus() },
+                    { Category.SmallStraight, new CategoryStatus()},
+                    { Category.LargeStraight, new CategoryStatus() },
+                    { Category.Chance, new CategoryStatus() },
+                    { Category.Yahtzee, new CategoryStatus() },
+                };
+            }
         }
 
         public void RollDice(List<Dice> dice)
@@ -88,9 +101,16 @@ namespace Yahtzee.Core
                 { Category.Chance, chanceScore },
                 { Category.Yahtzee, yahtzeeScore },
             };
-
         }
 
+        public Dictionary<Category, CategoryStatus>[] GameStatus()
+        {
+            return _gameStatus;
+        }
 
+        public void AddPoints(Category category)
+        {
+            _gameStatus[ActivePlayer][category].Points = 6;
+        }
     }
 }

@@ -100,9 +100,9 @@ namespace Yahtzee.UnitTests
         {
             string[] playersName = { "A", "B", "C", "D" };
             _game.NewGame(playersName);
-            string result = _game.ActivePlayer;
+            int result = _game.ActivePlayer;
 
-            Assert.AreEqual("A", result);
+            Assert.AreEqual(0, result);
         }
 
         [TestCase(1, 1, 1, 1, 1, Category.Aces, 5)]
@@ -149,31 +149,54 @@ namespace Yahtzee.UnitTests
             Assert.AreEqual(expectedScore, result[categoryToCheck]);
         }
 
-        //[Test]
-        //public void GetScore_AllCategoriesInitialScoreForPlayer_ReturnsZero()
-        //{
-        //    string[] playerName = { "A" };
+        [Test]
+        public void GameStatus_AllCategoriesHasInitialPointsForOnePlayer_ReturnsZero()
+        {
+            string[] playerName = { "A" };
 
-        //    _game.NewGame(playerName);
-        //    var result = _game.GetScore(playerName[0]);
+            _game.NewGame(playerName);
+            var result = _game.GameStatus();
 
-        //    Assert.IsNotNull(_game.Table[playerName[0]]);
-        //}
+            Assert.IsTrue(result.All(x => x.Values.All(y => y.Points == 0)));
+        }
 
-        //[Test]
-        //public void AddPoints_ForGivenCategory_PointsAreStored()
-        //{
-        //    string[] playerName = { "A" };
-        //    _randomizer.Roll(1, 6).Returns(1);
-        //    List<Dice> dice = MakeNewDiceSet();
+        [Test]
+        public void GameStatus_AllCategoriesHasInitialPointsForTwoPlayers_ReturnsZero()
+        {
+            string[] playerName = { "A", "B" };
 
-        //    _game.NewGame(playerName);
-        //    _game.RollDice(dice);
-        //    _game.AddPoints(category);
+            _game.NewGame(playerName);
+            var result = _game.GameStatus();
 
-        //    var result = _game.Table[playerName[0]];
+            Assert.IsTrue(result.All(x => x.Values.All(y => y.Points == 0)));
+        }
 
-        //    Assert.AreEqual(6, result.GetScore());
-        //}
+        [Test]
+        public void GameStatus_AllCategoriesInitialIsAvailableStatusSetAsFalse_IsAvailableReturnsFalse()
+        {
+            string[] playerName = { "A", "B" };
+
+            _game.NewGame(playerName);
+            var result = _game.GameStatus();
+
+            Assert.IsTrue(result.All(x => x.Values.All(y => y.IsAviable == false)));
+        }
+
+        [TestCase(1, 1, 1, 1, 1, Category.Aces, 6)]
+        public void AddPoints_ForGivenCategory_PointsAreStored(
+            int die1, int die2, int die3, int die4, int die5, Category selectedCategory, int expectedScore)
+        {
+            string[] playerName = { "A" };
+            _randomizer.Roll(1, 6).Returns(die1, die2, die3, die4, die5);
+            List<Dice> dice = MakeNewDiceSet();
+
+            _game.NewGame(playerName);
+            _game.RollDice(dice);
+            _game.AddPoints(selectedCategory);
+
+            var result = _game.GameStatus()[0][selectedCategory].Points;
+
+            Assert.AreEqual(expectedScore, result);
+        }
     }
 }
