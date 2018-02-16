@@ -13,7 +13,7 @@ namespace Yahtzee.ViewModels
     public class GameWindowViewModel : INotifyPropertyChanged
     {
         private IRandomizer _randomizer;
-        private List<Dice> _dice;
+        private IDice[] _dice;
 
         public GameWindowViewModel()
         {
@@ -24,8 +24,7 @@ namespace Yahtzee.ViewModels
             }
             UpdateTable = new Dictionary<Category, int>[4];
 
-            _dice = new List<Dice>
-            {
+            _dice = new[] {
                 new Dice(),
                 new Dice(),
                 new Dice(),
@@ -37,7 +36,7 @@ namespace Yahtzee.ViewModels
               {
                   Game game = new Game(_randomizer);
                   game.NewGame(new[] { "Bob" });
-                  
+
                   game.RollDice(_dice);
                   RollResult = game.RollResult.Select(x => x.Result).ToArray();
                   UpdateTable[0] = game.GetAvailableOptions("Bob");
@@ -80,7 +79,7 @@ namespace Yahtzee.ViewModels
             }
         }
 
-        private Dictionary<Category,int>[] _updateTable;
+        private Dictionary<Category, int>[] _updateTable;
         public Dictionary<Category, int>[] UpdateTable
         {
             get
