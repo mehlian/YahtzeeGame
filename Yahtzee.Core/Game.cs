@@ -8,6 +8,7 @@ namespace Yahtzee.Core
     {
         private IRandomizer _randomizer;
         private Dictionary<Category, int?>[] _gameStatus;
+        private YahtzeeScorer _yahtzeeScorer;
 
         public string[] Players { get; protected set; }
         public int ActivePlayer { get; protected set; }
@@ -16,6 +17,7 @@ namespace Yahtzee.Core
         public Game(IRandomizer randomizer)
         {
             _randomizer = randomizer;
+            _yahtzeeScorer = new YahtzeeScorer();
         }
 
         public void NewGame(params string[] playerName)
@@ -69,45 +71,16 @@ namespace Yahtzee.Core
             RollsLeft--;
         }
 
-        public Dictionary<Category, int> GetAvailableOptions(string playerName)
+        public Dictionary<Category, int> GetAvailableOptions()
         {
-            int acesScore = (int)RollResult.Where(x => x.Result == 1).Sum(x => x.Result);
-            int twosScore = (int)RollResult.Where(x => x.Result == 2).Sum(x => x.Result);
-            int threesScore = (int)RollResult.Where(x => x.Result == 3).Sum(x => x.Result);
-            int foursScore = (int)RollResult.Where(x => x.Result == 4).Sum(x => x.Result);
-            int fivesScore = (int)RollResult.Where(x => x.Result == 5).Sum(x => x.Result);
-            int sixesScore = (int)RollResult.Where(x => x.Result == 6).Sum(x => x.Result);
-
-            int threeOfKindScore = RollResult.GroupBy(x => x.Result).Where(x => x.Count() == 3) != null ? (int)RollResult.Sum(x => x.Result) : 0;
-            int fourOfKindScore = RollResult.GroupBy(x => x.Result).Where(x => x.Count() == 4) != null ? (int)RollResult.Sum(x => x.Result) : 0;
-            int fullHouseScore = RollResult.GroupBy(x => x.Result).Count() == 2 ? 25 : 0;
-
-            var master = new int[] { 1, 2, 3, 4, 5, 6 };
-            var sub = RollResult.Select(x => x.Result).Distinct().OrderBy(x => x).ToArray();
-            int smallStraightScore = sub.Length > 3 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
-                .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 30 : 0;
-            int largeStraightScore = sub.Length == 5 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
-                .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
-
-            int chanceScore = (int)RollResult.Sum(x => x.Result);
-            int yahtzeeScore = RollResult.GroupBy(x => x.Result).Count() == 1 ? 50 : 0;
-
-            return new Dictionary<Category, int>
+            var scores = new Dictionary<Category, int>();
+            foreach (Category category in Enum.GetValues(typeof(Category)))
             {
-                { Category.Aces, acesScore },
-                { Category.Twos, twosScore },
-                { Category.Threes, threesScore },
-                { Category.Fours, foursScore },
-                { Category.Fives, fivesScore },
-                { Category.Sixes, sixesScore },
-                { Category.ThreeOfKind, threeOfKindScore },
-                { Category.FourOfKind, fourOfKindScore },
-                { Category.FullHouse, fullHouseScore },
-                { Category.SmallStraight, smallStraightScore },
-                { Category.LargeStraight, largeStraightScore },
-                { Category.Chance, chanceScore },
-                { Category.Yahtzee, yahtzeeScore },
-            };
+                if (_gameStatus[ActivePlayer][category] == null)
+                    scores.Add(category, _yahtzeeScorer.CalculateScore(category, RollResult));
+            }
+
+            return scores;
         }
 
         public Dictionary<Category, int?>[] GameStatus()
@@ -117,10 +90,10 @@ namespace Yahtzee.Core
 
         public void AddPoints(Category category)
         {
-            if (_gameStatus[ActivePlayer][category]!=null)
+            if (_gameStatus[ActivePlayer][category] != null)
                 throw new ArgumentException($"Category {category} already taken! Choose other category.");
 
-            _gameStatus[ActivePlayer][category] = CalculateScore(category);
+            _gameStatus[ActivePlayer][category] = _yahtzeeScorer.CalculateScore(category, RollResult);
 
             ActivePlayer++;
             RollsLeft = 3;
@@ -128,87 +101,6 @@ namespace Yahtzee.Core
             {
                 ActivePlayer = 0;
             }
-        }
-
-        private int CalculateScore(Category category)
-        {
-            switch (category)
-            {
-                case Category.Aces:
-                    return CalculateScoreForGivenSideNumber(1);
-                case Category.Twos:
-                    return CalculateScoreForGivenSideNumber(2);
-                case Category.Threes:
-                    return CalculateScoreForGivenSideNumber(3);
-                case Category.Fours:
-                    return CalculateScoreForGivenSideNumber(4);
-                case Category.Fives:
-                    return CalculateScoreForGivenSideNumber(5);
-                case Category.Sixes:
-                    return CalculateScoreForGivenSideNumber(6);
-                case Category.ThreeOfKind:
-                    return CalculateScoreForThreeOfKind();
-                case Category.FourOfKind:
-                    return CalculateScoreForFourOfKind();
-                case Category.FullHouse:
-                    return CalculateScoreForFullHouse();
-                case Category.SmallStraight:
-                    return CalculateScoreForSmallStraight();
-                case Category.LargeStraight:
-                    return CalculateScoreForLargeStraight();
-                case Category.Chance:
-                    return CalculateScoreForChance();
-                case Category.Yahtzee:
-                    return CalculateScoreForYahtzee();
-                default:
-                    throw new ArgumentException($"Unsupported category {category}.");
-            }
-        }
-
-        private int CalculateScoreForYahtzee()
-        {
-            return RollResult.GroupBy(x => x.Result).Count() == 1 ? 50 : 0;
-        }
-
-        private int CalculateScoreForChance()
-        {
-            return RollResult.Sum(x => x.Result);
-        }
-
-        private int CalculateScoreForLargeStraight()
-        {
-            var master = new int[] { 1, 2, 3, 4, 5, 6 };
-            var sub = RollResult.Select(x => x.Result).Distinct().OrderBy(x => x).ToArray();
-            return sub.Length == 5 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
-                        .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
-        }
-
-        private int CalculateScoreForSmallStraight()
-        {
-            var master = new int[] { 1, 2, 3, 4, 5, 6 };
-            var sub = RollResult.Select(x => x.Result).Distinct().OrderBy(x => x).ToArray();
-            return sub.Length > 3 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
-                        .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 30 : 0;
-        }
-
-        private int CalculateScoreForFullHouse()
-        {
-            return RollResult.GroupBy(x => x.Result).Count() == 2 ? 25 : 0;
-        }
-
-        private int CalculateScoreForFourOfKind()
-        {
-            return RollResult.GroupBy(x => x.Result).Where(x => x.Count() == 4) != null ? RollResult.Sum(x => x.Result) : 0;
-        }
-
-        private int CalculateScoreForThreeOfKind()
-        {
-            return RollResult.GroupBy(x => x.Result).Where(x => x.Count() == 3) != null ? RollResult.Sum(x => x.Result) : 0;
-        }
-
-        private int CalculateScoreForGivenSideNumber(int side)
-        {
-            return RollResult.Where(x => x.Result == side).Sum(x => x.Result);
         }
     }
 }

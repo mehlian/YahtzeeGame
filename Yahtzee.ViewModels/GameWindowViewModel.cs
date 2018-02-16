@@ -39,9 +39,9 @@ namespace Yahtzee.ViewModels
 
                   game.RollDice(_dice);
                   RollResult = game.RollResult.Select(x => x.Result).ToArray();
-                  UpdateTable[0] = game.GetAvailableOptions("Bob");
+                  UpdateTable[0] = game.GetAvailableOptions();
                   game.RollDice(_dice);
-                  UpdateTable[1] = game.GetAvailableOptions("Bob");
+                  UpdateTable[1] = game.GetAvailableOptions();
 
                   //UpdateTable = UpdateTable;
                   //Category co = (Category)Enum.Parse(typeof(Category), "Aces");

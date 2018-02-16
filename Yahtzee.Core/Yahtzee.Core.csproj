@@ -53,6 +53,7 @@
     <Compile Include="IDice.cs" />
     <Compile Include="IRandomizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YahtzeeScorer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

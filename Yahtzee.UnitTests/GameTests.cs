@@ -200,6 +200,7 @@ namespace Yahtzee.UnitTests
             new object[]{1, 1, 1, 2, 3, Category.ThreeOfKind, 8              },
             new object[]{1, 1, 1, 1, 2, Category.FourOfKind, 6               },
             new object[]{1, 1, 1, 1, 3, Category.FourOfKind, 7               },
+            new object[]{1, 1, 2, 2, 2, Category.FourOfKind, 0               },
             new object[]{1, 1, 2, 2, 2, Category.FullHouse, 25               },
             new object[]{1, 1, 2, 2, 3, Category.FullHouse, 0                },
             new object[]{1, 2, 3, 4, 1, Category.SmallStraight, 30           },
@@ -300,21 +301,92 @@ namespace Yahtzee.UnitTests
             Assert.AreEqual(3, result);
         }
 
-        [TestCaseSource(nameof(_combinations))]
-        public void GetAvailableOptions_PlayerRollsFiveDices_ReturnsDictionaryWithCalculatedScoreForEachAvailableCategory(
-            int die1, int die2, int die3, int die4, int die5, Category categoryToCheck, int expectedScore)
+        [Test]
+        public void GetAvailableOptions_PlayerRollsFiveDices_ReturnsDictionaryWithCalculatedScoreForEachAvailableCategory()
         {
-            string[] playerName = { "A" };
-            _randomizer.Roll(1, 6).Returns(die1, die2, die3, die4, die5);
+            _randomizer.Roll(1, 6).Returns(1);
             IDice[] dice = MakeNewDiceSet();
 
-            _game.NewGame(playerName);
+            _game.NewGame("A");
             _game.RollDice(dice);
-            var result = _game.GetAvailableOptions(playerName[0]);
+            var expected = new Dictionary<Category, int>()
+            {
+                { Category.Aces, 5 },
+                { Category.Twos, 0 },
+                { Category.Threes, 0 },
+                { Category.Fours, 0 },
+                { Category.Fives, 0 },
+                { Category.Sixes, 0 },
+                { Category.ThreeOfKind, 5 },
+                { Category.FourOfKind, 5 },
+                { Category.FullHouse, 0 },
+                { Category.SmallStraight, 0 },
+                { Category.LargeStraight, 0 },
+                { Category.Chance, 5 },
+                { Category.Yahtzee, 50 },
+            };
+            var result = _game.GetAvailableOptions();
 
-            Assert.AreEqual(expectedScore, result[categoryToCheck]);
+            CollectionAssert.AreEqual(expected, result);
         }
 
+        [Test]
+        public void GetAvailableOptions_PlayerRollsFiveDices_ReturnsDictionaryWithCalculatedScoreForEachAvailableCategory2()
+        {
+            _randomizer.Roll(1, 6).Returns(1,1,2,2,2);
+            IDice[] dice = MakeNewDiceSet();
 
+            _game.NewGame("A");
+            _game.RollDice(dice);
+            var expected = new Dictionary<Category, int>()
+            {
+                { Category.Aces, 2 },
+                { Category.Twos, 6 },
+                { Category.Threes, 0 },
+                { Category.Fours, 0 },
+                { Category.Fives, 0 },
+                { Category.Sixes, 0 },
+                { Category.ThreeOfKind, 8 },
+                { Category.FourOfKind, 0 },
+                { Category.FullHouse, 25 },
+                { Category.SmallStraight, 0 },
+                { Category.LargeStraight, 0 },
+                { Category.Chance, 8 },
+                { Category.Yahtzee, 0 },
+            };
+            var result = _game.GetAvailableOptions();
+
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void GetAvailableOptions_PlayerAlreadyPickedOneCategory_ReturnsDictionaryWithCalculatedScoreForEachLeftCategory()
+        {
+            _randomizer.Roll(1, 6).Returns(1, 1, 2, 2, 2);
+            IDice[] dice = MakeNewDiceSet();
+
+            _game.NewGame("A");
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces);
+
+            var expected = new Dictionary<Category, int>()
+            {
+                { Category.Twos, 6 },
+                { Category.Threes, 0 },
+                { Category.Fours, 0 },
+                { Category.Fives, 0 },
+                { Category.Sixes, 0 },
+                { Category.ThreeOfKind, 8 },
+                { Category.FourOfKind, 0 },
+                { Category.FullHouse, 25 },
+                { Category.SmallStraight, 0 },
+                { Category.LargeStraight, 0 },
+                { Category.Chance, 8 },
+                { Category.Yahtzee, 0 },
+            };
+            var result = _game.GetAvailableOptions();
+
+            CollectionAssert.AreEqual(expected, result);
+        }
     }
 }
