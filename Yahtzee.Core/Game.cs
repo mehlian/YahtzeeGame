@@ -84,9 +84,9 @@ namespace Yahtzee.Core
 
             var master = new int[] { 1, 2, 3, 4, 5, 6 };
             var sub = RollResult.Select(x => x.Result).Distinct().OrderBy(x => x).ToArray();
-            int smallStraightScore = master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
+            int smallStraightScore = sub.Length > 3 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
                 .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 30 : 0;
-            int largeStraightScore = master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
+            int largeStraightScore = sub.Length == 5 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
                 .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
 
             int chanceScore = (int)RollResult.Sum(x => x.Result);
@@ -117,7 +117,17 @@ namespace Yahtzee.Core
 
         public void AddPoints(Category category)
         {
+            if (_gameStatus[ActivePlayer][category]!=null)
+                throw new ArgumentException($"Category {category} already taken! Choose other category.");
+
             _gameStatus[ActivePlayer][category] = CalculateScore(category);
+
+            ActivePlayer++;
+            RollsLeft = 3;
+            if (ActivePlayer > Players.Length - 1)
+            {
+                ActivePlayer = 0;
+            }
         }
 
         private int CalculateScore(Category category)
