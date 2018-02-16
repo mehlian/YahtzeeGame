@@ -9,11 +9,85 @@ namespace Yahtzee.Core
         private IRandomizer _randomizer;
         private Dictionary<Category, int?>[] _gameStatus;
         private YahtzeeScorer _yahtzeeScorer;
+        private int[] _bonusScore;
+        private int[] _partialScore;
+        private int[] _totalScore;
 
         public string[] Players { get; protected set; }
         public int ActivePlayer { get; protected set; }
         public IDice[] RollResult { get; protected set; }
-        public int RollsLeft { get; protected set; } = 0;
+        public int RollsLeft { get; protected set; }
+        public int[] PartialScore
+        {
+            get
+            {
+                int[] score = new int[Players.Length];
+                for (int i = 0; i < Players.Length; i++)
+                {
+                    int? temp = 0;
+                    temp += _gameStatus[ActivePlayer][Category.Aces];
+                    temp += _gameStatus[ActivePlayer][Category.Twos];
+                    temp += _gameStatus[ActivePlayer][Category.Threes];
+                    temp += _gameStatus[ActivePlayer][Category.Fours];
+                    temp += _gameStatus[ActivePlayer][Category.Fives];
+                    temp += _gameStatus[ActivePlayer][Category.Sixes];
+                    score[i] = temp == null ? 0 : (int)temp + BonusScore[i];
+                }
+                return score;
+            }
+            protected set { _partialScore = value; }
+        }
+
+        public int[] BonusScore
+        {
+            get
+            {
+                int[] score = new int[Players.Length];
+                for (int i = 0; i < Players.Length; i++)
+                {
+                    int? temp = 0;
+                    temp += _gameStatus[ActivePlayer][Category.Aces];
+                    temp += _gameStatus[ActivePlayer][Category.Twos];
+                    temp += _gameStatus[ActivePlayer][Category.Threes];
+                    temp += _gameStatus[ActivePlayer][Category.Fours];
+                    temp += _gameStatus[ActivePlayer][Category.Fives];
+                    temp += _gameStatus[ActivePlayer][Category.Sixes];
+                    score[i] = temp < 62 || temp == null ? 0 : 35;
+                }
+                return score;
+            }
+            protected set { _bonusScore = value; }
+        }
+
+        public int[] TotalScore
+        {
+            get
+            {
+                int[] score = new int[Players.Length];
+                for (int i = 0; i < Players.Length; i++)
+                {
+                    int? temp = 0;
+                    temp += _gameStatus[ActivePlayer][Category.Aces];
+                    temp += _gameStatus[ActivePlayer][Category.Twos];
+                    temp += _gameStatus[ActivePlayer][Category.Threes];
+                    temp += _gameStatus[ActivePlayer][Category.Fours];
+                    temp += _gameStatus[ActivePlayer][Category.Fives];
+                    temp += _gameStatus[ActivePlayer][Category.Sixes];
+                    temp += _gameStatus[ActivePlayer][Category.ThreeOfKind];
+                    temp += _gameStatus[ActivePlayer][Category.FourOfKind];
+                    temp += _gameStatus[ActivePlayer][Category.FullHouse];
+                    temp += _gameStatus[ActivePlayer][Category.SmallStraight];
+                    temp += _gameStatus[ActivePlayer][Category.LargeStraight];
+                    temp += _gameStatus[ActivePlayer][Category.Yahtzee];
+                    temp += _gameStatus[ActivePlayer][Category.Chance];
+
+                    score[i] = temp == null ? 0 : (int)temp + BonusScore[i];
+                }
+                return score;
+            }
+            protected set { _totalScore = value; }
+        }
+
         public Game(IRandomizer randomizer)
         {
             _randomizer = randomizer;
@@ -28,6 +102,9 @@ namespace Yahtzee.Core
             Players = playerName;
             ActivePlayer = 0;
             RollsLeft = 3;
+            PartialScore = new int[playerName.Length];
+            BonusScore = new int[playerName.Length];
+            TotalScore = new int[playerName.Length];
 
             _gameStatus = new Dictionary<Category, int?>[playerName.Length];
             for (int i = 0; i < playerName.Length; i++)

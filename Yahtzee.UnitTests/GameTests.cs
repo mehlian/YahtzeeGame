@@ -333,7 +333,7 @@ namespace Yahtzee.UnitTests
         [Test]
         public void GetAvailableOptions_PlayerRollsFiveDices_ReturnsDictionaryWithCalculatedScoreForEachAvailableCategory2()
         {
-            _randomizer.Roll(1, 6).Returns(1,1,2,2,2);
+            _randomizer.Roll(1, 6).Returns(1, 1, 2, 2, 2);
             IDice[] dice = MakeNewDiceSet();
 
             _game.NewGame("A");
@@ -387,6 +387,245 @@ namespace Yahtzee.UnitTests
             var result = _game.GetAvailableOptions();
 
             CollectionAssert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void PartialScore_NotAllSimpleCategoriesAreTaken_Returns0()
+        {
+            _randomizer.Roll(1, 6).Returns(1);
+            IDice[] dice = MakeNewDiceSet();
+
+            _game.NewGame("A");
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces);
+
+            var result = _game.PartialScore[0];
+
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void BonusScore_NotAllSimpleCategoriesAreTaken_Returns0()
+        {
+            _randomizer.Roll(1, 6).Returns(1);
+            IDice[] dice = MakeNewDiceSet();
+
+            _game.NewGame("A");
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces);
+
+            var result = _game.BonusScore[0];
+
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void BonusScore_AllSimpleCategoriesAreTakenAndSumOfTheirPointsIsGreaterThan62_Returns35()
+        {
+            IDice[] dice = MakeNewDiceSet();
+            _game.NewGame("A");
+
+            _randomizer.Roll(1, 6).Returns(1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces); // 5 points
+            _randomizer.Roll(1, 6).Returns(2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos); // 10 points
+            _randomizer.Roll(1, 6).Returns(3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes); // 15 points
+            _randomizer.Roll(1, 6).Returns(4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours); // 20 points
+            _randomizer.Roll(1, 6).Returns(5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives); // 25 points
+            _randomizer.Roll(1, 6).Returns(6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes); // 30 points
+                                             // Sum: 105 points
+            var result = _game.BonusScore[0];
+
+            Assert.AreEqual(35, result);
+        }
+
+        [Test]
+        public void PartialScore_AllSimpleCategoriesAreTaken_ReturnsSum()
+        {
+            IDice[] dice = MakeNewDiceSet();
+            _game.NewGame("A");
+
+            _randomizer.Roll(1, 6).Returns(1, 2, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces); // 1 point
+            _randomizer.Roll(1, 6).Returns(2, 3, 3, 3, 3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos); // 2 points
+            _randomizer.Roll(1, 6).Returns(3, 4, 4, 4, 4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes); // 3 points
+            _randomizer.Roll(1, 6).Returns(4, 5, 5, 5, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours); // 4 points
+            _randomizer.Roll(1, 6).Returns(5, 6, 6, 6, 6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives); // 5 points
+            _randomizer.Roll(1, 6).Returns(6, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes); // 6 points
+                                             // Sum: 21 points
+            var result = _game.PartialScore[0];
+
+            Assert.AreEqual(21, result);
+        }
+
+        [Test]
+        public void PartialScore_AllSimpleCategoriesAreTakenAndSumOfTheirPointsIsGreaterThan62_ReturnsSumWithBonus()
+        {
+            IDice[] dice = MakeNewDiceSet();
+            _game.NewGame("A");
+
+            _randomizer.Roll(1, 6).Returns(1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces); // 5 points
+            _randomizer.Roll(1, 6).Returns(2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos); // 10 points
+            _randomizer.Roll(1, 6).Returns(3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes); // 15 points
+            _randomizer.Roll(1, 6).Returns(4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours); // 20 points
+            _randomizer.Roll(1, 6).Returns(5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives); // 25 points
+            _randomizer.Roll(1, 6).Returns(6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes); // 30 points
+                                             // Sum: 105 points
+            var result = _game.PartialScore[0];
+
+            Assert.AreEqual(140, result);
+        }
+
+        [Test]
+        public void TotalScore_NotAllCategoriesAreTaken_Returns0()
+        {
+            _randomizer.Roll(1, 6).Returns(1);
+            IDice[] dice = MakeNewDiceSet();
+
+            _game.NewGame("A");
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces);
+
+            var result = _game.TotalScore[0];
+
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void TotalScore_AllCategoriesAreTaken_ReturnsTotalScore()
+        {
+            IDice[] dice = MakeNewDiceSet();
+            _game.NewGame("A");
+
+            _randomizer.Roll(1, 6).Returns(1, 2, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces); // 1 point
+            _randomizer.Roll(1, 6).Returns(2, 3, 3, 3, 3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos); // 2 points
+            _randomizer.Roll(1, 6).Returns(3, 4, 4, 4, 4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes); // 3 points
+            _randomizer.Roll(1, 6).Returns(4, 5, 5, 5, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours); // 4 points
+            _randomizer.Roll(1, 6).Returns(5, 6, 6, 6, 6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives); // 5 points
+            _randomizer.Roll(1, 6).Returns(6, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes); // 6 points
+                                             // Sum: 21 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.ThreeOfKind); // 5 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.FourOfKind); // 5 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.FullHouse); // 25 points
+            _randomizer.Roll(1, 6).Returns(1, 2, 3, 4, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.SmallStraight); // 30 points
+            _randomizer.Roll(1, 6).Returns(1, 2, 3, 4, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.LargeStraight); // 40 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Yahtzee); // 50 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Chance); // 5 points
+
+            var result = _game.TotalScore[0];
+
+            Assert.AreEqual(181, result);
+        }
+
+        [Test]
+        public void TotalScore_AllCategoriesAreTakenAndSimpleCategoriesSumIsGreaterThan62_ReturnsTotalScoreWithBonus()
+        {
+            IDice[] dice = MakeNewDiceSet();
+            _game.NewGame("A");
+
+            _randomizer.Roll(1, 6).Returns(1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces); // 5 points
+            _randomizer.Roll(1, 6).Returns(2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos); // 10 points
+            _randomizer.Roll(1, 6).Returns(3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes); // 15 points
+            _randomizer.Roll(1, 6).Returns(4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours); // 20 points
+            _randomizer.Roll(1, 6).Returns(5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives); // 25 points
+            _randomizer.Roll(1, 6).Returns(6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes); // 30 points
+                                             // Sum: 105 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.ThreeOfKind); // 5 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.FourOfKind); // 5 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.FullHouse); // 25 points
+            _randomizer.Roll(1, 6).Returns(1, 2, 3, 4, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.SmallStraight); // 30 points
+            _randomizer.Roll(1, 6).Returns(1, 2, 3, 4, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.LargeStraight); // 40 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Yahtzee); // 50 points
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Chance); // 5 points
+
+            var result = _game.TotalScore[0];
+
+            Assert.AreEqual(300, result);
         }
     }
 }
