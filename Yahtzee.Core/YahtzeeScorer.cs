@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Yahtzee.Core
 {
-    public class YahtzeeScorer
+    internal class YahtzeeScorer
     {
-        private IDice[] _rollResult;
+        private int[] _rollResult;
 
-        public int CalculateScore(Category category, IDice[] rollResult)
+         
+
+        internal int CalculateCategoryScore(Category category, int[] rollResult)
         {
             _rollResult = rollResult;
 
@@ -47,50 +46,50 @@ namespace Yahtzee.Core
             }
         }
 
-        private int CalculateScoreForYahtzee()
+        private int CalculateScoreForGivenSideNumber(int side)
         {
-            return _rollResult.GroupBy(x => x.Result).Count() == 1 ? 50 : 0;
+            return _rollResult.Where(x => x == side).Sum();
         }
 
-        private int CalculateScoreForChance()
+        private int CalculateScoreForThreeOfKind()
         {
-            return _rollResult.Sum(x => x.Result);
+            return _rollResult.GroupBy(x => x).Any(x => x.Count() >= 3) ? _rollResult.Sum() : 0;
         }
 
-        private int CalculateScoreForLargeStraight()
+        private int CalculateScoreForFourOfKind()
         {
-            var master = new int[] { 1, 2, 3, 4, 5, 6 };
-            var sub = _rollResult.Select(x => x.Result).Distinct().OrderBy(x => x).ToArray();
-            return sub.Length == 5 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
-                        .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
+            return _rollResult.GroupBy(x => x).Any(x => x.Count() >= 4) ? _rollResult.Sum() : 0;
+        }
+
+        private int CalculateScoreForFullHouse()
+        {
+            return _rollResult.GroupBy(x => x).Count() == 2 ? 25 : 0;
         }
 
         private int CalculateScoreForSmallStraight()
         {
             var master = new int[] { 1, 2, 3, 4, 5, 6 };
-            var sub = _rollResult.Select(x => x.Result).Distinct().OrderBy(x => x).ToArray();
+            var sub = _rollResult.Select(x => x).Distinct().OrderBy(x => x).ToArray();
             return sub.Length > 3 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
                         .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 30 : 0;
         }
 
-        private int CalculateScoreForFullHouse()
+        private int CalculateScoreForLargeStraight()
         {
-            return _rollResult.GroupBy(x => x.Result).Count() == 2 ? 25 : 0;
+            var master = new int[] { 1, 2, 3, 4, 5, 6 };
+            var sub = _rollResult.Select(x => x).Distinct().OrderBy(x => x).ToArray();
+            return sub.Length == 5 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
+                        .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
         }
 
-        private int CalculateScoreForFourOfKind()
+        private int CalculateScoreForChance()
         {
-            return _rollResult.GroupBy(x => x.Result).Any(x => x.Count() >= 4) ? _rollResult.Sum(x => x.Result) : 0;
+            return _rollResult.Sum(x => x);
         }
 
-        private int CalculateScoreForThreeOfKind()
+        private int CalculateScoreForYahtzee()
         {
-            return _rollResult.GroupBy(x => x.Result).Any(x => x.Count() >= 3) ? _rollResult.Sum(x => x.Result) : 0;
-        }
-
-        private int CalculateScoreForGivenSideNumber(int side)
-        {
-            return _rollResult.Where(x => x.Result == side).Sum(x => x.Result);
+            return _rollResult.GroupBy(x => x).Count() == 1 ? 50 : 0;
         }
     }
 }

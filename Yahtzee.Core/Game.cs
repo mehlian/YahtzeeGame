@@ -9,9 +9,6 @@ namespace Yahtzee.Core
         private IRandomizer _randomizer;
         private Dictionary<Category, int?>[] _gameStatus;
         private YahtzeeScorer _yahtzeeScorer;
-        private int[] _bonusScore;
-        private int[] _partialScore;
-        private int[] _totalScore;
 
         public string[] Players { get; protected set; }
         public int ActivePlayer { get; protected set; }
@@ -25,17 +22,16 @@ namespace Yahtzee.Core
                 for (int i = 0; i < Players.Length; i++)
                 {
                     int? temp = 0;
-                    temp += _gameStatus[ActivePlayer][Category.Aces];
-                    temp += _gameStatus[ActivePlayer][Category.Twos];
-                    temp += _gameStatus[ActivePlayer][Category.Threes];
-                    temp += _gameStatus[ActivePlayer][Category.Fours];
-                    temp += _gameStatus[ActivePlayer][Category.Fives];
-                    temp += _gameStatus[ActivePlayer][Category.Sixes];
+                    temp += _gameStatus[i][Category.Aces];
+                    temp += _gameStatus[i][Category.Twos];
+                    temp += _gameStatus[i][Category.Threes];
+                    temp += _gameStatus[i][Category.Fours];
+                    temp += _gameStatus[i][Category.Fives];
+                    temp += _gameStatus[i][Category.Sixes];
                     score[i] = temp == null ? 0 : (int)temp + BonusScore[i];
                 }
                 return score;
             }
-            protected set { _partialScore = value; }
         }
 
         public int[] BonusScore
@@ -46,17 +42,16 @@ namespace Yahtzee.Core
                 for (int i = 0; i < Players.Length; i++)
                 {
                     int? temp = 0;
-                    temp += _gameStatus[ActivePlayer][Category.Aces];
-                    temp += _gameStatus[ActivePlayer][Category.Twos];
-                    temp += _gameStatus[ActivePlayer][Category.Threes];
-                    temp += _gameStatus[ActivePlayer][Category.Fours];
-                    temp += _gameStatus[ActivePlayer][Category.Fives];
-                    temp += _gameStatus[ActivePlayer][Category.Sixes];
+                    temp += _gameStatus[i][Category.Aces];
+                    temp += _gameStatus[i][Category.Twos];
+                    temp += _gameStatus[i][Category.Threes];
+                    temp += _gameStatus[i][Category.Fours];
+                    temp += _gameStatus[i][Category.Fives];
+                    temp += _gameStatus[i][Category.Sixes];
                     score[i] = temp < 62 || temp == null ? 0 : 35;
                 }
                 return score;
             }
-            protected set { _bonusScore = value; }
         }
 
         public int[] TotalScore
@@ -67,25 +62,24 @@ namespace Yahtzee.Core
                 for (int i = 0; i < Players.Length; i++)
                 {
                     int? temp = 0;
-                    temp += _gameStatus[ActivePlayer][Category.Aces];
-                    temp += _gameStatus[ActivePlayer][Category.Twos];
-                    temp += _gameStatus[ActivePlayer][Category.Threes];
-                    temp += _gameStatus[ActivePlayer][Category.Fours];
-                    temp += _gameStatus[ActivePlayer][Category.Fives];
-                    temp += _gameStatus[ActivePlayer][Category.Sixes];
-                    temp += _gameStatus[ActivePlayer][Category.ThreeOfKind];
-                    temp += _gameStatus[ActivePlayer][Category.FourOfKind];
-                    temp += _gameStatus[ActivePlayer][Category.FullHouse];
-                    temp += _gameStatus[ActivePlayer][Category.SmallStraight];
-                    temp += _gameStatus[ActivePlayer][Category.LargeStraight];
-                    temp += _gameStatus[ActivePlayer][Category.Yahtzee];
-                    temp += _gameStatus[ActivePlayer][Category.Chance];
+                    temp += _gameStatus[i][Category.Aces];
+                    temp += _gameStatus[i][Category.Twos];
+                    temp += _gameStatus[i][Category.Threes];
+                    temp += _gameStatus[i][Category.Fours];
+                    temp += _gameStatus[i][Category.Fives];
+                    temp += _gameStatus[i][Category.Sixes];
+                    temp += _gameStatus[i][Category.ThreeOfKind];
+                    temp += _gameStatus[i][Category.FourOfKind];
+                    temp += _gameStatus[i][Category.FullHouse];
+                    temp += _gameStatus[i][Category.SmallStraight];
+                    temp += _gameStatus[i][Category.LargeStraight];
+                    temp += _gameStatus[i][Category.Yahtzee];
+                    temp += _gameStatus[i][Category.Chance];
 
                     score[i] = temp == null ? 0 : (int)temp + BonusScore[i];
                 }
                 return score;
             }
-            protected set { _totalScore = value; }
         }
 
         public Game(IRandomizer randomizer)
@@ -99,12 +93,14 @@ namespace Yahtzee.Core
             if (playerName.Length > 4)
                 throw new ArgumentException("Max number of players is 4.");
 
+            RestartGame(playerName);
+        }
+
+        private void RestartGame(string[] playerName)
+        {
             Players = playerName;
             ActivePlayer = 0;
             RollsLeft = 3;
-            PartialScore = new int[playerName.Length];
-            BonusScore = new int[playerName.Length];
-            TotalScore = new int[playerName.Length];
 
             _gameStatus = new Dictionary<Category, int?>[playerName.Length];
             for (int i = 0; i < playerName.Length; i++)
@@ -134,14 +130,12 @@ namespace Yahtzee.Core
                 throw new InvalidOperationException($"Player {Players[ActivePlayer]} has exceeded the maximum number of dice rolls in this turn.");
 
             if (dice.Length != 5)
-                throw new ArgumentException("Only five dice are supported.");
+                throw new ArgumentException("Only set of five dice is supported.");
 
             foreach (var die in dice)
             {
                 if (die.IsUnlocked)
-                {
                     die.Result = _randomizer.Roll(1, die.SideNumber);
-                }
             }
 
             RollResult = dice;
@@ -154,7 +148,10 @@ namespace Yahtzee.Core
             foreach (Category category in Enum.GetValues(typeof(Category)))
             {
                 if (_gameStatus[ActivePlayer][category] == null)
-                    scores.Add(category, _yahtzeeScorer.CalculateScore(category, RollResult));
+                {
+                    int[] rollResult = RollResult.Select(x => x.Result).ToArray();
+                    scores.Add(category, _yahtzeeScorer.CalculateCategoryScore(category, rollResult));
+                }
             }
 
             return scores;
@@ -170,14 +167,14 @@ namespace Yahtzee.Core
             if (_gameStatus[ActivePlayer][category] != null)
                 throw new ArgumentException($"Category {category} already taken! Choose other category.");
 
-            _gameStatus[ActivePlayer][category] = _yahtzeeScorer.CalculateScore(category, RollResult);
+            int[] rollResult = RollResult.Select(x => x.Result).ToArray();
+            _gameStatus[ActivePlayer][category] = _yahtzeeScorer.CalculateCategoryScore(category, rollResult);
 
             ActivePlayer++;
             RollsLeft = 3;
+
             if (ActivePlayer > Players.Length - 1)
-            {
                 ActivePlayer = 0;
-            }
         }
     }
 }

@@ -480,6 +480,68 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
+        public void PartialScore_AllSimpleCategoriesAreTakenInTwoPlayersGame_ReturnsSum()
+        {
+            IDice[] dice = MakeNewDiceSet();
+            _game.NewGame("A", "B");
+
+            _randomizer.Roll(1, 6).Returns(1, 2, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces);
+            // 1 point for player A
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces);
+            // 5 points for player B
+            _randomizer.Roll(1, 6).Returns(2, 3, 3, 3, 3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos);
+            // 2 points for player A
+            _randomizer.Roll(1, 6).Returns(2, 2, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos);
+            // 10 points for player B
+            _randomizer.Roll(1, 6).Returns(3, 4, 4, 4, 4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes);
+            // 3 points for player A
+            _randomizer.Roll(1, 6).Returns(3, 3, 3, 3, 3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes);
+            // 15 points for player B
+            _randomizer.Roll(1, 6).Returns(4, 5, 5, 5, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours);
+            // 4 points for player A
+            _randomizer.Roll(1, 6).Returns(4, 4, 4, 4, 4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours);
+            // 20 points for player B
+            _randomizer.Roll(1, 6).Returns(5, 6, 6, 6, 6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives);
+            // 5 points for player A
+            _randomizer.Roll(1, 6).Returns(5, 5, 5, 5, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives);
+            // 25 points for player B
+            _randomizer.Roll(1, 6).Returns(6, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes);
+            // 6 points for player A
+            // Sum: 21 points for player A
+            _randomizer.Roll(1, 6).Returns(6, 6, 6, 6, 6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes);
+            // 30 points for player B
+            // Sum: 140 points for player B
+
+            var result = _game.PartialScore;
+
+            Assert.AreEqual(new[] { 21, 140 }, result);
+        }
+
+        [Test]
         public void PartialScore_AllSimpleCategoriesAreTakenAndSumOfTheirPointsIsGreaterThan62_ReturnsSumWithBonus()
         {
             IDice[] dice = MakeNewDiceSet();
@@ -626,6 +688,122 @@ namespace Yahtzee.UnitTests
             var result = _game.TotalScore[0];
 
             Assert.AreEqual(300, result);
+        }
+
+        [Test]
+        public void TotalScore_AllCategoriesAreTakenAndSimpleCategoriesSumIsGreaterThan62InTwoPlayersGame_ReturnsTotalScoreWithBonus()
+        {
+            IDice[] dice = MakeNewDiceSet();
+            _game.NewGame("A", "B");
+
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces);
+            // 5 points for player A
+            _randomizer.Roll(1, 6).Returns(1, 2, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces);
+            // 1 points for player B
+            _randomizer.Roll(1, 6).Returns(2, 2, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos);
+            // 10 points for player A
+            _randomizer.Roll(1, 6).Returns(2, 3, 3, 3, 3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos);
+            // 2 points for player B
+            _randomizer.Roll(1, 6).Returns(3, 3, 3, 3, 3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes);
+            // 15 points for player A
+            _randomizer.Roll(1, 6).Returns(3, 4, 4, 4, 4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes);
+            // 3 points for player B
+            _randomizer.Roll(1, 6).Returns(4, 4, 4, 4, 4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours);
+            // 20 points for player A
+            _randomizer.Roll(1, 6).Returns(4, 5, 5, 5, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours);
+            // 4 points for player B
+            _randomizer.Roll(1, 6).Returns(5, 5, 5, 5, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives);
+            // 25 points for player A
+            _randomizer.Roll(1, 6).Returns(5, 6, 6, 6, 6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives);
+            // 5 points for player B
+            _randomizer.Roll(1, 6).Returns(6, 6, 6, 6, 6);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes); // 30 points for player A
+                                             // Sum: 105 points for player A
+            _randomizer.Roll(1, 6).Returns(6, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes); // 6 points for player B
+                                             // Sum: 21 points for player B
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.ThreeOfKind);
+            // 5 points for player A
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.ThreeOfKind);
+            // 5 points for player B
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.FourOfKind);
+            // 5 points for player A
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.FourOfKind);
+            // 5 points for player B
+            _randomizer.Roll(1, 6).Returns(1, 1, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.FullHouse);
+            // 25 points for player A
+            _randomizer.Roll(1, 6).Returns(1, 1, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.FullHouse);
+            // 25 points for player B
+            _randomizer.Roll(1, 6).Returns(1, 2, 3, 4, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.SmallStraight);
+            // 30 points for player A
+            _randomizer.Roll(1, 6).Returns(1, 2, 3, 4, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.SmallStraight);
+            // 30 points for player B
+            _randomizer.Roll(1, 6).Returns(1, 2, 3, 4, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.LargeStraight);
+            // 40 points for player A
+            _randomizer.Roll(1, 6).Returns(1, 2, 3, 4, 5);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.LargeStraight);
+            // 40 points for player B
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Yahtzee);
+            // 50 points for player A
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Yahtzee);
+            // 50 points for player B
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Chance);
+            // 5 points for player A
+            _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Chance);
+            // 5 points for player B
+
+            var result = _game.TotalScore;
+
+            Assert.AreEqual(new[] { 300, 181 }, result);
         }
     }
 }
