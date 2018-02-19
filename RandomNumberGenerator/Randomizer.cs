@@ -1,12 +1,15 @@
-﻿using Yahtzee.Core;
+﻿using System;
+using Yahtzee.Core;
 
 namespace RandomNumberGenerator
 {
     public class Randomizer : IRandomizer
     {
-        public int GetRandomNumber(int minValue, int maxValue)
+        private readonly Random rand = new Random();
+
+        public int GetRandomNumber(int minNumber, int maxNumber)
         {
-            throw new System.NotImplementedException();
+            return rand.Next(minNumber, maxNumber + 1);
         }
     }
 }

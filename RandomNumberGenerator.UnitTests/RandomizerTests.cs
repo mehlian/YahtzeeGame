@@ -1,9 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Yahtzee.Core;
 
 namespace RandomNumberGenerator.UnitTests
@@ -23,6 +18,26 @@ namespace RandomNumberGenerator.UnitTests
             Randomizer randomizer = new Randomizer();
 
             Assert.IsInstanceOf<IRandomizer>(randomizer);
+        }
+
+        [Test]
+        public void GetRandomNuber_ForGivenMinValue_ReturnsValueGreaterOrEqualToMinValue()
+        {
+            Randomizer randomizer = new Randomizer();
+
+            var result = randomizer.GetRandomNumber(1, 6);
+
+            Assert.GreaterOrEqual(result, 1);
+        }
+
+        [Test]
+        public void GetRandomNuber_ForGivenMaxValue_ReturnsValueLesserOrEqualToMaxValue()
+        {
+            Randomizer randomizer = new Randomizer();
+
+            var result = randomizer.GetRandomNumber(1, 6);
+
+            Assert.LessOrEqual(result, 6);
         }
     }
 }
