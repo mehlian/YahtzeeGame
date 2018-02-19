@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.ViewModels.UnitTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahtzee.ViewModels", "Yahtzee.ViewModels\Yahtzee.ViewModels.csproj", "{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomNumberGenerator", "RandomNumberGenerator\RandomNumberGenerator.csproj", "{575D4FB4-3DB7-420B-B46B-3D696A8AF13B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomNumberGenerator.UnitTests", "RandomNumberGenerator.UnitTests\RandomNumberGenerator.UnitTests.csproj", "{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38E4BC4E-42E5-46D1-9134-08A54F16E4E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{575D4FB4-3DB7-420B-B46B-3D696A8AF13B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{575D4FB4-3DB7-420B-B46B-3D696A8AF13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{575D4FB4-3DB7-420B-B46B-3D696A8AF13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{575D4FB4-3DB7-420B-B46B-3D696A8AF13B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
