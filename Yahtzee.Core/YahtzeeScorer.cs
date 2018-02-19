@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Yahtzee.Core
@@ -6,8 +7,6 @@ namespace Yahtzee.Core
     internal class YahtzeeScorer
     {
         private int[] _rollResult;
-
-         
 
         internal int CalculateCategoryScore(Category category, int[] rollResult)
         {
@@ -44,6 +43,21 @@ namespace Yahtzee.Core
                 default:
                     throw new ArgumentException($"Unsupported category {category}.");
             }
+        }
+
+        internal int CalculateBonusScore(Dictionary<Category, int?> gameStatus)
+        {
+            return gameStatus.Take(6).Any(x => x.Value == null) || gameStatus.Take(6).Sum(x => x.Value) < 63 ? 0 : 35;
+        }
+
+        internal int CalculatePartialScore(Dictionary<Category, int?> gameStatus)
+        {
+            return gameStatus.Take(6).Any(x => x.Value == null) ? 0 : (int)gameStatus.Take(6).Sum(x => x.Value) + CalculateBonusScore(gameStatus);
+        }
+
+        internal int CalculateTotalScore(Dictionary<Category, int?> gameStatus)
+        {
+            return gameStatus.Any(x => x.Value == null) ? 0 : (int)gameStatus.Sum(x => x.Value) + CalculateBonusScore(gameStatus);
         }
 
         private int CalculateScoreForGivenSideNumber(int side)

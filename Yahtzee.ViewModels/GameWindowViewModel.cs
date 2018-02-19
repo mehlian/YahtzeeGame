@@ -20,7 +20,7 @@ namespace Yahtzee.ViewModels
             if (_randomizer == null)
             {
                 _randomizer = Substitute.For<IRandomizer>();
-                _randomizer.Roll(1, 6).Returns(1, 1, 1, 1, 1, 6, 6, 3, 3, 3);
+                _randomizer.GetRandomNumber(1, 6).Returns(1, 1, 1, 1, 1, 6, 6, 3, 3, 3);
             }
             UpdateTable = new Dictionary<Category, int>[4];
 
@@ -39,9 +39,9 @@ namespace Yahtzee.ViewModels
 
                   game.RollDice(_dice);
                   RollResult = game.RollResult.Select(x => x.Result).ToArray();
-                  UpdateTable[0] = game.GetAvailableOptions();
+                  UpdateTable[0] = game.GetAvailableCategories();
                   game.RollDice(_dice);
-                  UpdateTable[1] = game.GetAvailableOptions();
+                  UpdateTable[1] = game.GetAvailableCategories();
 
                   //UpdateTable = UpdateTable;
                   //Category co = (Category)Enum.Parse(typeof(Category), "Aces");

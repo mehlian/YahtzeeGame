@@ -37,7 +37,7 @@ namespace Yahtzee.ViewModels.UnitTests
             int rollResult)
         {
             GameWindowViewModel viewModel = new GameWindowViewModel(_randomizer);
-            _randomizer.Roll(1, 6).Returns(rollResult);
+            _randomizer.GetRandomNumber(1, 6).Returns(rollResult);
             ICommand command = viewModel.RollDiceCommand;
 
             command.Execute(null);
@@ -55,7 +55,7 @@ namespace Yahtzee.ViewModels.UnitTests
                 if (args.PropertyName == nameof(viewModel.RollResult))
                     hasFired = true;
             };
-            _randomizer.Roll(1, 6).Returns(1);
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
             ICommand command = viewModel.RollDiceCommand;
 
             command.Execute(null);
@@ -73,7 +73,7 @@ namespace Yahtzee.ViewModels.UnitTests
                 if (args.PropertyName == nameof(viewModel.UpdateTable))
                     hasFired = true;
             };
-            _randomizer.Roll(1, 6).Returns(1);
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
             ICommand command = viewModel.RollDiceCommand;
 
             command.Execute(null);

@@ -2,6 +2,6 @@
 {
     public interface IRandomizer
     {
-        int Roll(int minValue, int maxValue);
+        int GetRandomNumber(int minValue, int maxValue);
     }
 }
