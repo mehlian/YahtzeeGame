@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomNumberGenerator", "Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomNumberGenerator.UnitTests", "RandomNumberGenerator.UnitTests\RandomNumberGenerator.UnitTests.csproj", "{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairRandomnessChecker", "FairRandomnessChecker\FairRandomnessChecker.csproj", "{BE74DDEF-B036-47E8-BF44-37F21213BC49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairRandomnessChecker.UnitTests", "FairRandomnessChecker.UnitTests\FairRandomnessChecker.UnitTests.csproj", "{6AD2D6DD-C340-4D11-B377-A89C1EB8998E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE5F1E6E-32A2-44CD-AE21-DDD08C9F476A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE74DDEF-B036-47E8-BF44-37F21213BC49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE74DDEF-B036-47E8-BF44-37F21213BC49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE74DDEF-B036-47E8-BF44-37F21213BC49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE74DDEF-B036-47E8-BF44-37F21213BC49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AD2D6DD-C340-4D11-B377-A89C1EB8998E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AD2D6DD-C340-4D11-B377-A89C1EB8998E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AD2D6DD-C340-4D11-B377-A89C1EB8998E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AD2D6DD-C340-4D11-B377-A89C1EB8998E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

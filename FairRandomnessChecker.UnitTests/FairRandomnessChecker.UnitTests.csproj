@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D7A056C7-ECA0-403A-9269-9755F3E0DDFD}</ProjectGuid>
+    <ProjectGuid>{6AD2D6DD-C340-4D11-B377-A89C1EB8998E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Yahtzee.IntegrationTests</RootNamespace>
-    <AssemblyName>Yahtzee.IntegrationTests</AssemblyName>
+    <RootNamespace>FairRandomnessChecker.UnitTests</RootNamespace>
+    <AssemblyName>FairRandomnessChecker.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,21 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChiSquaredTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomizerTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FairRandomnessChecker\FairRandomnessChecker.csproj">
       <Project>{be74ddef-b036-47e8-bf44-37f21213bc49}</Project>
       <Name>FairRandomnessChecker</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RandomNumberGenerator\RandomNumberGenerator.csproj">
-      <Project>{575D4FB4-3DB7-420B-B46B-3D696A8AF13B}</Project>
-      <Name>RandomNumberGenerator</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
