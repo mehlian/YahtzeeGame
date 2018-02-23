@@ -63,13 +63,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameWindowViewModel.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CommandHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RandomNumberGenerator\RandomNumberGenerator.csproj">
+      <Project>{575D4FB4-3DB7-420B-B46B-3D696A8AF13B}</Project>
+      <Name>RandomNumberGenerator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yahtzee.Core\Yahtzee.Core.csproj">
       <Project>{42eacad1-58eb-4ca4-bb1a-6955b47d86fd}</Project>
       <Name>Yahtzee.Core</Name>

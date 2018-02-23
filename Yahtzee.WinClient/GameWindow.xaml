@@ -60,9 +60,9 @@
             </Border>
             <TextBlock Margin="0 10" Text="Select available category on the table to score."/>
 
-        </StackPanel>
+        </StackPanel> 
         <StackPanel Grid.Column="1">
-            <FlowDocumentScrollViewer Padding="0">
+            <FlowDocumentScrollViewer Padding="0" IsSelectionEnabled="False">
                 <FlowDocumentScrollViewer.VerticalScrollBarVisibility>
                     <ScrollBarVisibility>
                         0
@@ -113,7 +113,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[Aces]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][Aces]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -140,7 +140,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[Twos]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][Twos]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -167,7 +167,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[Threes]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][Threes]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -194,7 +194,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[Fours]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][Fours]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -221,7 +221,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[Fives]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][Fives]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -253,7 +253,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[1][Sixes]}"/>
+                                        <TextBlock Text="0"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -270,57 +270,58 @@
                             <TableRow>
                                 <TableCell BorderBrush="Black" BorderThickness="0,1,0,0">
                                     <Paragraph>
-                                        <TextBlock Text="SUM"/>
-                                    </Paragraph>
+                                        <TextBlock Text="(Bonus)"/>
+                                    </Paragraph> 
                                 </TableCell>
                                 <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
-                                    <Paragraph>
-                                        <TextBlock Text="0"/>
-                                    </Paragraph>
-                                </TableCell>
+                                    <Paragraph>                   
+                                        <TextBlock Text="(0)"/>   
+                                    </Paragraph>                  
+                                </TableCell>                      
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>                   
+                                        <TextBlock Text="(0)"/>   
+                                    </Paragraph>                  
+                                </TableCell>                      
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>                   
+                                        <TextBlock Text="(0)"/>   
+                                    </Paragraph>                  
+                                </TableCell>                      
                                 <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
-                                    </Paragraph>
-                                </TableCell>
-                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
-                                    <Paragraph>
-                                        <TextBlock Text="0"/>
-                                    </Paragraph>
-                                </TableCell>
-                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
-                                    <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="(0)"/>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>
                                     <Paragraph>
-                                        <TextBlock Text="(bonus)"/>
+                                        <TextBlock Text="SUM"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="(0)"/>
+                                        <TextBlock Text="0"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="(0)"/>
+                                        <TextBlock Text="0"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="(0)"/>
+                                        <TextBlock Text="0"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="(0)"/>
+                                        <TextBlock Text="0"/>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
+                            
                             <TableRow>
                                 <TableCell>
                                     <Paragraph/>
@@ -336,7 +337,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[ThreeOfKind]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][ThreeOfKind]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -365,7 +366,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[FourOfKind]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][FourOfKind]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -392,7 +393,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[FullHouse]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][FullHouse]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -419,7 +420,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[SmallStraight]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][SmallStraight]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -446,7 +447,7 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[LargeStraight]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][LargeStraight]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -468,12 +469,12 @@
                             <TableRow Background="AliceBlue">
                                 <TableCell>
                                     <Paragraph>
-                                        <TextBlock Text="Yahtzee"/>
+                                        <TextBlock Text="Chance"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[Yahtzee]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0][Chance]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -495,12 +496,12 @@
                             <TableRow>
                                 <TableCell>
                                     <Paragraph>
-                                        <TextBlock Text="Chance"/>
+                                        <TextBlock Text="Yahtzee"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[Chance]}"/>
+                                        <TextBlock Text="{Binding UpdateTable[0] [Yahtzee]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
@@ -519,6 +520,7 @@
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
+                            
                             <TableRow>
                                 <TableCell BorderBrush="Black" BorderThickness="0,1,0,0">
                                     <Paragraph>

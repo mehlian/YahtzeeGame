@@ -4,20 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Yahtzee.WinClient"
+        xmlns:vm="clr-namespace:Yahtzee.ViewModels;assembly=Yahtzee.ViewModels"
         mc:Ignorable="d"
         Title="Yahtzee Game" Height="250" Width="400"
         MinHeight="250" MinWidth="400" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid Background="AliceBlue">
-        <TabControl>
-            <TabItem x:Name="welcomeTab" Focusable="False" IsHitTestVisible="False" IsSelected="True" Visibility="Collapsed">
+        <TabControl SelectedIndex="{Binding TabControlIndex}" BorderThickness="0">
+            <TabItem Focusable="False" IsHitTestVisible="False" Visibility="Collapsed">
                 <StackPanel Margin="10">
                     <TextBlock Margin="10" Text="Welcome in Yahtzee!" FontSize="36" HorizontalAlignment="Center"/>
-                    <Button Margin="10" Width="100" Content="New Game" Command=""/>
+                    <Button Margin="10" Width="100" Content="New Game" Command="{Binding NewGameCommand}"/>
                     <Button Margin="10" Width="100" Content="Scores" Command=""/>
-                    <Button Margin="10" Width="100" Content="Exit Game" Command=""/>
+                    <Button Margin="10" Width="100" Content="Exit Game" Click="Button_Click"/>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="numberOfPlayersTab" Focusable="False" IsHitTestVisible="False" IsSelected="True" Visibility="Collapsed">
+            <TabItem x:Name="numberOfPlayersTab" Focusable="False" IsHitTestVisible="False" Visibility="Collapsed">
                 <StackPanel Margin="10">
                     <TextBlock Margin="0 15 0 10" Text="Select number of players:" FontSize="28" HorizontalAlignment="Center"/>
                     <Grid>
@@ -27,23 +31,23 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Margin="10" Content="1" Command=""/>
-                        <Button Grid.Column="1" Margin="10" Content="2" Command=""/>
-                        <Button Grid.Column="2" Margin="10" Content="3" Command=""/>
-                        <Button Grid.Column="3" Margin="10" Content="4" Command=""/>
+                        <Button Grid.Column="0" Margin="10" Content="1" Command="{Binding SelectNumberOfPlayersCommand}" CommandParameter="1"/>
+                        <Button Grid.Column="1" Margin="10" Content="2" Command="{Binding SelectNumberOfPlayersCommand}" CommandParameter="2"/>
+                        <Button Grid.Column="2" Margin="10" Content="3" Command="{Binding SelectNumberOfPlayersCommand}" CommandParameter="3"/>
+                        <Button Grid.Column="3" Margin="10" Content="4" Command="{Binding SelectNumberOfPlayersCommand}" CommandParameter="4"/>
                     </Grid>
-                    <Button Margin="0 56 0 10" Width="100" Content="Back" Command=""/>
+                    <Button Margin="0 56 0 10" Width="100" Content="Back" Command="{Binding BackCommand}"/>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="playersNameTab" Focusable="False" IsHitTestVisible="False" IsSelected="True" Visibility="Collapsed">
+            <TabItem x:Name="playersNameTab" Focusable="False" IsHitTestVisible="False" Visibility="Collapsed">
                 <StackPanel Margin="10">
-                    <TextBlock Margin="0 15 0 10" Text="Enter name for player X:" FontSize="28" HorizontalAlignment="Center"/>
-                    <TextBox Width="200" Height="20" Text=""/>
-                    <Button Margin="0 36 0 10" Width="100" Content="Ok" Command=""/>
-                    <Button Margin="10" Width="100" Content="Back" Command=""/>
+                    <TextBlock Margin="0 15 0 10" Text="{Binding Message}" FontSize="28" HorizontalAlignment="Center"/>
+                    <TextBox Width="200" Height="20" Text="{Binding PlayerName}"/>
+                    <Button Margin="0 36 0 10" Width="100" Content="Ok" Command="{Binding OKCommand}"/>
+                    <Button Margin="10" Width="100" Content="Cancel" Command="{Binding CancelCommand}"/>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="scoresTab" Focusable="False" IsHitTestVisible="False" IsSelected="True" Visibility="Collapsed">
+            <TabItem x:Name="scoresTab" Focusable="False" IsHitTestVisible="False" Visibility="Collapsed">
                 <StackPanel>
                     <TextBlock  Margin="0 0 0 0" Text="Scores:" FontSize="20" HorizontalAlignment="Center"/>
                     <ListView Height="140" ItemsSource="{Binding namea}" Margin="5">

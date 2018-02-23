@@ -7,6 +7,7 @@ using System.ComponentModel;
 using NSubstitute;
 using System.Linq;
 using System.Collections.ObjectModel;
+using RandomNumberGenerator;
 
 namespace Yahtzee.ViewModels
 {
@@ -19,8 +20,9 @@ namespace Yahtzee.ViewModels
         {
             if (_randomizer == null)
             {
-                _randomizer = Substitute.For<IRandomizer>();
-                _randomizer.GetRandomNumber(1, 6).Returns(1, 1, 1, 1, 1, 6, 6, 3, 3, 3);
+                //_randomizer = Substitute.For<IRandomizer>();
+                //_randomizer.GetRandomNumber(1, 6).Returns(1, 1, 1, 1, 1, 6, 6, 3, 3, 3);
+                _randomizer = new Randomizer();
             }
             UpdateTable = new Dictionary<Category, int>[4];
 
@@ -35,13 +37,13 @@ namespace Yahtzee.ViewModels
             _rollDiceCommand = new DelegateCommand(() =>
               {
                   Game game = new Game(_randomizer);
-                  game.NewGame(new[] { "Bob" });
+                  game.NewGame("Bob");
 
                   game.RollDice(_dice);
                   RollResult = game.RollResult.Select(x => x.Result).ToArray();
                   UpdateTable[0] = game.GetAvailableCategories();
                   game.RollDice(_dice);
-                  UpdateTable[1] = game.GetAvailableCategories();
+                  //UpdateTable[1] = game.GetAvailableCategories();
 
                   //UpdateTable = UpdateTable;
                   //Category co = (Category)Enum.Parse(typeof(Category), "Aces");
