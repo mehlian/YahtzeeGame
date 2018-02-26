@@ -17,6 +17,11 @@ namespace Yahtzee.ViewModels.UnitTests
             _randomizer = Substitute.For<IRandomizer>();
         }
 
+        public GameWindowViewModel CreateGameWindowViewModel()
+        {
+            return new GameWindowViewModel(_randomizer);
+        }
+
         [Test]
         public void GameWindowViewModel_CanBeCreated()
         {

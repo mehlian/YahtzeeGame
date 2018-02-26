@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Yahtzee.WinClient"
         xmlns:vm="clr-namespace:Yahtzee.ViewModels;assembly=Yahtzee.ViewModels"
         mc:Ignorable="d"
-        Title="GameWindow" Height="430" Width="650" ResizeMode="NoResize">
+        Title="GameWindow" Height="430" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:GameWindowViewModel/>
     </Window.DataContext>
@@ -113,22 +113,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][Aces]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][Aces]}"/>
+                                        </Hyperlink>
                                     </Paragraph> 
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][Aces]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][Aces]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][Aces]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -140,22 +148,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][Twos]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][Twos]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][Twos]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][Twos]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][Twos]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -167,22 +183,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][Threes]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][Threes]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][Threes]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][Threes]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][Threes]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -194,22 +218,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][Fours]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][Fours]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][Fours]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][Fours]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][Fours]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -221,22 +253,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][Fives]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][Fives]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][Fives]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][Fives]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][Fives]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -248,22 +288,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][Sixes]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][Sixes]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][Sixes]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][Sixes]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][Sixes]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -337,24 +385,28 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][ThreeOfKind]}"/>
-                                    </Paragraph>
-                                </TableCell>
-                                <TableCell TextAlignment="Center">
-                                    <Paragraph>
-                                        <Hyperlink Command="{Binding RollDiceCommand}" TextDecorations="None" Foreground="Black">
-                                            <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][ThreeOfKind]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][ThreeOfKind]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][ThreeOfKind]}"/>
+                                        </Hyperlink>
+                                    </Paragraph>
+                                </TableCell>
+                                <TableCell TextAlignment="Center">
+                                    <Paragraph>
+ 
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -366,22 +418,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][FourOfKind]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][FourOfKind]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][FourOfKind]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][FourOfKind]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][FourOfKind]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -393,22 +453,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][FullHouse]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][FullHouse]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][FullHouse]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][FullHouse]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][FullHouse]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -420,22 +488,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][SmallStraight]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][SmallStraight]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][SmallStraight]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][SmallStraight]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][SmallStraight]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -447,22 +523,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][LargeStraight]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][LargeStraight]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][LargeStraight]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][LargeStraight]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][LargeStraight]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -474,22 +558,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0][Chance]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][Chance]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][Chance]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][Chance]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][Chance]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -501,22 +593,30 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="{Binding UpdateTable[0] [Yahtzee]}"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[0][Yahtzee]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[1][Yahtzee]}"/>
+                                        </Hyperlink> 
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[2][Yahtzee]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <Hyperlink Command="" TextDecorations="None" Foreground="Black">
+                                            <TextBlock Text="{Binding UpdateTable[3][Yahtzee]}"/>
+                                        </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -552,7 +652,7 @@
                     </Table>
                 </FlowDocument>
             </FlowDocumentScrollViewer>
-            <Button HorizontalAlignment="Right" Margin="20" Width="100" Content="Quit Game" Command=""/>
+            <Button HorizontalAlignment="Right" Margin="20" Width="100" Content="Quit Game" Command="" Click="Button_Click"/>
 
         </StackPanel>
     </Grid>
