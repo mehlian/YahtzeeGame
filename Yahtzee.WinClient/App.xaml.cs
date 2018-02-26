@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Yahtzee.ViewModels;
 
 namespace Yahtzee.WinClient
 {
@@ -13,5 +14,14 @@ namespace Yahtzee.WinClient
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            IGameWindowService gameWindowService = new GameWindowService(MainWindow);
+            gameWindowService.Register<GameWindowViewModel, GameWindow>();
+
+            var viewModel = new MainWindowViewModel(gameWindowService);
+            var view = new MainWindow { DataContext = viewModel };
+            view.ShowDialog();
+        }
     }
 }

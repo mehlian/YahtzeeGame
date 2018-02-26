@@ -11,7 +11,7 @@ using RandomNumberGenerator;
 
 namespace Yahtzee.ViewModels
 {
-    public class GameWindowViewModel : INotifyPropertyChanged
+    public class GameWindowViewModel : INotifyPropertyChanged,IGameWindowRequestClose
     {
         private IRandomizer _randomizer;
         private IDice[] _dice;
@@ -97,5 +97,6 @@ namespace Yahtzee.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<GameWindowCloseRequestedEventArgs> CloseRequested;
     }
 }

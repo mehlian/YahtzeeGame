@@ -258,11 +258,47 @@ namespace Yahtzee.ViewModels.UnitTests
             Assert.IsTrue(hasFired);
         }
 
+        //[Test]
+        //public void NumberOfPlayers_PropertyChanged_IsFired()
+        //{
+        //    MainWindowViewModel vm = new MainWindowViewModel();
+
+        //}
+
         [Test]
-        public void NumberOfPlayers_PropertyChanged_IsFired()
+        public void OKCommand_WhenAllPlayersNamesAreGiven_MessageIsNotUpdated()
         {
             MainWindowViewModel vm = new MainWindowViewModel();
+            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
+            ICommand commandOK = vm.OKCommand;
+            commandPlNb.Execute(2);
+            vm.PlayerName = "A";
+            commandOK.Execute(null);
+            var expected = vm.Message;
+            vm.PlayerName = "B";
+            commandOK.Execute(null);
 
+            var result = vm.Message;
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void OKCommand_WhenAllPlayersNamesAreGiven_PlayerNameIsNotUpdated()
+        {
+            MainWindowViewModel vm = new MainWindowViewModel();
+            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
+            ICommand commandOK = vm.OKCommand;
+            commandPlNb.Execute(2);
+            vm.PlayerName = "A";
+            commandOK.Execute(null);
+            vm.PlayerName = "B";
+            var expected = vm.PlayerName;
+            commandOK.Execute(null);
+
+            var result = vm.PlayerName;
+
+            Assert.AreEqual(expected, result);
         }
 
         [Test]

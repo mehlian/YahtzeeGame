@@ -11,7 +11,11 @@ namespace Yahtzee.ViewModels
         public MainWindowViewModel()
         {
         }
-
+        private IGameWindowService _gameWindowService;
+        public MainWindowViewModel(IGameWindowService gameWindowService)
+        {
+            _gameWindowService = gameWindowService;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand NewGameCommand { get { return new CommandHandler((x) => { TabControlIndex = 1; }, (x) => true); } }
@@ -73,10 +77,18 @@ namespace Yahtzee.ViewModels
             {
                 return new CommandHandler((x) =>
                 {
-                    Players.Add(PlayerName);
-                    activePlayer++;
-                    PlayerName = $"Name{activePlayer}";
-                    Message = $"Enter name for player {activePlayer}:";
+                    if (activePlayer < NumberOfPlayers)
+                    {
+                        Players.Add(PlayerName);
+                        activePlayer++;
+                        PlayerName = $"Name{activePlayer}";
+                        Message = $"Enter name for player {activePlayer}:";
+                    }
+                    else
+                    {
+                        ShowGameWindow();
+                    }
+
                 }, (x) => CanExecute(x));
             }
         }
@@ -86,11 +98,42 @@ namespace Yahtzee.ViewModels
 
         private bool CanExecute(object param)
         {
-            if (activePlayer>NumberOfPlayers)
+            if (activePlayer > NumberOfPlayers)
             {
                 return false;
             }
             return true;
+        }
+
+        // testing gamewindow
+        public ICommand ShowGameWindowCommand
+        {
+            get
+            {
+                return new CommandHandler((x) =>
+                {
+                    ShowGameWindow();
+                }, (x) => CanExecute(x));
+            }
+        }
+
+        // testing gamewindow
+        private void ShowGameWindow()
+        {
+            var viewModel = new GameWindowViewModel();
+            bool? result = _gameWindowService.ShowDialog(viewModel);
+
+            if (result.HasValue)
+            {
+                if (result.Value)
+                {
+                    //Accepted
+                }
+                else
+                {
+                    //Cancelled
+                }
+            }
         }
     }
 }
