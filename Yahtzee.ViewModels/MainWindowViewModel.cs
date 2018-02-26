@@ -120,6 +120,11 @@ namespace Yahtzee.ViewModels
         // testing gamewindow
         private void ShowGameWindow()
         {
+            NumberOfPlayers = 1;
+            TabControlIndex = 0;
+            activePlayer = 1;
+            Message = $"Enter name for player {activePlayer}:";
+            PlayerName = $"Name{activePlayer}";
             var viewModel = new GameWindowViewModel();
             bool? result = _gameWindowService.ShowDialog(viewModel);
 
