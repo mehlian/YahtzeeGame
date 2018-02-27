@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NSubstitute;
+using NUnit.Framework;
 using System.Windows.Input;
 
 namespace Yahtzee.ViewModels.UnitTests
@@ -6,53 +7,62 @@ namespace Yahtzee.ViewModels.UnitTests
     [TestFixture]
     public class MainWindowViewModelTests
     {
-        [Test]
-        public void MainWindowViewModel_CanBeCreated()
+        private IGameWindowService _gameWindowService;
+        private MainWindowViewModel _vm;
+
+        [SetUp]
+        public void Setup()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
+            _gameWindowService = Substitute.For<IGameWindowService>();
+            _vm = Substitute.ForPartsOf<MainWindowViewModel>(_gameWindowService);
+            _vm.When(x => x.ShowGameWindow()).DoNotCallBase();
         }
 
         [Test]
-        public void NewGameCommand_CanBeExecuted()
+        public void MainWindowViewModel_CanBeCreated()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand command = vm.NewGameCommand;
-            command.Execute(null);
+            MainWindowViewModel vm = new MainWindowViewModel(_gameWindowService);
         }
 
         [Test]
         public void TabControlIndex_InitialState_Returns0()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            var result = vm.TabControlIndex;
+            var result = _vm.TabControlIndex;
 
             Assert.AreEqual(0, result);
         }
 
         [Test]
-        public void NewGameCommand_NewGameButtonIsPressed_TabControlIndexReturns1()
+        public void NewGameCommand_CanBeExecuted()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
+            ICommand newGameCommand = _vm.NewGameCommand;
 
-            ICommand command = vm.NewGameCommand;
-            command.Execute(null);
-            var result = vm.TabControlIndex;
+            newGameCommand.Execute(null);
+        }
+
+        [Test]
+        public void NewGameCommand_CommandExecuted_TabControlIndexReturns1()
+        {
+            ICommand newGameCommand = _vm.NewGameCommand;
+
+            newGameCommand.Execute(null);
+            var result = _vm.TabControlIndex;
 
             Assert.AreEqual(1, result);
         }
 
         [Test]
-        public void TabControlIndex_PropertyChangedOnNewGameCommand_IsFired()
+        public void TabControlIndex_PropertyChanged_IsFired()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
             bool hasFired = false;
-            vm.PropertyChanged += (sender, args) =>
+            _vm.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName == nameof(vm.TabControlIndex))
+                if (args.PropertyName == nameof(_vm.TabControlIndex))
                     hasFired = true;
             };
-            ICommand command = vm.NewGameCommand;
-            command.Execute(null);
+            ICommand newGameCommand = _vm.NewGameCommand;
+
+            newGameCommand.Execute(null);
 
             Assert.IsTrue(hasFired);
         }
@@ -60,135 +70,77 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void SelectNumberOfPlayersCommand_CanBeExecuted()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand command = vm.SelectNumberOfPlayersCommand;
-            command.Execute(1);
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+
+            selectNumberOfPlayersCommand.Execute(0);
         }
 
         [Test]
-        public void SelectNumberOfPlayersCommand_ButtonWithNumberIsPressed_NumbersOfPlayersReturnsSelectedNumber()
+        public void SelectNumberOfPlayersCommand_CommandExecuted_NumberOfPlayersReturnsGivenNumber()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
 
-            ICommand command = vm.SelectNumberOfPlayersCommand;
-            command.Execute(1);
-            var result = vm.NumberOfPlayers;
+            selectNumberOfPlayersCommand.Execute(1);
+            var result = _vm.NumberOfPlayers;
 
             Assert.AreEqual(1, result);
         }
 
         [Test]
-        public void SelectNumberOfPlayersCommand_ButtonWithNumberIsPressed_TabControlIndexReturns2()
+        public void SelectNumberOfPlayersCommand_CommandExecuted_TabControlIndexReturns2()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
 
-            ICommand command = vm.SelectNumberOfPlayersCommand;
-            command.Execute(1);
-            var result = vm.TabControlIndex;
+            selectNumberOfPlayersCommand.Execute(1);
+            var result = _vm.TabControlIndex;
 
             Assert.AreEqual(2, result);
         }
 
-        [Test]
-        public void SelectNumberOfPlayersCommand_ButtonWithNumberIsPressed_MessageReturnsString()
-        {
-            MainWindowViewModel vm = new MainWindowViewModel();
+        //[Test]
+        //public void SelectNumberOfPlayersCommand_ButtonWithNumberIsPressed_MessageReturnsString()
+        //{
+        //    MainWindowViewModel vm = CreateMainWindowViewModel();
 
-            ICommand command = vm.SelectNumberOfPlayersCommand;
-            command.Execute(1);
-            var result = vm.Message;
+        //    ICommand command = vm.SelectNumberOfPlayersCommand;
+        //    command.Execute(1);
+        //    var result = vm.Message;
 
-            StringAssert.Contains("Enter name for player 1:", result);
-        }
+        //    StringAssert.Contains("Enter name for player 1:", result);
+        //}
 
         [Test]
         public void BackCommand_CanBeExecuted()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
+            ICommand backCommand = _vm.BackCommand;
 
-            ICommand command = vm.BackCommand;
-            command.Execute(null);
+            backCommand.Execute(null);
         }
 
         [Test]
-        public void BackCommand_WhenClicked_TabControlIndexReturns0()
+        public void BackCommand_CommandExecuted_TabControlIndexReturns0()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
+            ICommand backCommand = _vm.BackCommand;
+            ICommand newGameCommand = _vm.NewGameCommand;
 
-            ICommand command = vm.BackCommand;
-            ICommand commandNewGame = vm.NewGameCommand;
-            commandNewGame.Execute(null);
-            command.Execute(null);
+            newGameCommand.Execute(null);
+            backCommand.Execute(null);
+            var result = _vm.TabControlIndex;
 
-            Assert.AreEqual(0, vm.TabControlIndex);
-        }
-
-        [Test]
-        public void CancelCommand_CanBeExecuted()
-        {
-            MainWindowViewModel vm = new MainWindowViewModel();
-
-            ICommand command = vm.CancelCommand;
-            command.Execute(null);
-        }
-
-        [Test]
-        public void CancelCommand_WhenClicked_TabControlIndexReturns1()
-        {
-            MainWindowViewModel vm = new MainWindowViewModel();
-
-            ICommand command = vm.CancelCommand;
-            command.Execute(null);
-
-            Assert.AreEqual(1, vm.TabControlIndex);
-        }
-
-        [Test]
-        public void CancelCommand_WhenClicked_NumberOfPlayersReturns1()
-        {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
-            commandPlNb.Execute(3);
-            ICommand command = vm.CancelCommand;
-            command.Execute(null);
-
-            Assert.AreEqual(1, vm.NumberOfPlayers);
-        }
-
-        [Test]
-        public void CancelCommand_WhenClicked_PlayerNameReturnsName1()
-        {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
-            commandPlNb.Execute(3);
-            ICommand commandOK = vm.OKCommand;
-            commandOK.Execute(null);
-            ICommand command = vm.CancelCommand;
-            command.Execute(null);
-
-            Assert.AreEqual("Name1", vm.PlayerName);
-        }
-
-        [Test]
-        public void PlayerName_InitialValue_ReturnsPlayerOne()
-        {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            var result=vm.PlayerName;
-
-            Assert.AreEqual("Name1", result);
+            Assert.AreEqual(0, result);
         }
 
         [Test]
         public void PlayerName_PropertyChanged_IsFired()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
             bool hasFired = false;
-            vm.PropertyChanged += (sender, args) =>
+            _vm.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName == nameof(vm.PlayerName))
+                if (args.PropertyName == nameof(_vm.PlayerName))
                     hasFired = true;
             };
-            vm.PlayerName = "A";
+
+            _vm.PlayerName = "A";
 
             Assert.IsTrue(hasFired);
         }
@@ -196,49 +148,49 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void OKCommand_CanBeExecuted()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand command = vm.OKCommand;
-            command.Execute(null);
+            ICommand okCommand = _vm.OKCommand;
+
+            okCommand.Execute(null);
         }
 
         [Test]
-        public void OKCommand_EnteredValidName_NameIsRegistered()
+        public void OKCommand_CommandExecutedWithGivenName_NameIsStored()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
-            commandPlNb.Execute(2);
-            vm.PlayerName = "A";
-            ICommand commandOK = vm.OKCommand;
-            commandOK.Execute(null);
-            var result = vm.Players;
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
 
-            Assert.AreEqual("A", result[0]);
+            selectNumberOfPlayersCommand.Execute(1);
+            _vm.PlayerName = "A";
+            okCommand.Execute(null);
+            var result = _vm.Players[0];
+
+            Assert.AreEqual("A", result);
         }
 
         [Test]
-        public void OKCommand_EnteredValidName_PlayerNameReturnsName()
+        public void OKCommand_CommandExecutedWithGivenNameForFirstPlayer_PlayerNameReturnsDefaultNameForNextPlayer()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
-            commandPlNb.Execute(2);
-            vm.PlayerName = "A";
-            ICommand commandOK = vm.OKCommand;
-            commandOK.Execute(null);
-            var result = vm.PlayerName;
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
+
+            selectNumberOfPlayersCommand.Execute(2);
+            _vm.PlayerName = "A";
+            okCommand.Execute(null);
+            var result = _vm.PlayerName;
 
             Assert.AreEqual("Name2", result);
         }
 
         [Test]
-        public void OKCommand_GivenValidName_MessageIsChanged()
+        public void OKCommand_CommandExecutedWithGivenNameForFirstPlayer_MessageIsUpdatedForNextPlayer()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
-            commandPlNb.Execute(2);
-            vm.PlayerName = "A";
-            ICommand commandOK = vm.OKCommand;
-            commandOK.Execute(null);
-            var result = vm.Message;
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
+
+            selectNumberOfPlayersCommand.Execute(2);
+            _vm.PlayerName = "A";
+            okCommand.Execute(null);
+            var result = _vm.Message;
 
             Assert.AreEqual("Enter name for player 2:", result);
         }
@@ -246,39 +198,35 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void Message_PropertyChanged_IsFired()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
             bool hasFired = false;
-            vm.PropertyChanged += (sender, args) =>
+            _vm.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName == nameof(vm.Message))
+                if (args.PropertyName == nameof(_vm.Message))
                     hasFired = true;
             };
-            vm.Message = "A";
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
+
+            selectNumberOfPlayersCommand.Execute(2);
+            _vm.PlayerName = "A";
+            okCommand.Execute(null);
 
             Assert.IsTrue(hasFired);
         }
 
-        //[Test]
-        //public void NumberOfPlayers_PropertyChanged_IsFired()
-        //{
-        //    MainWindowViewModel vm = new MainWindowViewModel();
-
-        //}
-
         [Test]
         public void OKCommand_WhenAllPlayersNamesAreGiven_MessageIsNotUpdated()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
-            ICommand commandOK = vm.OKCommand;
-            commandPlNb.Execute(2);
-            vm.PlayerName = "A";
-            commandOK.Execute(null);
-            var expected = vm.Message;
-            vm.PlayerName = "B";
-            commandOK.Execute(null);
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
 
-            var result = vm.Message;
+            selectNumberOfPlayersCommand.Execute(2);
+            _vm.PlayerName = "A";
+            okCommand.Execute(null);
+            var expected = _vm.Message;
+            _vm.PlayerName = "B";
+            okCommand.Execute(null);
+            var result = _vm.Message;
 
             Assert.AreEqual(expected, result);
         }
@@ -286,36 +234,114 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void OKCommand_WhenAllPlayersNamesAreGiven_PlayerNameIsNotUpdated()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
-            ICommand commandOK = vm.OKCommand;
-            commandPlNb.Execute(2);
-            vm.PlayerName = "A";
-            commandOK.Execute(null);
-            vm.PlayerName = "B";
-            var expected = vm.PlayerName;
-            commandOK.Execute(null);
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
 
-            var result = vm.PlayerName;
+            selectNumberOfPlayersCommand.Execute(2);
+            _vm.PlayerName = "A";
+            okCommand.Execute(null);
+            _vm.PlayerName = "B";
+            var expected = _vm.PlayerName;
+            okCommand.Execute(null);
+            var result = _vm.PlayerName;
 
             Assert.AreEqual(expected, result);
         }
 
         [Test]
-        public void OKCommand_WhenAllPlayersNamesAreGiven_CantExecuteOKCommand()
+        public void OKCommand_GivenExtraNameWhenAllNamesAreStored_ExtraNameIsNotStored()
         {
-            MainWindowViewModel vm = new MainWindowViewModel();
-            ICommand commandPlNb = vm.SelectNumberOfPlayersCommand;
-            ICommand commandOK = vm.OKCommand;
-            commandPlNb.Execute(2);
-            vm.PlayerName = "A";
-            commandOK.Execute(null);
-            vm.PlayerName = "B";
-            commandOK.Execute(null);
 
-            var result = commandOK.CanExecute(null);
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
 
-            Assert.AreEqual(false, result);
+            selectNumberOfPlayersCommand.Execute(2);
+            _vm.PlayerName = "A";
+            okCommand.Execute(null);
+            _vm.PlayerName = "B";
+            okCommand.Execute(null);
+            _vm.PlayerName = "C";
+            okCommand.Execute(null);
+
+            var result = _vm.Players.Count;
+
+            Assert.AreEqual(2, result);
+        }
+
+        [Test]
+        public void OKCommand_GivenExtraNameWhenAllNamesAreStored_ShowGameWindowIsInvoked()
+        {
+            bool isFired = false;
+            _vm.When(x => x.ShowGameWindow()).Do(x => isFired = true);
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
+
+            selectNumberOfPlayersCommand.Execute(2);
+            _vm.PlayerName = "A";
+            okCommand.Execute(null);
+            _vm.PlayerName = "B";
+            okCommand.Execute(null);
+
+            Assert.IsTrue(isFired);
+        }
+
+        [Test]
+        public void CancelCommand_CanBeExecuted()
+        {
+            ICommand cancelCommand = _vm.CancelCommand;
+
+            cancelCommand.Execute(null);
+        }
+
+        [Test]
+        public void CancelCommand_CommandExecuted_TabControlIndexReturns1()
+        {
+            ICommand cancelCommand = _vm.CancelCommand;
+
+            cancelCommand.Execute(null);
+            var result = _vm.TabControlIndex;
+
+            Assert.AreEqual(1, result);
+        }
+
+        [Test]
+        public void CancelCommand_CommandExecuted_PlayersCountReturns0()
+        {
+            ICommand cancelCommand = _vm.CancelCommand;
+
+            _vm.Players.Add("A");
+            cancelCommand.Execute(null);
+            var result = _vm.Players.Count;
+
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void CancelCommand_CommandExecuted_NumberOfPlayersReturns1()
+        {
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand cancelCommand = _vm.CancelCommand;
+
+            selectNumberOfPlayersCommand.Execute(2);
+            cancelCommand.Execute(null);
+            var result = _vm.NumberOfPlayers;
+
+            Assert.AreEqual(1, result);
+        }
+
+        [Test]
+        public void CancelCommand_CommandExecuted_PlayerNameReturnsDefaultName()
+        {
+            ICommand selectNumberOfPlayersCommand = _vm.SelectNumberOfPlayersCommand;
+            ICommand okCommand = _vm.OKCommand;
+            ICommand cancelCommand = _vm.CancelCommand;
+
+            selectNumberOfPlayersCommand.Execute(2);
+            okCommand.Execute(null);
+            cancelCommand.Execute(null);
+            var result = _vm.PlayerName;
+
+            Assert.AreEqual("Name1", result);
         }
     }
 }

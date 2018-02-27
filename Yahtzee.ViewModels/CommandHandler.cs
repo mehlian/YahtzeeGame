@@ -14,6 +14,10 @@ namespace Yahtzee.ViewModels
             _canExecute = canExecute;
         }
 
+        public CommandHandler(Action<object> action) : this(action, null)
+        {
+        }
+
         public bool CanExecute(object parameter) => _canExecute(parameter);
         public void Execute(object parameter) => _action(parameter);
         public event EventHandler CanExecuteChanged;

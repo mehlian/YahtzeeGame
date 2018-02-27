@@ -1,12 +1,5 @@
 ﻿<Application x:Class="Yahtzee.WinClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Yahtzee.WinClient"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-        <Style TargetType="Paragraph">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="12px"/>
-        </Style>
-    </Application.Resources>
+             xmlns:local="clr-namespace:Yahtzee.WinClient">
 </Application>

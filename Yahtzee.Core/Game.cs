@@ -97,6 +97,27 @@ namespace Yahtzee.Core
             return scores;
         }
 
+        //public Dictionary<Category, int>[] GameStatus()
+        //{
+        //    Dictionary<Category, int>[] dictionary = new Dictionary<Category, int>[4]
+        //    {
+        //        new Dictionary<Category, int>(),
+        //        new Dictionary<Category, int>(),
+        //        new Dictionary<Category, int>(),
+        //        new Dictionary<Category, int>()
+        //    };
+
+        //    for (int i = 0; i < _gameStatus.Length; i++)
+        //    {
+        //        foreach (var item in _gameStatus[i])
+        //        {
+        //            int ee = item.Value.HasValue ? (int)item.Value : 0;
+        //            dictionary[i].Add(item.Key,ee );
+        //        }
+        //    }
+        //    return dictionary;
+        //}
+
         public Dictionary<Category, int?>[] GameStatus()
         {
             return _gameStatus;

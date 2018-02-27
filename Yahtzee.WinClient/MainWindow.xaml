@@ -8,9 +8,7 @@
         mc:Ignorable="d"
         Title="Yahtzee Game" Height="250" Width="400"
         MinHeight="250" MinWidth="400" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
+
     <Grid Background="AliceBlue">
         <TabControl SelectedIndex="{Binding TabControlIndex}" BorderThickness="0">
             <TabItem Focusable="False" IsHitTestVisible="False" Visibility="Collapsed">

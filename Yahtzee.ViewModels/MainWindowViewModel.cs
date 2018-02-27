@@ -1,144 +1,139 @@
 ﻿using Prism.Commands;
+using RandomNumberGenerator;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Yahtzee.Core;
 
 namespace Yahtzee.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        public MainWindowViewModel()
-        {
-        }
         private IGameWindowService _gameWindowService;
+        private int _tabControlIndex;
+        private string _message;
+        private int _defaultNameIndex;
+        private string _playerName;
+
         public MainWindowViewModel(IGameWindowService gameWindowService)
         {
             _gameWindowService = gameWindowService;
+
+            Players = new List<string>();
+
+            NewGameCommand = new DelegateCommand(() => TabControlIndex = 1);
+            SelectNumberOfPlayersCommand = new DelegateCommand<object>((x) =>
+                                                {
+                                                    SetDefaultValues();
+                                                    NumberOfPlayers = int.Parse(x.ToString());
+                                                    TabControlIndex = 2;
+                                                });
+            BackCommand = new DelegateCommand(() => { TabControlIndex = 0; });
+            OKCommand = new DelegateCommand(() =>
+                                                {
+                                                    if (Players.Count < NumberOfPlayers)
+                                                    {
+                                                        Players.Add(PlayerName);
+                                                    }
+                                                    if (Players.Count < NumberOfPlayers)
+                                                    {
+                                                        _defaultNameIndex++;
+                                                        PlayerName = $"Name{_defaultNameIndex}";
+                                                        Message = $"Enter name for player {_defaultNameIndex}:";
+                                                    }
+                                                    if (Players.Count == NumberOfPlayers)
+                                                    {
+                                                        TabControlIndex = 0;
+                                                        ShowGameWindow();
+                                                    }
+
+                                                });
+            CancelCommand = new DelegateCommand(() =>
+                                                {
+                                                    SetDefaultValues();
+                                                    TabControlIndex = 1;
+                                                });
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ICommand NewGameCommand { get { return new CommandHandler((x) => { TabControlIndex = 1; }, (x) => true); } }
+        public ICommand NewGameCommand { get; }
+        public ICommand SelectNumberOfPlayersCommand { get; }
+        public ICommand BackCommand { get; }
+        public ICommand OKCommand { get; }
+        public ICommand CancelCommand { get; }
 
-        private int _tabControlIndex;
+        public int NumberOfPlayers { get; protected set; }
+
         public int TabControlIndex
         {
             get { return _tabControlIndex; }
             set
             {
                 _tabControlIndex = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TabControlIndex)));
+                OnPropertyChanged();
             }
         }
 
-        public ICommand SelectNumberOfPlayersCommand
+        public string Message
         {
-            get
+            get { return _message; }
+            protected set
             {
-                return new CommandHandler((x) =>
-                {
-                    NumberOfPlayers = int.Parse(x.ToString());
-                    TabControlIndex = 2;
-                }, (x) => true);
+                _message = value;
+                OnPropertyChanged();
             }
         }
 
-        public int NumberOfPlayers { get; set; } = 1;
-        public ICommand BackCommand
+        public string PlayerName
         {
-            get
+            get { return _playerName; }
+            set
             {
-                return new CommandHandler((x) => { TabControlIndex = 0; }, (x) => true);
+                _playerName = value;
+                OnPropertyChanged();
             }
         }
 
-        public ICommand CancelCommand
+        public List<string> Players { get; protected set; }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            get
-            {
-                return new CommandHandler((x) =>
-                {
-                    NumberOfPlayers = 1;
-                    TabControlIndex = 1;
-                    activePlayer = 1;
-                    Message = $"Enter name for player {activePlayer}:";
-                    PlayerName = $"Name{activePlayer}";
-                }, (x) => true);
-            }
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private string _message = "Enter name for player 1:";
-        public string Message { get { return _message; } set { _message = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Message))); } }
-
-        private int activePlayer = 1;
-        public ICommand OKCommand
-        {
-            get
-            {
-                return new CommandHandler((x) =>
-                {
-                    if (activePlayer < NumberOfPlayers)
-                    {
-                        Players.Add(PlayerName);
-                        activePlayer++;
-                        PlayerName = $"Name{activePlayer}";
-                        Message = $"Enter name for player {activePlayer}:";
-                    }
-                    else
-                    {
-                        ShowGameWindow();
-                    }
-
-                }, (x) => CanExecute(x));
-            }
-        }
-        private string _playerName = $"Name1";
-        public string PlayerName { get { return _playerName; } set { _playerName = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PlayerName))); } }
-        public List<string> Players { get; set; } = new List<string>();
-
-        private bool CanExecute(object param)
-        {
-            if (activePlayer > NumberOfPlayers)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        // testing gamewindow
-        public ICommand ShowGameWindowCommand
-        {
-            get
-            {
-                return new CommandHandler((x) =>
-                {
-                    ShowGameWindow();
-                }, (x) => CanExecute(x));
-            }
-        }
-
-        // testing gamewindow
-        private void ShowGameWindow()
+        private void SetDefaultValues()
         {
             NumberOfPlayers = 1;
-            TabControlIndex = 0;
-            activePlayer = 1;
-            Message = $"Enter name for player {activePlayer}:";
-            PlayerName = $"Name{activePlayer}";
-            var viewModel = new GameWindowViewModel();
+            _defaultNameIndex = 1;
+            Players.Clear();
+            Message = $"Enter name for player {_defaultNameIndex}:";
+            PlayerName = $"Name{_defaultNameIndex}";
+        }
+
+        // testing gamewindow
+        public virtual void ShowGameWindow()
+        {
+            var players = Players.ToArray();
+            SetDefaultValues();
+            IRandomizer randomizer = new Randomizer();
+            var viewModel = new GameWindowViewModel(randomizer, players);
             bool? result = _gameWindowService.ShowDialog(viewModel);
 
-            if (result.HasValue)
-            {
-                if (result.Value)
-                {
-                    //Accepted
-                }
-                else
-                {
-                    //Cancelled
-                }
-            }
+            //if (result.HasValue)
+            //{
+            //    if (result.Value)
+            //    {
+            //        //Accepted
+            //    }
+            //    else
+            //    {
+            //        //Cancelled
+            //    }
+            //}
         }
     }
 }
