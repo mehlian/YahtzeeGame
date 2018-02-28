@@ -480,6 +480,36 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
+        public void BonusScore_AllSimpleCategoriesAreTakenAndSumOfTheirPointsIsSmallerThan63_Returns0()
+        {
+            IDice[] dice = MakeNewDiceSet();
+            _game.NewGame("A");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1, 2, 2, 2, 2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Aces); // 1 points
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Twos); // 10 points
+            _randomizer.GetRandomNumber(1, 6).Returns(3);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Threes); // 15 points
+            _randomizer.GetRandomNumber(1, 6).Returns(4);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fours); // 20 points
+            _randomizer.GetRandomNumber(1, 6).Returns(5, 5, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Fives); // 10 points
+            _randomizer.GetRandomNumber(1, 6).Returns(6, 1, 1, 1, 1);
+            _game.RollDice(dice);
+            _game.AddPoints(Category.Sixes); // 6 points
+                                             // Sum: 62 points
+            var result = _game.BonusScore[0];
+
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
         public void PartialScore_InitialValue_ReturnsNull()
         {
             _game.NewGame("A");

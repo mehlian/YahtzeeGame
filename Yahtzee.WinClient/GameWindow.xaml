@@ -325,23 +325,23 @@
                                     </Paragraph> 
                                 </TableCell>
                                 <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
-                                    <Paragraph>                   
-                                        <TextBlock Text="(0)"/>   
-                                    </Paragraph>                  
-                                </TableCell>                      
-                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
-                                    <Paragraph>                   
-                                        <TextBlock Text="(0)"/>   
-                                    </Paragraph>                  
-                                </TableCell>                      
-                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
-                                    <Paragraph>                   
-                                        <TextBlock Text="(0)"/>   
+                                    <Paragraph>
+                                        <TextBlock Text="{Binding BonusScore[0]}"/>   
                                     </Paragraph>                  
                                 </TableCell>                      
                                 <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
                                     <Paragraph>
-                                        <TextBlock Text="(0)"/>
+                                        <TextBlock Text="{Binding BonusScore[1]}"/>   
+                                    </Paragraph>                  
+                                </TableCell>                      
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="{Binding BonusScore[2]}"/>   
+                                    </Paragraph>                  
+                                </TableCell>                      
+                                <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
+                                    <Paragraph>
+                                        <TextBlock Text="{Binding BonusScore[3]}"/>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>
@@ -632,22 +632,22 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding TotalScore[0]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding TotalScore[1]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding TotalScore[2]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center" BorderBrush="Black" BorderThickness="0,1,0,0">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding TotalScore[3]}"/>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>

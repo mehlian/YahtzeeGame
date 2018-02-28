@@ -47,6 +47,8 @@ namespace Yahtzee.Core
 
         internal int? CalculateBonusScore(Dictionary<Category, int?> gameStatus)
         {
+            if (gameStatus.Take(6).All(x => x.Value != null) && gameStatus.Take(6).Sum(x => x.Value) < 63)
+                return 0;
             if (gameStatus.Take(6).Any(x => x.Value == null) || gameStatus.Take(6).Sum(x => x.Value) < 63)
                 return null;
             else
