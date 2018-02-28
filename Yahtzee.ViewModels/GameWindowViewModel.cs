@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Collections.ObjectModel;
 using RandomNumberGenerator;
+using System.Runtime.CompilerServices;
 
 namespace Yahtzee.ViewModels
 {
@@ -36,85 +37,87 @@ namespace Yahtzee.ViewModels
                 new Dice()
             };
 
-            _rollDiceCommand =
-                new CommandHandler((x) =>
-                {
-                    _game.RollDice(_dice);
-                    RollResult = _game.RollResult.Select(y => y.Result).ToArray();
-                    UpdateTable[_game.ActivePlayer] = _game.GetAvailableCategories();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
-                }, (x) => CanExecute());
+            RollDiceCommand = new DelegateCommand(() =>
+                                {
+                                    _game.RollDice(_dice);
+                                    RollResult = _game.RollResult.Select(y => y.Result).ToArray();
+                                    UpdateTable[_game.ActivePlayer] = _game.GetAvailableCategories();
+                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
+                                    if (_game.RollsLeft == 0)
+                                    {
+                                        RollsLeft = false;
+                                    }
+                                }).ObservesCanExecute(() => RollsLeft);
+
+            PickCategoryCommand = new DelegateCommand<object>((x) =>
+                                {
+                                    var parseCategory = (Category)Enum.Parse(typeof(Category), x.ToString());
+                                    _game.AddPoints(parseCategory);
+
+                                    //UpdateTable = _game.GameStatus();
+
+                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
+
+                                    ActivePlayer = Players?[_game.ActivePlayer] + "'s Turn:";
+                                    RollsLeft = true;
+                                });
         }
 
-        private bool CanExecute()
-        {
-            if (_game.RollsLeft == 0)
-                return false;
-            return true;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<GameWindowCloseRequestedEventArgs> CloseRequested;
 
-        private ICommand _rollDiceCommand;
-        public ICommand RollDiceCommand
+        public ICommand RollDiceCommand { get; }
+        public ICommand PickCategoryCommand { get; }
+
+        public string[] Players { get; }
+        private string _activePlayer;
+        public string ActivePlayer
         {
-            get
+            get { return _activePlayer; }
+            protected set
             {
-                return _rollDiceCommand;
+                _activePlayer = value;
+                OnPropertyChanged();
             }
         }
 
         private int[] _rollResult;
         public int[] RollResult
         {
-            get
-            {
-                return _rollResult;
-            }
-
+            get { return _rollResult; }
             set
             {
                 _rollResult = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RollResult)));
+                OnPropertyChanged();
             }
         }
 
         private Dictionary<Category, int>[] _updateTable;
         public Dictionary<Category, int>[] UpdateTable
         {
-            get
-            {
-                return _updateTable;
-            }
-
+            get { return _updateTable; }
             set
             {
                 _updateTable = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
+                OnPropertyChanged();
             }
         }
 
-        public string[] Players { get; }
-        public ICommand PickCategoryCommand
+        private bool _rollsLeft = true;
+        private bool RollsLeft
         {
-            get
+            get { return _rollsLeft; }
+            set
             {
-                return new CommandHandler((x) =>
-                {
-                var parseCategory = (Category)Enum.Parse(typeof(Category), x.ToString());
-                    _game.AddPoints(parseCategory);
-
-                        //UpdateTable = _game.GameStatus();
-
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
-
-                    ActivePlayer = Players?[_game.ActivePlayer] + "'s Turn:";
-
-                }, (x) => true);
+                _rollsLeft = value;
+                OnPropertyChanged();
             }
         }
 
-        public string ActivePlayer { get; protected set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler<GameWindowCloseRequestedEventArgs> CloseRequested;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
