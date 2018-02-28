@@ -189,5 +189,184 @@ namespace Yahtzee.ViewModels.UnitTests
 
             Assert.IsTrue(result);
         }
+
+        [Test]
+        public void PartialScore_InitialState_ReturnsNull()
+        {
+            var result = _vm.PartialScore[0];
+
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void PickCategoryCommand_PlayerPicksAllSimpleCategories_PartialScoreReturnsScore()
+        {
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
+            ICommand rollDiceCommand = vm.RollDiceCommand;
+            ICommand pickCategoryCommand = vm.PickCategoryCommand;
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Twos");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Threes");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fours");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fives");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Sixes");
+            var result = vm.PartialScore[0];
+
+            Assert.AreEqual(5,result);
+        }
+
+        [Test]
+        public void PartialScore_PropertyChanged_IsFired()
+        {
+            bool isFired = false;
+            _vm.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_vm.PartialScore))
+                {
+                    isFired = true;
+                }
+            };
+            ICommand rollDiceCommand = _vm.RollDiceCommand;
+            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
+
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+
+            Assert.IsTrue(isFired);
+        }
+
+        [Test]
+        public void BonusScore_InitialState_ReturnsNull()
+        {
+            var result = _vm.BonusScore[0];
+
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void BonusScore_PlayerPicksAllSimpleCategoriesAndPartialScoreIsGreaterThan62_BonusScoreReturnsScore()
+        {
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
+            ICommand rollDiceCommand = vm.RollDiceCommand;
+            ICommand pickCategoryCommand = vm.PickCategoryCommand;
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Twos");
+            _randomizer.GetRandomNumber(1, 6).Returns(3);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Threes");
+            _randomizer.GetRandomNumber(1, 6).Returns(4);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fours");
+            _randomizer.GetRandomNumber(1, 6).Returns(5);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fives");
+            _randomizer.GetRandomNumber(1, 6).Returns(6);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Sixes");
+            var result = vm.BonusScore[0];
+
+            Assert.AreEqual(35, result);
+        }
+
+        [Test]
+        public void BonusScore_PropertyChanged_IsFired()
+        {
+            bool isFired = false;
+            _vm.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_vm.BonusScore))
+                {
+                    isFired = true;
+                }
+            };
+            ICommand rollDiceCommand = _vm.RollDiceCommand;
+            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
+
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+
+            Assert.IsTrue(isFired);
+        }
+
+        [Test]
+        public void TotalScore_InitialState_ReturnsNull()
+        {
+            var result = _vm.TotalScore[0];
+
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void TotalScore_PlayerPicksAllCategories_TotalScoreReturnsScore()
+        {
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
+            ICommand rollDiceCommand = vm.RollDiceCommand;
+            ICommand pickCategoryCommand = vm.PickCategoryCommand;
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Twos");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Threes");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fours");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fives");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Sixes");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("ThreeOfKind");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FourOfKind");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FullHouse");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("SmallStraight");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("LargeStraight");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Chance");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Yahtzee");
+            var result = vm.TotalScore[0];
+
+            Assert.AreEqual(20 + 50, result);
+
+        }
+
+        [Test]
+        public void TotalScore_PropertyChanged_IsFired()
+        {
+            bool isFired = false;
+            _vm.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_vm.TotalScore))
+                {
+                    isFired = true;
+                }
+            };
+            ICommand rollDiceCommand = _vm.RollDiceCommand;
+            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
+
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+
+            Assert.IsTrue(isFired);
+        }
     }
 }

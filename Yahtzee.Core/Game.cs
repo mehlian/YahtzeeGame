@@ -14,9 +14,9 @@ namespace Yahtzee.Core
         public int ActivePlayer { get; protected set; }
         public IDice[] RollResult { get; protected set; }
         public int RollsLeft { get; protected set; }
-        public int[] PartialScore { get; protected set; }
-        public int[] BonusScore { get; protected set; }
-        public int[] TotalScore { get; protected set; }
+        public int?[] PartialScore { get; protected set; }
+        public int?[] BonusScore { get; protected set; }
+        public int?[] TotalScore { get; protected set; }
 
         public Game(IRandomizer randomizer)
         {
@@ -38,9 +38,9 @@ namespace Yahtzee.Core
             Players = playerName;
             ActivePlayer = 0;
             RollsLeft = 3;
-            BonusScore = new int[numberOfPlayers];
-            PartialScore = new int[numberOfPlayers];
-            TotalScore = new int[numberOfPlayers];
+            BonusScore = new int?[numberOfPlayers];
+            PartialScore = new int?[numberOfPlayers];
+            TotalScore = new int?[numberOfPlayers];
 
             _gameStatus = new Dictionary<Category, int?>[numberOfPlayers];
             for (int i = 0; i < numberOfPlayers; i++)

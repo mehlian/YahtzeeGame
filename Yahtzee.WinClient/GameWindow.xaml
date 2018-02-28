@@ -353,22 +353,22 @@
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding PartialScore[0]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding PartialScore[1]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding PartialScore[2]}"/>
                                     </Paragraph>
                                 </TableCell>
                                 <TableCell TextAlignment="Center">
                                     <Paragraph>
-                                        <TextBlock Text="0"/>
+                                        <TextBlock Text="{Binding PartialScore[3]}"/>
                                     </Paragraph>
                                 </TableCell>
                             </TableRow>

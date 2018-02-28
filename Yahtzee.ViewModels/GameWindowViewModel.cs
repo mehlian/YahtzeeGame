@@ -17,7 +17,7 @@ namespace Yahtzee.ViewModels
         private IDice[] _dice;
         private Game _game;
 
-        public GameWindowViewModel(IRandomizer randomizer, string[] players)
+        public GameWindowViewModel(IRandomizer randomizer, params string[] players)
         {
             _randomizer = randomizer;
             _game = new Game(_randomizer);
@@ -26,6 +26,9 @@ namespace Yahtzee.ViewModels
             Players = new string[4];
             Players = players;
             ActivePlayer = Players[_game.ActivePlayer] + "'s Turn:";
+            PartialScore = new int?[4];
+            BonusScore = new int?[4];
+            TotalScore = new int?[4];
 
             UpdateTable = new Dictionary<Category, int>[4];
 
@@ -60,6 +63,9 @@ namespace Yahtzee.ViewModels
 
                                     ActivePlayer = Players?[_game.ActivePlayer] + "'s Turn:";
                                     RollsLeft = true;
+                                    PartialScore = _game.PartialScore;
+                                    BonusScore = _game.BonusScore;
+                                    TotalScore = _game.TotalScore;
                                 });
         }
 
@@ -110,6 +116,39 @@ namespace Yahtzee.ViewModels
             set
             {
                 _rollsLeft = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int?[] _partialScore;
+        public int?[] PartialScore
+        {
+            get { return _partialScore; }
+            protected set
+            {
+                _partialScore = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int?[] _bonusScore;
+        public int?[] BonusScore
+        {
+            get { return _bonusScore; }
+            protected set
+            {
+                _bonusScore = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int?[] _totalScore;
+        public int?[] TotalScore
+        {
+            get { return _totalScore; }
+            protected set
+            {
+                _totalScore = value;
                 OnPropertyChanged();
             }
         }

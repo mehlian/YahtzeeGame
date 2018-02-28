@@ -390,7 +390,7 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
-        public void PartialScore_NotAllSimpleCategoriesAreTaken_Returns0()
+        public void PartialScore_NotAllSimpleCategoriesAreTaken_ReturnsNull()
         {
             _randomizer.GetRandomNumber(1, 6).Returns(1);
             IDice[] dice = MakeNewDiceSet();
@@ -401,11 +401,11 @@ namespace Yahtzee.UnitTests
 
             var result = _game.PartialScore[0];
 
-            Assert.AreEqual(0, result);
+            Assert.AreEqual(null, result);
         }
 
         [Test]
-        public void BonusScore_NotAllSimpleCategoriesAreTaken_Returns0()
+        public void BonusScore_NotAllSimpleCategoriesAreTaken_ReturnsNull()
         {
             _randomizer.GetRandomNumber(1, 6).Returns(1);
             IDice[] dice = MakeNewDiceSet();
@@ -416,7 +416,7 @@ namespace Yahtzee.UnitTests
 
             var result = _game.BonusScore[0];
 
-            Assert.AreEqual(0, result);
+            Assert.AreEqual(null, result);
         }
 
         [Test]
@@ -480,6 +480,15 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
+        public void PartialScore_InitialValue_ReturnsNull()
+        {
+            _game.NewGame("A");
+            var result = _game.PartialScore[0];
+
+            Assert.IsNull(result);
+        }
+
+        [Test]
         public void PartialScore_AllSimpleCategoriesAreTaken_ReturnsSum()
         {
             IDice[] dice = MakeNewDiceSet();
@@ -510,7 +519,7 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
-        public void PartialScore_AllSimpleCategoriesAreTakenInTwoPlayersGame_ReturnsSum()
+        public void PartialScore_AllSimpleCategoriesAreTakenInTwoPlayersGame_ReturnsSumForEachPlayer()
         {
             IDice[] dice = MakeNewDiceSet();
             _game.NewGame("A", "B");
@@ -602,7 +611,7 @@ namespace Yahtzee.UnitTests
         }
 
         [Test]
-        public void TotalScore_NotAllCategoriesAreTaken_Returns0()
+        public void TotalScore_NotAllCategoriesAreTaken_ReturnsNull()
         {
             _randomizer.GetRandomNumber(1, 6).Returns(1);
             IDice[] dice = MakeNewDiceSet();
@@ -613,7 +622,7 @@ namespace Yahtzee.UnitTests
 
             var result = _game.TotalScore[0];
 
-            Assert.AreEqual(0, result);
+            Assert.IsNull(result);
         }
 
         [Test]

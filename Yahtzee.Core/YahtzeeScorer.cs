@@ -45,19 +45,27 @@ namespace Yahtzee.Core
             }
         }
 
-        internal int CalculateBonusScore(Dictionary<Category, int?> gameStatus)
+        internal int? CalculateBonusScore(Dictionary<Category, int?> gameStatus)
         {
-            return gameStatus.Take(6).Any(x => x.Value == null) || gameStatus.Take(6).Sum(x => x.Value) < 63 ? 0 : 35;
+            if (gameStatus.Take(6).Any(x => x.Value == null) || gameStatus.Take(6).Sum(x => x.Value) < 63)
+                return null;
+            else
+                return 35;
         }
 
-        internal int CalculatePartialScore(Dictionary<Category, int?> gameStatus)
+        internal int? CalculatePartialScore(Dictionary<Category, int?> gameStatus)
         {
-            return gameStatus.Take(6).Any(x => x.Value == null) ? 0 : (int)gameStatus.Take(6).Sum(x => x.Value) + CalculateBonusScore(gameStatus);
+            var bonusScore = CalculateBonusScore(gameStatus) == null ? 0 : (int)CalculateBonusScore(gameStatus);
+            return gameStatus.Take(6).Any(x => x.Value == null) ? null : gameStatus.Take(6).Sum(x => x.Value) + bonusScore;
         }
 
-        internal int CalculateTotalScore(Dictionary<Category, int?> gameStatus)
+        internal int? CalculateTotalScore(Dictionary<Category, int?> gameStatus)
         {
-            return gameStatus.Any(x => x.Value == null) ? 0 : (int)gameStatus.Sum(x => x.Value) + CalculateBonusScore(gameStatus);
+            var bonusScore = CalculateBonusScore(gameStatus) == null ? 0 : (int)CalculateBonusScore(gameStatus);
+            if (gameStatus.Any(x => x.Value == null))
+                return null;
+            else
+                return (int)gameStatus.Sum(x => x.Value) + bonusScore;
         }
 
         private int CalculateScoreForGivenSideNumber(int side)
