@@ -369,8 +369,9 @@ namespace Yahtzee.UnitTests
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
 
-            var expected = new Dictionary<Category, int>()
+            var expected = new Dictionary<Category, int?>()
             {
+                {Category.Aces, null },
                 { Category.Twos, 6 },
                 { Category.Threes, 0 },
                 { Category.Fours, 0 },
@@ -385,6 +386,45 @@ namespace Yahtzee.UnitTests
                 { Category.Yahtzee, 0 },
             };
             var result = _game.GetAvailableCategories();
+
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void GetAvailableCategories_PlayerAlreadyPickedOneCategory_GameStatusStaysIntact()
+        {
+            _randomizer.GetRandomNumber(1, 6).Returns(1, 1, 2, 2, 2);
+            IDice[] dice = MakeNewDiceSet();
+            Dictionary<Category, int?>[] result = new Dictionary<Category, int?>[1];
+
+            _game.NewGame("A");
+            _game.RollDice(dice);
+            result[0] = _game.GetAvailableCategories();
+            _game.AddPoints(Category.Aces);
+            _game.GameStatus().CopyTo(result, 0);
+            _game.RollDice(dice);
+            result[0] = _game.GetAvailableCategories();
+            _game.GameStatus().CopyTo(result, 0);
+
+            var expected = new Dictionary<Category, int?>[1]
+            {
+                new Dictionary<Category, int?>()
+                {
+                    {Category.Aces, 2 },
+                    { Category.Twos, null },
+                    { Category.Threes, null },
+                    { Category.Fours, null },
+                    { Category.Fives, null },
+                    { Category.Sixes, null },
+                    { Category.ThreeOfKind, null },
+                    { Category.FourOfKind, null },
+                    { Category.FullHouse, null },
+                    { Category.SmallStraight, null },
+                    { Category.LargeStraight, null },
+                    { Category.Chance, null },
+                    { Category.Yahtzee, null },
+                }
+            };
 
             CollectionAssert.AreEqual(expected, result);
         }
@@ -455,7 +495,7 @@ namespace Yahtzee.UnitTests
             IDice[] dice = MakeNewDiceSet();
             _game.NewGame("A");
 
-            _randomizer.GetRandomNumber(1, 6).Returns(1,1,2,2,2);
+            _randomizer.GetRandomNumber(1, 6).Returns(1, 1, 2, 2, 2);
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces); // 2 points
             _randomizer.GetRandomNumber(1, 6).Returns(2);
@@ -467,10 +507,10 @@ namespace Yahtzee.UnitTests
             _randomizer.GetRandomNumber(1, 6).Returns(4);
             _game.RollDice(dice);
             _game.AddPoints(Category.Fours); // 20 points
-            _randomizer.GetRandomNumber(1, 6).Returns(5,5,1,1,1);
+            _randomizer.GetRandomNumber(1, 6).Returns(5, 5, 1, 1, 1);
             _game.RollDice(dice);
             _game.AddPoints(Category.Fives); // 10 points
-            _randomizer.GetRandomNumber(1, 6).Returns(6,1,1,1,1);
+            _randomizer.GetRandomNumber(1, 6).Returns(6, 1, 1, 1, 1);
             _game.RollDice(dice);
             _game.AddPoints(Category.Sixes); // 6 points
                                              // Sum: 63 points

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.ObjectModel;
-using RandomNumberGenerator;
 using System.Runtime.CompilerServices;
 
 namespace Yahtzee.ViewModels
@@ -30,7 +29,9 @@ namespace Yahtzee.ViewModels
             BonusScore = new int?[4];
             TotalScore = new int?[4];
 
-            UpdateTable = new Dictionary<Category, int>[4];
+            UpdateTable = new ObservableCollection<Dictionary<Category, int?>>(_game.GameStatus());
+
+            IsPickCategoryCommandAvailable = DisablePickCategoryCommand();
 
             _dice = new[] {
                 new Dice(),
@@ -41,32 +42,57 @@ namespace Yahtzee.ViewModels
             };
 
             RollDiceCommand = new DelegateCommand(() =>
-                                {
-                                    _game.RollDice(_dice);
-                                    RollResult = _game.RollResult.Select(y => y.Result).ToArray();
-                                    UpdateTable[_game.ActivePlayer] = _game.GetAvailableCategories();
-                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
-                                    if (_game.RollsLeft == 0)
-                                    {
-                                        RollsLeft = false;
-                                    }
-                                }).ObservesCanExecute(() => RollsLeft);
+            {
+                _game.RollDice(_dice);
+                RollResult = _game.RollResult.Select(y => y.Result).ToArray();
+
+                UpdateTable[_game.ActivePlayer] = AvailableCategoriesProcessor();
+
+                if (_game.RollsLeft == 0)
+                {
+                    RollsLeft = false;
+                }
+            }).ObservesCanExecute(() => RollsLeft);
 
             PickCategoryCommand = new DelegateCommand<object>((x) =>
-                                {
-                                    var parseCategory = (Category)Enum.Parse(typeof(Category), x.ToString());
-                                    _game.AddPoints(parseCategory);
+            {
+                var parseCategory = (Category)Enum.Parse(typeof(Category), x.ToString());
+                _game.AddPoints(parseCategory);
 
-                                    //UpdateTable = _game.GameStatus();
+                UpdateTable = new ObservableCollection<Dictionary<Category, int?>>(_game.GameStatus());
+                IsPickCategoryCommandAvailable = DisablePickCategoryCommand();
 
-                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateTable)));
+                ActivePlayer = Players?[_game.ActivePlayer] + "'s Turn:";
+                RollsLeft = true;
+                PartialScore = _game.PartialScore;
+                BonusScore = _game.BonusScore;
+                TotalScore = _game.TotalScore;
+            });
+        }
 
-                                    ActivePlayer = Players?[_game.ActivePlayer] + "'s Turn:";
-                                    RollsLeft = true;
-                                    PartialScore = _game.PartialScore;
-                                    BonusScore = _game.BonusScore;
-                                    TotalScore = _game.TotalScore;
-                                });
+        private ObservableCollection<Dictionary<Category,bool>> DisablePickCategoryCommand()
+        {
+            var reset = new ObservableCollection<Dictionary<Category, bool>>();
+            for (int i = 0; i < 4; i++)
+            {
+                reset.Add(new Dictionary<Category, bool>
+                {
+                    { Category.Aces, false },
+                    { Category.Twos, false },
+                    { Category.Threes, false },
+                    { Category.Fours, false },
+                    { Category.Fives, false },
+                    { Category.Sixes, false },
+                    { Category.ThreeOfKind, false },
+                    { Category.FourOfKind, false },
+                    { Category.FullHouse, false },
+                    { Category.SmallStraight, false },
+                    { Category.LargeStraight, false },
+                    { Category.Chance, false },
+                    { Category.Yahtzee, false },
+                });
+            }
+            return reset;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -98,11 +124,11 @@ namespace Yahtzee.ViewModels
             }
         }
 
-        private Dictionary<Category, int>[] _updateTable;
-        public Dictionary<Category, int>[] UpdateTable
+        private ObservableCollection<Dictionary<Category, int?>> _updateTable;
+        public ObservableCollection<Dictionary<Category, int?>> UpdateTable
         {
             get { return _updateTable; }
-            set
+            protected set
             {
                 _updateTable = value;
                 OnPropertyChanged();
@@ -153,10 +179,44 @@ namespace Yahtzee.ViewModels
             }
         }
 
+        private ObservableCollection<Dictionary<Category, bool>> isPickCategoryCommandAvailable;
+        public ObservableCollection<Dictionary<Category, bool>> IsPickCategoryCommandAvailable
+        {
+            get { return isPickCategoryCommandAvailable; }
+            protected set
+            {
+                isPickCategoryCommandAvailable = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private Dictionary<Category, int?> AvailableCategoriesProcessor()
+        {
+            Dictionary<Category, int?> processor = new Dictionary<Category, int?>();
+            Dictionary<Category, bool> isAvailable = new Dictionary<Category, bool>();
+
+            foreach (var category in _game.GetAvailableCategories())
+            {
+                if (category.Value == null)
+                {
+                    processor.Add(category.Key, _game.GameStatus()[_game.ActivePlayer][category.Key]);
+                    isAvailable.Add(category.Key, false);
+                }
+                else
+                {
+                    processor.Add(category.Key, category.Value);
+                    isAvailable.Add(category.Key, true);
+                }
+            }
+
+            IsPickCategoryCommandAvailable[_game.ActivePlayer] = isAvailable;
+            return processor;
         }
     }
 }

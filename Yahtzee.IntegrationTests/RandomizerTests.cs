@@ -23,7 +23,7 @@ namespace Yahtzee.IntegrationTests
 
             var result = chiSquared.IsPassingChiSquaredTest(observedResults, expectedResults, alfa);
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(result,$"observedResults: {observedResults}; expectedResults: {expectedResults}; alfa: {alfa}");
         }
     }
 }

@@ -82,15 +82,19 @@ namespace Yahtzee.Core
             RollsLeft--;
         }
 
-        public Dictionary<Category, int> GetAvailableCategories()
+        public Dictionary<Category, int?> GetAvailableCategories()
         {
-            var scores = new Dictionary<Category, int>();
+            var scores = new Dictionary<Category, int?>();
             foreach (Category category in Enum.GetValues(typeof(Category)))
             {
                 if (_gameStatus[ActivePlayer][category] == null)
                 {
                     int[] rollResult = RollResult.Select(x => x.Result).ToArray();
                     scores.Add(category, _yahtzeeScorer.CalculateCategoryScore(category, rollResult));
+                }
+                else
+                {
+                    scores.Add(category, null);
                 }
             }
 
