@@ -14,6 +14,9 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="5">
+        <Grid.Resources>
+            <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -114,28 +117,28 @@
                                         <TextBlock Text="Aces"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][Aces], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Aces" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][Aces]}">
                                             <TextBlock Text="{Binding UpdateTable[0][Aces]}"/>
                                         </Hyperlink>
                                     </Paragraph> 
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][Aces], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Aces" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][Aces]}">
                                             <TextBlock Text="{Binding UpdateTable[1][Aces]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][Aces], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Aces" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][Aces]}">
                                             <TextBlock Text="{Binding UpdateTable[2][Aces]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][Aces], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Aces" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][Aces]}">
                                             <TextBlock Text="{Binding UpdateTable[3][Aces]}"/>
@@ -149,28 +152,28 @@
                                         <TextBlock Text="Twos"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][Twos], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Twos" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][Twos]}">
                                             <TextBlock Text="{Binding UpdateTable[0][Twos]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][Twos], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Twos" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][Twos]}">
                                             <TextBlock Text="{Binding UpdateTable[1][Twos]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][Twos], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Twos" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][Twos]}">
                                             <TextBlock Text="{Binding UpdateTable[2][Twos]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][Twos], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Twos" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][Twos]}">
                                             <TextBlock Text="{Binding UpdateTable[3][Twos]}"/>
@@ -184,28 +187,28 @@
                                         <TextBlock Text="Threes"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][Threes], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Threes" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][Threes]}">
                                             <TextBlock Text="{Binding UpdateTable[0][Threes]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][Threes], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Threes" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][Threes]}">
                                             <TextBlock Text="{Binding UpdateTable[1][Threes]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][Threes], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Threes" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][Threes]}">
                                             <TextBlock Text="{Binding UpdateTable[2][Threes]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][Threes], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Threes" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][Threes]}">
                                             <TextBlock Text="{Binding UpdateTable[3][Threes]}"/>
@@ -219,28 +222,28 @@
                                         <TextBlock Text="Fours"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][Fours], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Fours" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][Fours]}">
                                             <TextBlock Text="{Binding UpdateTable[0][Fours]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][Fours], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Fours" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][Fours]}">
                                             <TextBlock Text="{Binding UpdateTable[1][Fours]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][Fours], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Fours" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][Fours]}">
                                             <TextBlock Text="{Binding UpdateTable[2][Fours]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center"  Background="{Binding IsPickCategoryCommandAvailable[3][Fours], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Fours" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][Fours]}">
                                             <TextBlock Text="{Binding UpdateTable[3][Fours]}"/>
@@ -254,28 +257,28 @@
                                         <TextBlock Text="Fives"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][Fives], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Fives" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][Fives]}">
                                             <TextBlock Text="{Binding UpdateTable[0][Fives]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][Fives], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Fives" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][Fives]}">
                                             <TextBlock Text="{Binding UpdateTable[1][Fives]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][Fives], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Fives" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][Fives]}">
                                             <TextBlock Text="{Binding UpdateTable[2][Fives]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][Fives], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Fives" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][Fives]}">
                                             <TextBlock Text="{Binding UpdateTable[3][Fives]}"/>
@@ -289,28 +292,28 @@
                                         <TextBlock Text="Sixes"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][Sixes], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Sixes" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][Sixes]}">
                                             <TextBlock Text="{Binding UpdateTable[0][Sixes]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][Sixes], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Sixes" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][Sixes]}">
                                             <TextBlock Text="{Binding UpdateTable[1][Sixes]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][Sixes], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Sixes" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][Sixes]}">
                                             <TextBlock Text="{Binding UpdateTable[2][Sixes]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][Sixes], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Sixes" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][Sixes]}">
                                             <TextBlock Text="{Binding UpdateTable[3][Sixes]}"/>
@@ -386,28 +389,28 @@
                                         <TextBlock Text="3 of a kind"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][ThreeOfKind], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="ThreeOfKind" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][ThreeOfKind]}">
                                             <TextBlock Text="{Binding UpdateTable[0][ThreeOfKind]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][ThreeOfKind], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="ThreeOfKind" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][ThreeOfKind]}">
                                             <TextBlock Text="{Binding UpdateTable[1][ThreeOfKind]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][ThreeOfKind], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="ThreeOfKind" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][ThreeOfKind]}">
                                             <TextBlock Text="{Binding UpdateTable[2][ThreeOfKind]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][ThreeOfKind], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="ThreeOfKind" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][ThreeOfKind]}">
                                             <TextBlock Text="{Binding UpdateTable[3][ThreeOfKind]}"/>
@@ -421,28 +424,28 @@
                                         <TextBlock Text="4 of a kind"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][FourOfKind], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="FourOfKind" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][FourOfKind]}">
                                             <TextBlock Text="{Binding UpdateTable[0][FourOfKind]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][FourOfKind], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="FourOfKind" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][FourOfKind]}">
                                             <TextBlock Text="{Binding UpdateTable[1][FourOfKind]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][FourOfKind], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="FourOfKind" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][FourOfKind]}">
                                             <TextBlock Text="{Binding UpdateTable[2][FourOfKind]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][FourOfKind], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="FourOfKind" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][FourOfKind]}">
                                             <TextBlock Text="{Binding UpdateTable[3][FourOfKind]}"/>
@@ -456,28 +459,28 @@
                                         <TextBlock Text="Full house"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][FullHouse], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="FullHouse" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][FullHouse]}">
                                             <TextBlock Text="{Binding UpdateTable[0][FullHouse]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][FullHouse], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="FullHouse" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][FullHouse]}">
                                             <TextBlock Text="{Binding UpdateTable[1][FullHouse]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][FullHouse], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="FullHouse" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][FullHouse]}">
                                             <TextBlock Text="{Binding UpdateTable[2][FullHouse]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][FullHouse], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="FullHouse" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][FullHouse]}">
                                             <TextBlock Text="{Binding UpdateTable[3][FullHouse]}"/>
@@ -491,28 +494,28 @@
                                         <TextBlock Text="Small straight"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][SmallStraight], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="SmallStraight" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][SmallStraight]}">
                                             <TextBlock Text="{Binding UpdateTable[0][SmallStraight]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][SmallStraight], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="SmallStraight" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][SmallStraight]}">
                                             <TextBlock Text="{Binding UpdateTable[1][SmallStraight]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][SmallStraight], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="SmallStraight" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][SmallStraight]}">
                                             <TextBlock Text="{Binding UpdateTable[2][SmallStraight]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][SmallStraight], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="SmallStraight" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][SmallStraight]}">
                                             <TextBlock Text="{Binding UpdateTable[3][SmallStraight]}"/>
@@ -526,28 +529,28 @@
                                         <TextBlock Text="Large straight"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][LargeStraight], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="LargeStraight" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][LargeStraight]}">
                                             <TextBlock Text="{Binding UpdateTable[0][LargeStraight]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][LargeStraight], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="LargeStraight" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][LargeStraight]}">
                                             <TextBlock Text="{Binding UpdateTable[1][LargeStraight]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][LargeStraight], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="LargeStraight" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][LargeStraight]}">
                                             <TextBlock Text="{Binding UpdateTable[2][LargeStraight]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][LargeStraight], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="LargeStraight" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][LargeStraight]}">
                                             <TextBlock Text="{Binding UpdateTable[3][LargeStraight]}"/>
@@ -561,28 +564,28 @@
                                         <TextBlock Text="Chance"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][Chance], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Chance" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][Chance]}">
                                             <TextBlock Text="{Binding UpdateTable[0][Chance]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][Chance], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Chance" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][Chance]}">
                                             <TextBlock Text="{Binding UpdateTable[1][Chance]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][Chance], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Chance" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][Chance]}">
                                             <TextBlock Text="{Binding UpdateTable[2][Chance]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][Chance], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Chance" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][Chance]}">
                                             <TextBlock Text="{Binding UpdateTable[3][Chance]}"/>
@@ -596,28 +599,28 @@
                                         <TextBlock Text="Yahtzee"/>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[0][Yahtzee], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Yahtzee" IsEnabled="{Binding IsPickCategoryCommandAvailable[0][Yahtzee]}">
                                             <TextBlock Text="{Binding UpdateTable[0][Yahtzee]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[1][Yahtzee], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Yahtzee" IsEnabled="{Binding IsPickCategoryCommandAvailable[1][Yahtzee]}">
                                             <TextBlock Text="{Binding UpdateTable[1][Yahtzee]}"/>
                                         </Hyperlink> 
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[2][Yahtzee], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Yahtzee" IsEnabled="{Binding IsPickCategoryCommandAvailable[2][Yahtzee]}">
                                             <TextBlock Text="{Binding UpdateTable[2][Yahtzee]}"/>
                                         </Hyperlink>
                                     </Paragraph>
                                 </TableCell>
-                                <TableCell TextAlignment="Center">
+                                <TableCell TextAlignment="Center" Background="{Binding IsPickCategoryCommandAvailable[3][Yahtzee], Converter={StaticResource BoolToColorConverter}}">
                                     <Paragraph>
                                         <Hyperlink Command="{Binding PickCategoryCommand}" CommandParameter="Yahtzee" IsEnabled="{Binding IsPickCategoryCommandAvailable[3][Yahtzee]}">
                                             <TextBlock Text="{Binding UpdateTable[3][Yahtzee]}"/>

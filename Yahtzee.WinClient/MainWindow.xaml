@@ -15,7 +15,7 @@
                 <StackPanel Margin="10">
                     <TextBlock Margin="10" Text="Welcome in Yahtzee!" FontSize="36" HorizontalAlignment="Center"/>
                     <Button Margin="10" Width="100" Content="New Game" Command="{Binding NewGameCommand}"/>
-                    <Button Margin="10" Width="100" Content="Scores" Command=""/>
+                    <Button Margin="10" Width="100" Content="Scores" Command="" IsEnabled="False"/>
                     <Button Margin="10" Width="100" Content="Exit Game" Click="Button_Click"/>
                 </StackPanel>
             </TabItem>
