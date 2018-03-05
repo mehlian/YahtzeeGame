@@ -41,10 +41,28 @@ namespace Yahtzee.ViewModels
                 new Dice()
             };
 
+            ToggleDiceLockCommand = new DelegateCommand<object>((x) =>
+            {
+                if (_game.RollsLeft<3)
+                {
+                    var dieNumber = int.Parse((string)x);
+                    if (Dice[dieNumber].IsUnlocked)
+                    {
+                        Dice[dieNumber].Lock();
+                    }
+                    else
+                    {
+                        Dice[dieNumber].Unlock();
+                    } 
+                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Dice)));
+            });
+
             RollDiceCommand = new DelegateCommand(() =>
             {
                 _game.RollDice(_dice);
                 RollResult = _game.RollResult.Select(y => y.Result).ToArray();
+                Dice = _game.RollResult;
 
                 UpdateTable[_game.ActivePlayer] = AvailableCategoriesProcessor();
 
@@ -67,10 +85,12 @@ namespace Yahtzee.ViewModels
                 PartialScore = _game.PartialScore;
                 BonusScore = _game.BonusScore;
                 TotalScore = _game.TotalScore;
+                UnlockAllDice();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Dice)));
             });
         }
 
-        private ObservableCollection<Dictionary<Category,bool>> DisablePickCategoryCommand()
+        private ObservableCollection<Dictionary<Category, bool>> DisablePickCategoryCommand()
         {
             var reset = new ObservableCollection<Dictionary<Category, bool>>();
             for (int i = 0; i < 4; i++)
@@ -100,6 +120,17 @@ namespace Yahtzee.ViewModels
 
         public ICommand RollDiceCommand { get; }
         public ICommand PickCategoryCommand { get; }
+        public ICommand ToggleDiceLockCommand { get; }
+
+        public IDice[] Dice
+        {
+            get { return _dice; }
+            protected set
+            {
+                _dice = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string[] Players { get; }
         private string _activePlayer;
@@ -190,6 +221,7 @@ namespace Yahtzee.ViewModels
             }
         }
 
+
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var handler = PropertyChanged;
@@ -217,6 +249,14 @@ namespace Yahtzee.ViewModels
 
             IsPickCategoryCommandAvailable[_game.ActivePlayer] = isAvailable;
             return processor;
+        }
+
+        private void UnlockAllDice()
+        {
+            foreach (var dice in Dice)
+            {
+                dice.Unlock();
+            }
         }
     }
 }

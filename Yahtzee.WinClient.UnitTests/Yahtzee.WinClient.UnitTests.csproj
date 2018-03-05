@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoolToColoRConverterTests.cs" />
+    <Compile Include="DiceLockToVerticalAlignmentConverterTests.cs" />
+    <Compile Include="IntToImageConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

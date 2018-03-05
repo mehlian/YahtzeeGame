@@ -96,8 +96,8 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void RollDiceCommand_CommandExecutedAfterOneCategoryAlreadyPicked_UpdateTableReturnsAvailableCategoriesWithScores()
         {
-            var vm = new GameWindowViewModel(_randomizer,"A");
-            
+            var vm = new GameWindowViewModel(_randomizer, "A");
+
             _randomizer.GetRandomNumber(1, 6).Returns(1);
             ICommand rollDiceCommand = vm.RollDiceCommand;
             ICommand pickCategoryCommand = vm.PickCategoryCommand;
@@ -352,7 +352,7 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void IsPickCategoryCommandAvailable_RollDiceCommandExecutedByPlayerAfterOnePick_ReturnsFalseForPlayerOne()
         {
-            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A","B");
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A", "B");
             ICommand rollDiceCommand = vm.RollDiceCommand;
             ICommand pickCategoryCommand = vm.PickCategoryCommand;
 
@@ -528,6 +528,139 @@ namespace Yahtzee.ViewModels.UnitTests
             Assert.IsTrue(isFired);
         }
 
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        public void Dice_InitialResultValue_Returns0(int dieNumber)
+        {
+            var result = _vm.Dice[dieNumber].Result;
 
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void Dice_PropertyChanged_IsFired()
+        {
+            bool isFired = false;
+            _vm.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_vm.Dice))
+                {
+                    isFired = true;
+                }
+            };
+            ICommand rollDiceCommand = _vm.RollDiceCommand;
+
+            rollDiceCommand.Execute(null);
+
+            Assert.IsTrue(isFired);
+        }
+
+        [Test]
+        public void ToggleDiceLock_CanBeExecuted()
+        {
+            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
+
+            toggleDiceLockCommand.Execute("0");
+        }
+
+        [Test]
+        public void ToggleDiceLock_GivenNumberForUnlockedDice_DiceIsLocked()
+        {
+            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
+            ICommand rollDiceCommand = _vm.RollDiceCommand;
+
+            rollDiceCommand.Execute(null);
+            toggleDiceLockCommand.Execute("0");
+            var result = _vm.Dice[0].IsUnlocked;
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ToggleDiceLock_GivenNumberForLockedDice_DiceIsUnlocked()
+        {
+            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
+            ICommand rollDiceCommand = _vm.RollDiceCommand;
+
+            toggleDiceLockCommand.Execute("0");
+            toggleDiceLockCommand.Execute("0");
+            var result = _vm.Dice[0].IsUnlocked;
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ToggleDiceLock_PlayerTriesToLockDiceBeforeFirstRollInHisTurn_DiceIsUnlocked()
+        {
+            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
+
+            toggleDiceLockCommand.Execute("0");
+            var result = _vm.Dice[0].IsUnlocked;
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void PickCategoryCommand_UnlocksAllDiceForNextRound()
+        {
+            ICommand rollDiceCommand = _vm.RollDiceCommand;
+            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
+            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
+
+            rollDiceCommand.Execute(null);
+            toggleDiceLockCommand.Execute("0");
+            pickCategoryCommand.Execute("Aces");
+            var result = new[]
+            {
+                _vm.Dice[0].IsUnlocked,
+                _vm.Dice[1].IsUnlocked,
+                _vm.Dice[2].IsUnlocked,
+                _vm.Dice[3].IsUnlocked,
+                _vm.Dice[4].IsUnlocked
+            };
+
+            var expected = new[] { true, true, true, true, true };
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void Dice_PropertyChangedOnToggleDiceCommand_IsFired()
+        {
+            bool isFired = false;
+            _vm.PropertyChanged += (sender, args) => {
+                if (args.PropertyName==nameof(_vm.Dice))
+                {
+                    isFired = true;
+                }
+            };
+            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
+
+            toggleDiceLockCommand.Execute("0");
+
+            Assert.IsTrue(isFired);
+        }
+
+        [Test]
+        public void Dice_PropertyChangedOnPickCategoryCommand_IsFired()
+        {
+            bool isFired = false;
+            _vm.PropertyChanged += (sender, args) => {
+                if (args.PropertyName == nameof(_vm.Dice))
+                {
+                    isFired = true;
+                }
+            };
+            ICommand rollDiceCommand = _vm.RollDiceCommand;
+            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
+
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+
+            Assert.IsTrue(isFired);
+        }
     }
 }

@@ -78,9 +78,11 @@
     <Compile Include="DetailsWindow.xaml.cs">
       <DependentUpon>DetailsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DiceLockToVerticalAlignmentConverter.cs" />
     <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IntToImageConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -121,6 +123,14 @@
       <Project>{38e4bc4e-42e5-46d1-9134-08a54f16e4e5}</Project>
       <Name>Yahtzee.ViewModels</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dice1.png" />
+    <Resource Include="Images\dice2.png" />
+    <Resource Include="Images\dice3.png" />
+    <Resource Include="Images\dice4.png" />
+    <Resource Include="Images\dice5.png" />
+    <Resource Include="Images\dice6.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

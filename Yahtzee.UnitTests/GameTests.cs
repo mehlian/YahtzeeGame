@@ -203,6 +203,7 @@ namespace Yahtzee.UnitTests
             new object[]{1, 1, 2, 2, 2, Category.FourOfKind, 0               },
             new object[]{1, 1, 2, 2, 2, Category.FullHouse, 25               },
             new object[]{1, 1, 2, 2, 3, Category.FullHouse, 0                },
+            new object[]{2, 3, 2, 2, 2, Category.FullHouse, 0                },
             new object[]{1, 2, 3, 4, 1, Category.SmallStraight, 30           },
             new object[]{2, 3, 4, 5, 2, Category.SmallStraight, 30           },
             new object[]{2, 3, 4, 6, 2, Category.SmallStraight, 0            },

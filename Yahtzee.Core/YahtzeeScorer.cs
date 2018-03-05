@@ -87,7 +87,7 @@ namespace Yahtzee.Core
 
         private int CalculateScoreForFullHouse()
         {
-            return _rollResult.GroupBy(x => x).Count() == 2 ? 25 : 0;
+            return _rollResult.GroupBy(x => x).Count() == 2 && _rollResult.GroupBy(x => x).Any(x => x.Count() == 2) ? 25 : 0;
         }
 
         private int CalculateScoreForSmallStraight()
