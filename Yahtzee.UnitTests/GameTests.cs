@@ -64,7 +64,6 @@ namespace Yahtzee.UnitTests
             });
             _randomizer.GetRandomNumber(1, 6).Returns(2);
             _game.RollDice(dice);
-
             var result = _game.RollResult.All(d => d.Result == 1);
 
             Assert.IsTrue(result);
@@ -85,8 +84,8 @@ namespace Yahtzee.UnitTests
         public void NewGame_PlayerNameAsString_PlayerIsAddedToTheGame()
         {
             string[] playerName = { "A" };
-            _game.NewGame(playerName);
 
+            _game.NewGame(playerName);
             var result = _game.Players.All(x => x == "A");
 
             Assert.IsTrue(result);
@@ -96,6 +95,7 @@ namespace Yahtzee.UnitTests
         public void NewGame_PlayerNamesAsStringArray_PlayersAreAdded()
         {
             string[] playersName = { "A", "B", "C", "D" };
+
             _game.NewGame(playersName);
 
             Assert.AreEqual(playersName, _game.Players);
@@ -105,6 +105,7 @@ namespace Yahtzee.UnitTests
         public void NewGame_ArrayOfPlayerNamesIsLongerThan4_Throws()
         {
             string[] playersName = { "1", "2", "3", "4", "5" };
+
             TestDelegate result = () => _game.NewGame(playersName);
 
             Assert.Throws<ArgumentException>(result);
@@ -114,6 +115,7 @@ namespace Yahtzee.UnitTests
         public void NewGame_ArrayOfPlayersIsAdded_FirstPlayerFromArrayIsActive()
         {
             string[] playersName = { "A", "B", "C", "D" };
+
             _game.NewGame(playersName);
             var result = _game.ActivePlayer;
 
@@ -124,7 +126,6 @@ namespace Yahtzee.UnitTests
         public void RollsLeft_InitialRollLimitForActivePlayer_Returns3()
         {
             _game.NewGame("A");
-
             var result = _game.RollsLeft;
 
             Assert.AreEqual(3, result);
@@ -140,7 +141,6 @@ namespace Yahtzee.UnitTests
             _game.RollDice(dice);
             _game.RollDice(dice);
             _game.RollDice(dice);
-
             var result = _game.RollsLeft;
 
             Assert.AreEqual(0, result);
@@ -156,7 +156,6 @@ namespace Yahtzee.UnitTests
             _game.RollDice(dice);
             _game.RollDice(dice);
             _game.RollDice(dice);
-
             TestDelegate result = () => _game.RollDice(dice);
 
             Assert.Throws<InvalidOperationException>(result);
@@ -166,7 +165,6 @@ namespace Yahtzee.UnitTests
         public void GameStatus_PointsForAllCategoriesAtInitialStateForOnePlayer_ReturnsNull()
         {
             _game.NewGame("A");
-
             var result = _game.GameStatus().All(x => x.Values.All(y => y.HasValue == false));
 
             Assert.IsTrue(result);
@@ -176,7 +174,6 @@ namespace Yahtzee.UnitTests
         public void GameStatus_PointsForAllCategoriesAtInitialStateForTwoPlayers_ReturnsNull()
         {
             _game.NewGame("A", "B");
-
             var result = _game.GameStatus().All(x => x.Values.All(y => y.HasValue == false));
 
             Assert.IsTrue(result);
@@ -230,7 +227,6 @@ namespace Yahtzee.UnitTests
             _game.NewGame("A");
             _game.RollDice(dice);
             _game.AddPoints(selectedCategory);
-
             var result = _game.GameStatus()[0][selectedCategory];
 
             Assert.AreEqual(expectedScore, result);
@@ -245,7 +241,6 @@ namespace Yahtzee.UnitTests
             _game.NewGame("A");
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
-
             TestDelegate result = () => _game.AddPoints(Category.Aces);
 
             Assert.Throws<ArgumentException>(result);
@@ -266,7 +261,6 @@ namespace Yahtzee.UnitTests
             _game.AddPoints(Category.Aces);
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
-
             var result = _game.ActivePlayer;
 
             Assert.AreEqual(0, result);
@@ -281,7 +275,6 @@ namespace Yahtzee.UnitTests
             _game.NewGame("0", "1");
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
-
             var result = _game.ActivePlayer;
 
             Assert.AreEqual(1, result);
@@ -296,7 +289,6 @@ namespace Yahtzee.UnitTests
             _game.NewGame("0", "1");
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
-
             var result = _game.RollsLeft;
 
             Assert.AreEqual(3, result);
@@ -369,7 +361,6 @@ namespace Yahtzee.UnitTests
             _game.NewGame("A");
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
-
             var expected = new Dictionary<Category, int?>()
             {
                 {Category.Aces, null },
@@ -439,7 +430,6 @@ namespace Yahtzee.UnitTests
             _game.NewGame("A");
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
-
             var result = _game.PartialScore[0];
 
             Assert.AreEqual(null, result);
@@ -454,7 +444,6 @@ namespace Yahtzee.UnitTests
             _game.NewGame("A");
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
-
             var result = _game.BonusScore[0];
 
             Assert.AreEqual(null, result);
@@ -690,7 +679,6 @@ namespace Yahtzee.UnitTests
             _game.NewGame("A");
             _game.RollDice(dice);
             _game.AddPoints(Category.Aces);
-
             var result = _game.TotalScore[0];
 
             Assert.IsNull(result);

@@ -49,7 +49,7 @@ namespace Yahtzee.Core
         {
             if (gameStatus.Take(6).All(x => x.Value != null) && gameStatus.Take(6).Sum(x => x.Value) < 63)
                 return 0;
-            if (gameStatus.Take(6).Any(x => x.Value == null) || gameStatus.Take(6).Sum(x => x.Value) < 63)
+            if (gameStatus.Take(6).Any(x => x.Value == null))
                 return null;
             else
                 return 35;
