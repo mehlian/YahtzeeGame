@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using Yahtzee.Core;
 
@@ -13,6 +14,9 @@ namespace Yahtzee.ViewModels.UnitTests
         private IRandomizer _randomizer;
         private string[] _players;
         private GameWindowViewModel _vm;
+        private ICommand _rollDiceCommand;
+        private ICommand _pickCategoryCommand;
+        private ICommand _toggleDiceLockCommand;
 
         [SetUp]
         public void Setup()
@@ -20,12 +24,26 @@ namespace Yahtzee.ViewModels.UnitTests
             _randomizer = Substitute.For<IRandomizer>();
             _players = new[] { "A", "B", "C", "D" };
             _vm = new GameWindowViewModel(_randomizer, _players);
+            _rollDiceCommand = _vm.RollDiceCommand;
+            _pickCategoryCommand = _vm.PickCategoryCommand;
+            _toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
         }
 
         [Test]
         public void GameWindowViewModel_CanBeCreated()
         {
             GameWindowViewModel vm = new GameWindowViewModel(_randomizer, _players);
+        }
+
+        [Test]
+        public void GameWindowViewModel_WhenCreated_PlayerNamesAreStored()
+        {
+            var expected = new[] { "A", "B", "C", "D" };
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, expected);
+
+            var result = vm.Players;
+
+            Assert.AreEqual(expected, result);
         }
 
         [Test]
@@ -42,36 +60,37 @@ namespace Yahtzee.ViewModels.UnitTests
             int rollResult)
         {
             _randomizer.GetRandomNumber(1, 6).Returns(rollResult);
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
 
-            rollDiceCommand.Execute(null);
-            var result = _vm.RollResult;
-            var expected = new[] { rollResult, rollResult, rollResult, rollResult, rollResult };
+            _rollDiceCommand.Execute(null);
+            var expected = rollResult;
+            var result = _vm.Dice;
 
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected, result[0].Result);
+            Assert.AreEqual(expected, result[1].Result);
+            Assert.AreEqual(expected, result[2].Result);
+            Assert.AreEqual(expected, result[3].Result);
+            Assert.AreEqual(expected, result[4].Result);
         }
 
         [Test]
         public void RollDiceCommand_PlayerRollsThreeTimes_CommandIsDisabled()
         {
             _randomizer.GetRandomNumber(1, 6).Returns(1);
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
 
-            rollDiceCommand.Execute(null);
-            rollDiceCommand.Execute(null);
-            rollDiceCommand.Execute(null);
-            var result = rollDiceCommand.CanExecute(null);
+            _rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
+            var result = _rollDiceCommand.CanExecute(null);
 
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void RollDiceCommand_CommandExecuted_UpdateTableReturnsAvailableCategoriesWithScores()
+        public void RollDiceCommand_CommandExecuted_ScoreTableReturnsAvailableCategoriesWithScores()
         {
             _randomizer.GetRandomNumber(1, 6).Returns(1);
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
 
-            rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
             var expected = new Dictionary<Category, int?>
             {
                     { Category.Aces, 5 },
@@ -88,26 +107,23 @@ namespace Yahtzee.ViewModels.UnitTests
                     { Category.Chance, 5 },
                     { Category.Yahtzee, 50 },
             };
-            var result = _vm.UpdateTable[0];
+            var result = _vm.ScoreTable[0];
 
             Assert.AreEqual(expected, result);
         }
 
         [Test]
-        public void RollDiceCommand_CommandExecutedAfterOneCategoryAlreadyPicked_UpdateTableReturnsAvailableCategoriesWithScores()
+        public void RollDiceCommand_CommandExecutedAfterOneCategoryAlreadyPicked_ScoreTableReturnsAvailableCategoriesCombinedWithPreviousScores()
         {
             var vm = new GameWindowViewModel(_randomizer, "A");
-
             _randomizer.GetRandomNumber(1, 6).Returns(1);
             ICommand rollDiceCommand = vm.RollDiceCommand;
             ICommand pickCategoryCommand = vm.PickCategoryCommand;
 
             rollDiceCommand.Execute(null);
             pickCategoryCommand.Execute("Aces");
-
             _randomizer.GetRandomNumber(1, 6).Returns(2);
             rollDiceCommand.Execute(null);
-
             var expected = new Dictionary<Category, int?>
             {
                     { Category.Aces, 5 },
@@ -124,77 +140,42 @@ namespace Yahtzee.ViewModels.UnitTests
                     { Category.Chance, 10 },
                     { Category.Yahtzee, 50 },
             };
-            var result = vm.UpdateTable[0];
+            var result = vm.ScoreTable[0];
 
             Assert.AreEqual(expected, result);
         }
 
         [Test]
-        public void RollResult_PropertyChanged_IsFired()
+        public void ScoreTable_CollectionChanged_IsFired()
         {
             bool hasFired = false;
-            _vm.PropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName == nameof(_vm.RollResult))
-                    hasFired = true;
-            };
-            _randomizer.GetRandomNumber(1, 6).Returns(1);
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-
-            rollDiceCommand.Execute(null);
-
-            Assert.IsTrue(hasFired);
-        }
-
-        [Test]
-        public void UpdateTable_CollectionChanged_IsFired()
-        {
-            bool hasFired = false;
-            _vm.UpdateTable.CollectionChanged += (sender, args) =>
+            _vm.ScoreTable.CollectionChanged += (sender, args) =>
             {
                 if (args.NewItems != args.OldItems)
-                {
                     hasFired = true;
-                }
             };
             _randomizer.GetRandomNumber(1, 6).Returns(1);
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
 
-            rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
 
             Assert.IsTrue(hasFired);
         }
 
         [Test]
-        public void UpdateTable_PropertyChanged_IsFired()
+        public void ScoreTable_PropertyChanged_IsFired()
         {
-            bool isFired = false;
+            bool hasFired = false;
             _vm.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName == nameof(_vm.UpdateTable))
-                {
-                    isFired = true;
-                }
+                if (args.PropertyName == nameof(_vm.ScoreTable))
+                    hasFired = true;
             };
             _randomizer.GetRandomNumber(1, 6).Returns(1);
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
 
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
 
-            Assert.IsTrue(isFired);
-        }
-
-        [Test]
-        public void GameWindowViewModel_WhenCreated_PlayersReturnsGivenPlayersNames()
-        {
-            var expected = new[] { "A", "B", "C", "D" };
-            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, expected);
-
-            var result = vm.Players;
-
-            Assert.AreEqual(expected, result);
+            Assert.IsTrue(hasFired);
         }
 
         [Test]
@@ -212,70 +193,60 @@ namespace Yahtzee.ViewModels.UnitTests
         {
             var result = _vm.ActivePlayer;
 
-            Assert.AreEqual("A's Turn:", result);
+            Assert.AreEqual("A", result);
         }
 
         [Test]
-        public void PickCategoryCommand_PlayerPickCategory_NextPlayerIsActive()
+        public void PickCategoryCommand_CommandExecuted_NextPlayerIsActive()
         {
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
-
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
             var result = _vm.ActivePlayer;
 
-            Assert.AreEqual("B's Turn:", result);
+            Assert.AreEqual("B", result);
         }
 
         [Test]
         public void ActivePlayer_PropertyChanged_IsFired()
         {
-            bool isFired = false;
+            bool hasFired = false;
             _vm.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == nameof(_vm.ActivePlayer))
-                    isFired = true;
+                    hasFired = true;
             };
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
 
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
 
-            Assert.IsTrue(isFired);
+            Assert.IsTrue(hasFired);
         }
 
         [TestCase("Aces", 1, 5)]
         [TestCase("Twos", 2, 10)]
-        public void PickCategoryCommand_PlayerPicksCategory_GameStateIsUpdated(
+        public void PickCategoryCommand_CommandExecuted_ScoreTableIsUpdated(
             string choosenCategory, int rollResult, int expectedScore)
         {
             _randomizer.GetRandomNumber(1, 6).Returns(rollResult);
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
 
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute(choosenCategory);
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute(choosenCategory);
             var parseCategory = (Category)Enum.Parse(typeof(Category), choosenCategory);
-            var result = _vm.UpdateTable[0][parseCategory];
-            var result2 = _vm.UpdateTable[0][Category.Sixes];
+            var result = _vm.ScoreTable[0][parseCategory];
+            var result2 = _vm.ScoreTable[0][Category.Sixes];
 
             Assert.AreEqual(expectedScore, result);
             Assert.AreEqual(null, result2);
         }
 
         [Test]
-        public void PickCategoryCommand_PlayerPicksCategoryAfterThreeRolls_RollDiceCommandCanBeAgainExecuted()
+        public void PickCategoryCommand_PlayerPicksCategoryAfterThreeRolls_RollDiceCommandCanBeExecuted()
         {
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
-
-            rollDiceCommand.Execute(null);
-            rollDiceCommand.Execute(null);
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
-            var result = rollDiceCommand.CanExecute(null);
+            _rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
+            var result = _rollDiceCommand.CanExecute(null);
 
             Assert.IsTrue(result);
         }
@@ -283,7 +254,7 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void PartialScore_InitialState_ReturnsNull()
         {
-            var result = _vm.PartialScore[0];
+            var result = _vm.PartialScore;
 
             Assert.IsNull(result);
         }
@@ -316,26 +287,25 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void IsPickCategoryCommandAvailable_InitialState_ReturnsFalse()
         {
-            var result = _vm.IsPickCategoryCommandAvailable[0][Category.Aces];
+            var result = _vm.IsPickCategoryCommandAvailable.All(x => x.All(y => y.Value == true));
 
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void IsPickCategoryCommandAvailable_RollDiceCommandExecutedByPlayerOne_ReturnsTrueForPlayerOne()
+        public void IsPickCategoryCommandAvailable_RollDiceCommandExecuted_ReturnsTrue()
         {
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
+            ICommand rollDiceCommand = vm.RollDiceCommand;
+
             rollDiceCommand.Execute(null);
+            var result = vm.IsPickCategoryCommandAvailable.All(x => x.All(y => y.Value == true));
 
-            var expected = true;
-
-            var result = _vm.IsPickCategoryCommandAvailable[0][Category.Aces];
-
-            Assert.AreEqual(expected, result);
+            Assert.IsTrue(result);
         }
 
         [Test]
-        public void IsPickCategoryCommandAvailable_BeforeRollDiceCommandExecutedByPlayerAfterOnePick_ReturnsTrueForRestCategories()
+        public void IsPickCategoryCommandAvailable_OneCategoryTaken_ReturnsTrueForOtherCategory()
         {
             GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
             ICommand rollDiceCommand = vm.RollDiceCommand;
@@ -344,13 +314,15 @@ namespace Yahtzee.ViewModels.UnitTests
             rollDiceCommand.Execute(null);
             pickCategoryCommand.Execute("Aces");
             rollDiceCommand.Execute(null);
+            var result1 = vm.IsPickCategoryCommandAvailable[0][Category.Aces];
+            var result2 = vm.IsPickCategoryCommandAvailable[0][Category.Twos];
 
-            Assert.AreEqual(false, vm.IsPickCategoryCommandAvailable[0][Category.Aces]);
-            Assert.AreEqual(true, vm.IsPickCategoryCommandAvailable[0][Category.Twos]);
+            Assert.IsFalse(result1);
+            Assert.IsTrue(result2);
         }
 
         [Test]
-        public void IsPickCategoryCommandAvailable_RollDiceCommandExecutedByPlayerAfterOnePick_ReturnsFalseForPlayerOne()
+        public void IsPickCategoryCommandAvailable_RollDiceCommandExecutedAfterOneCategoryTaken_ReturnsFalseForThatCategory()
         {
             GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A", "B");
             ICommand rollDiceCommand = vm.RollDiceCommand;
@@ -358,60 +330,68 @@ namespace Yahtzee.ViewModels.UnitTests
 
             rollDiceCommand.Execute(null);
             pickCategoryCommand.Execute("Aces");
+            var result = vm.IsPickCategoryCommandAvailable[0][Category.Aces];
 
-            Assert.AreEqual(false, vm.IsPickCategoryCommandAvailable[0][Category.Aces]);
+            Assert.IsFalse(result);
         }
 
         [Test]
-        public void IsPickCategoryCommandAvailable_PropertyChanged_IsFired()
+        public void IsPickCategoryCommandAvailable_RollDiceCommandExecuted_PropertyChangedIsFired()
         {
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
-            bool isFired = false;
+            bool hasFired = false;
             _vm.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == nameof(_vm.IsPickCategoryCommandAvailable))
-                {
-                    isFired = true;
-                }
+                    hasFired = true;
             };
 
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
+            _rollDiceCommand.Execute(null);
 
-            Assert.IsTrue(isFired);
+            Assert.IsTrue(hasFired);
+        }
+
+        [Test]
+        public void IsPickCategoryCommandAvailable_PickCategoryCommandExecuted_PropertyChangedIsFired()
+        {
+            bool hasFired = false;
+            _vm.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_vm.IsPickCategoryCommandAvailable))
+                    hasFired = true;
+            };
+
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
+
+            Assert.IsTrue(hasFired);
         }
 
         [Test]
         public void PartialScore_PropertyChanged_IsFired()
         {
-            bool isFired = false;
+            bool hasFired = false;
             _vm.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == nameof(_vm.PartialScore))
-                {
-                    isFired = true;
-                }
+                    hasFired = true;
             };
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
 
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
 
-            Assert.IsTrue(isFired);
+            Assert.IsTrue(hasFired);
         }
 
         [Test]
         public void BonusScore_InitialState_ReturnsNull()
         {
-            var result = _vm.BonusScore[0];
+            var result = _vm.BonusScore;
 
             Assert.IsNull(result);
         }
 
         [Test]
-        public void BonusScore_PlayerPicksAllSimpleCategoriesAndPartialScoreIsGreaterThan62_BonusScoreReturnsScore()
+        public void BonusScore_PlayerPicksAllSimpleCategoriesAndScoreIsGreaterThan62_ReturnsBonusScore()
         {
             GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
             ICommand rollDiceCommand = vm.RollDiceCommand;
@@ -443,33 +423,29 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void BonusScore_PropertyChanged_IsFired()
         {
-            bool isFired = false;
+            bool hasFired = false;
             _vm.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == nameof(_vm.BonusScore))
-                {
-                    isFired = true;
-                }
+                    hasFired = true;
             };
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
 
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
 
-            Assert.IsTrue(isFired);
+            Assert.IsTrue(hasFired);
         }
 
         [Test]
         public void TotalScore_InitialState_ReturnsNull()
         {
-            var result = _vm.TotalScore[0];
+            var result = _vm.TotalScore;
 
             Assert.IsNull(result);
         }
 
         [Test]
-        public void TotalScore_PlayerPicksAllCategories_TotalScoreReturnsScore()
+        public void TotalScore_AllCategoriesAreTaken_ReturnsTotalScore()
         {
             GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
             ICommand rollDiceCommand = vm.RollDiceCommand;
@@ -505,27 +481,22 @@ namespace Yahtzee.ViewModels.UnitTests
             var result = vm.TotalScore[0];
 
             Assert.AreEqual(20 + 50, result);
-
         }
 
         [Test]
         public void TotalScore_PropertyChanged_IsFired()
         {
-            bool isFired = false;
+            bool hasFired = false;
             _vm.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == nameof(_vm.TotalScore))
-                {
-                    isFired = true;
-                }
+                    hasFired = true;
             };
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
 
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
 
-            Assert.IsTrue(isFired);
+            Assert.IsTrue(hasFired);
         }
 
         [TestCase(0)]
@@ -533,7 +504,8 @@ namespace Yahtzee.ViewModels.UnitTests
         [TestCase(2)]
         [TestCase(3)]
         [TestCase(4)]
-        public void Dice_InitialResultValue_Returns0(int dieNumber)
+        public void Dice_InitialResultValue_Returns0(
+            int dieNumber)
         {
             var result = _vm.Dice[dieNumber].Result;
 
@@ -543,19 +515,16 @@ namespace Yahtzee.ViewModels.UnitTests
         [Test]
         public void Dice_PropertyChanged_IsFired()
         {
-            bool isFired = false;
+            bool hasFired = false;
             _vm.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == nameof(_vm.Dice))
-                {
-                    isFired = true;
-                }
+                    hasFired = true;
             };
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
 
-            rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
 
-            Assert.IsTrue(isFired);
+            Assert.IsTrue(hasFired);
         }
 
         [Test]
@@ -567,52 +536,40 @@ namespace Yahtzee.ViewModels.UnitTests
         }
 
         [Test]
-        public void ToggleDiceLock_GivenNumberForUnlockedDice_DiceIsLocked()
+        public void ToggleDiceLock_GivenDiceNumberToLock_DiceIsLocked()
         {
-            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-
-            rollDiceCommand.Execute(null);
-            toggleDiceLockCommand.Execute("0");
+            _rollDiceCommand.Execute(null);
+            _toggleDiceLockCommand.Execute("0");
             var result = _vm.Dice[0].IsUnlocked;
 
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void ToggleDiceLock_GivenNumberForLockedDice_DiceIsUnlocked()
+        public void ToggleDiceLock_GivenDiceNumberToUnlock_DiceIsUnlocked()
         {
-            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-
-            toggleDiceLockCommand.Execute("0");
-            toggleDiceLockCommand.Execute("0");
+            _toggleDiceLockCommand.Execute("0");
+            _toggleDiceLockCommand.Execute("0");
             var result = _vm.Dice[0].IsUnlocked;
 
             Assert.IsTrue(result);
         }
 
         [Test]
-        public void ToggleDiceLock_PlayerTriesToLockDiceBeforeFirstRollInHisTurn_DiceIsUnlocked()
+        public void ToggleDiceLock_PlayerTriesToLockDiceBeforeFirstRoll_DiceStaysUnlocked()
         {
-            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
-
-            toggleDiceLockCommand.Execute("0");
+            _toggleDiceLockCommand.Execute("0");
             var result = _vm.Dice[0].IsUnlocked;
 
             Assert.IsTrue(result);
         }
 
         [Test]
-        public void PickCategoryCommand_UnlocksAllDiceForNextRound()
+        public void PickCategoryCommand_CommandExecuted_UnlocksAllDiceForNextRound()
         {
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
-
-            rollDiceCommand.Execute(null);
-            toggleDiceLockCommand.Execute("0");
-            pickCategoryCommand.Execute("Aces");
+            _rollDiceCommand.Execute(null);
+            _toggleDiceLockCommand.Execute("0");
+            _pickCategoryCommand.Execute("Aces");
             var result = new[]
             {
                 _vm.Dice[0].IsUnlocked,
@@ -622,45 +579,42 @@ namespace Yahtzee.ViewModels.UnitTests
                 _vm.Dice[4].IsUnlocked
             };
 
-            var expected = new[] { true, true, true, true, true };
-
-            Assert.AreEqual(expected, result);
+            Assert.IsTrue(result[0]);
+            Assert.IsTrue(result[1]);
+            Assert.IsTrue(result[2]);
+            Assert.IsTrue(result[3]);
+            Assert.IsTrue(result[4]);
         }
 
         [Test]
-        public void Dice_PropertyChangedOnToggleDiceCommand_IsFired()
+        public void Dice_ToggleDiceCommandExecuted_PropertyChangedIsFired()
         {
-            bool isFired = false;
-            _vm.PropertyChanged += (sender, args) => {
-                if (args.PropertyName==nameof(_vm.Dice))
-                {
-                    isFired = true;
-                }
-            };
-            ICommand toggleDiceLockCommand = _vm.ToggleDiceLockCommand;
-
-            toggleDiceLockCommand.Execute("0");
-
-            Assert.IsTrue(isFired);
-        }
-
-        [Test]
-        public void Dice_PropertyChangedOnPickCategoryCommand_IsFired()
-        {
-            bool isFired = false;
-            _vm.PropertyChanged += (sender, args) => {
+            bool hasFired = false;
+            _vm.PropertyChanged += (sender, args) =>
+            {
                 if (args.PropertyName == nameof(_vm.Dice))
-                {
-                    isFired = true;
-                }
+                    hasFired = true;
             };
-            ICommand rollDiceCommand = _vm.RollDiceCommand;
-            ICommand pickCategoryCommand = _vm.PickCategoryCommand;
 
-            rollDiceCommand.Execute(null);
-            pickCategoryCommand.Execute("Aces");
+            _toggleDiceLockCommand.Execute("0");
 
-            Assert.IsTrue(isFired);
+            Assert.IsTrue(hasFired);
+        }
+
+        [Test]
+        public void Dice_PickCategoryCommandExecuted_PropertyChangedIsFired()
+        {
+            bool hasFired = false;
+            _vm.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_vm.Dice))
+                    hasFired = true;
+            };
+
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
+
+            Assert.IsTrue(hasFired);
         }
     }
 }

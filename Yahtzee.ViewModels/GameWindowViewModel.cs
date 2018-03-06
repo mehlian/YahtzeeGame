@@ -1,118 +1,54 @@
-﻿using System;
-using Prism.Commands;
+﻿using Prism.Commands;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Yahtzee.Core;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 
 namespace Yahtzee.ViewModels
 {
     public class GameWindowViewModel : INotifyPropertyChanged, IGameWindowRequestClose
     {
         private IRandomizer _randomizer;
-        private IDice[] _dice;
         private Game _game;
 
         public GameWindowViewModel(IRandomizer randomizer, params string[] players)
         {
-            _randomizer = randomizer;
-            _game = new Game(_randomizer);
-            _game.NewGame(players);
-
-            Players = new string[4];
-            Players = players;
-            ActivePlayer = Players[_game.ActivePlayer] + "'s Turn:";
-            PartialScore = new int?[4];
-            BonusScore = new int?[4];
-            TotalScore = new int?[4];
-
-            UpdateTable = new ObservableCollection<Dictionary<Category, int?>>(_game.GameStatus());
-
-            IsPickCategoryCommandAvailable = DisablePickCategoryCommand();
-
-            _dice = new[] {
-                new Dice(),
-                new Dice(),
-                new Dice(),
-                new Dice(),
-                new Dice()
-            };
+            ResetGame(randomizer, players);
 
             ToggleDiceLockCommand = new DelegateCommand<object>((x) =>
             {
-                if (_game.RollsLeft<3)
-                {
-                    var dieNumber = int.Parse((string)x);
-                    if (Dice[dieNumber].IsUnlocked)
-                    {
-                        Dice[dieNumber].Lock();
-                    }
-                    else
-                    {
-                        Dice[dieNumber].Unlock();
-                    } 
-                }
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Dice)));
+                if (IsPlayerAllowedToLockDice())
+                    ToggleDiceLock(x);
+
+                InvokeDiceProperty();
             });
 
             RollDiceCommand = new DelegateCommand(() =>
             {
-                _game.RollDice(_dice);
-                RollResult = _game.RollResult.Select(y => y.Result).ToArray();
-                Dice = _game.RollResult;
+                RollWithDiceSet();
+                ShowRollResultsOnUI();
 
-                UpdateTable[_game.ActivePlayer] = AvailableCategoriesProcessor();
+                if (IsLastRoll())
+                    IsPlayerAllowedToRollDice = false;
 
-                if (_game.RollsLeft == 0)
-                {
-                    RollsLeft = false;
-                }
-            }).ObservesCanExecute(() => RollsLeft);
+            }).ObservesCanExecute(() => IsPlayerAllowedToRollDice);
 
             PickCategoryCommand = new DelegateCommand<object>((x) =>
             {
-                var parseCategory = (Category)Enum.Parse(typeof(Category), x.ToString());
-                _game.AddPoints(parseCategory);
-
-                UpdateTable = new ObservableCollection<Dictionary<Category, int?>>(_game.GameStatus());
+                AddPointsForActivePlayer(x);
+                ScoreTable = UpdateScoreTable();
                 IsPickCategoryCommandAvailable = DisablePickCategoryCommand();
 
-                ActivePlayer = Players?[_game.ActivePlayer] + "'s Turn:";
-                RollsLeft = true;
-                PartialScore = _game.PartialScore;
-                BonusScore = _game.BonusScore;
-                TotalScore = _game.TotalScore;
+                ActivePlayer = Players[_game.ActivePlayer];
+                IsPlayerAllowedToRollDice = true;
+                CalculateNewScore();
                 UnlockAllDice();
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Dice)));
-            });
-        }
 
-        private ObservableCollection<Dictionary<Category, bool>> DisablePickCategoryCommand()
-        {
-            var reset = new ObservableCollection<Dictionary<Category, bool>>();
-            for (int i = 0; i < 4; i++)
-            {
-                reset.Add(new Dictionary<Category, bool>
-                {
-                    { Category.Aces, false },
-                    { Category.Twos, false },
-                    { Category.Threes, false },
-                    { Category.Fours, false },
-                    { Category.Fives, false },
-                    { Category.Sixes, false },
-                    { Category.ThreeOfKind, false },
-                    { Category.FourOfKind, false },
-                    { Category.FullHouse, false },
-                    { Category.SmallStraight, false },
-                    { Category.LargeStraight, false },
-                    { Category.Chance, false },
-                    { Category.Yahtzee, false },
-                });
-            }
-            return reset;
+                InvokeDiceProperty();
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -122,6 +58,7 @@ namespace Yahtzee.ViewModels
         public ICommand PickCategoryCommand { get; }
         public ICommand ToggleDiceLockCommand { get; }
 
+        private IDice[] _dice;
         public IDice[] Dice
         {
             get { return _dice; }
@@ -132,7 +69,8 @@ namespace Yahtzee.ViewModels
             }
         }
 
-        public string[] Players { get; }
+        public string[] Players { get; protected set; }
+
         private string _activePlayer;
         public string ActivePlayer
         {
@@ -144,35 +82,24 @@ namespace Yahtzee.ViewModels
             }
         }
 
-        private int[] _rollResult;
-        public int[] RollResult
+        private ObservableCollection<Dictionary<Category, int?>> _scoreTable;
+        public ObservableCollection<Dictionary<Category, int?>> ScoreTable
         {
-            get { return _rollResult; }
-            set
-            {
-                _rollResult = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private ObservableCollection<Dictionary<Category, int?>> _updateTable;
-        public ObservableCollection<Dictionary<Category, int?>> UpdateTable
-        {
-            get { return _updateTable; }
+            get { return _scoreTable; }
             protected set
             {
-                _updateTable = value;
+                _scoreTable = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool _rollsLeft = true;
-        private bool RollsLeft
+        private bool _isPlayerAllowedToRollDice;
+        private bool IsPlayerAllowedToRollDice
         {
-            get { return _rollsLeft; }
+            get { return _isPlayerAllowedToRollDice; }
             set
             {
-                _rollsLeft = value;
+                _isPlayerAllowedToRollDice = value;
                 OnPropertyChanged();
             }
         }
@@ -221,42 +148,128 @@ namespace Yahtzee.ViewModels
             }
         }
 
-
+        private void ResetGame(IRandomizer randomizer, string[] players)
+        {
+            _randomizer = randomizer;
+            _game = new Game(_randomizer);
+            _game.NewGame(players);
+            _dice = MakeNewDiceSet();
+            Players = players;
+            ActivePlayer = Players[_game.ActivePlayer];
+            ScoreTable = UpdateScoreTable();
+            IsPickCategoryCommandAvailable = DisablePickCategoryCommand();
+            IsPlayerAllowedToRollDice = true;
+        }
+        private void InvokeDiceProperty()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Dice)));
+        }
+        private void InvokeIsPickCategoryCommandAvailableProperty()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPickCategoryCommandAvailable)));
+        }
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        private Dictionary<Category, int?> AvailableCategoriesProcessor()
+        private IDice[] MakeNewDiceSet()
         {
-            Dictionary<Category, int?> processor = new Dictionary<Category, int?>();
-            Dictionary<Category, bool> isAvailable = new Dictionary<Category, bool>();
-
-            foreach (var category in _game.GetAvailableCategories())
-            {
-                if (category.Value == null)
-                {
-                    processor.Add(category.Key, _game.GameStatus()[_game.ActivePlayer][category.Key]);
-                    isAvailable.Add(category.Key, false);
-                }
-                else
-                {
-                    processor.Add(category.Key, category.Value);
-                    isAvailable.Add(category.Key, true);
-                }
-            }
-
-            IsPickCategoryCommandAvailable[_game.ActivePlayer] = isAvailable;
-            return processor;
+            return new[] {
+                new Dice(),
+                new Dice(),
+                new Dice(),
+                new Dice(),
+                new Dice()
+            };
         }
-
+        private void RollWithDiceSet()
+        {
+            _game.RollDice(_dice);
+        }
+        private void ToggleDiceLock(object x)
+        {
+            var dieNumber = int.Parse((string)x);
+            if (Dice[dieNumber].IsUnlocked)
+                Dice[dieNumber].Lock();
+            else
+                Dice[dieNumber].Unlock();
+        }
         private void UnlockAllDice()
         {
             foreach (var dice in Dice)
             {
                 dice.Unlock();
             }
+        }
+        private bool IsLastRoll()
+        {
+            return _game.RollsLeft == 0;
+        }
+        private bool IsPlayerAllowedToLockDice()
+        {
+            return _game.RollsLeft < 3;
+        }
+        private void ShowRollResultsOnUI()
+        {
+            Dice = _game.RollResult;
+            ScoreTable[_game.ActivePlayer] = AvailableCategoriesProcessor();
+        }
+        private Dictionary<Category, int?> AvailableCategoriesProcessor()
+        {
+            var processor = new Dictionary<Category, int?>();
+
+            foreach (var category in _game.GetAvailableCategories())
+            {
+                if (category.Value == null)
+                    processor.Add(category.Key, _game.GameStatus()[_game.ActivePlayer][category.Key]);
+                else
+                {
+                    processor.Add(category.Key, category.Value);
+                    IsPickCategoryCommandAvailable[_game.ActivePlayer][category.Key] = true;
+                }
+            }
+            InvokeIsPickCategoryCommandAvailableProperty();
+            return processor;
+        }
+        private ObservableCollection<Dictionary<Category, bool>> DisablePickCategoryCommand()
+        {
+            var reset = new ObservableCollection<Dictionary<Category, bool>>();
+            for (int i = 0; i < Players.Length; i++)
+            {
+                reset.Add(new Dictionary<Category, bool>
+                {
+                    { Category.Aces, false },
+                    { Category.Twos, false },
+                    { Category.Threes, false },
+                    { Category.Fours, false },
+                    { Category.Fives, false },
+                    { Category.Sixes, false },
+                    { Category.ThreeOfKind, false },
+                    { Category.FourOfKind, false },
+                    { Category.FullHouse, false },
+                    { Category.SmallStraight, false },
+                    { Category.LargeStraight, false },
+                    { Category.Chance, false },
+                    { Category.Yahtzee, false },
+                });
+            }
+            return reset;
+        }
+        private void AddPointsForActivePlayer(object x)
+        {
+            var parseCategory = (Category)Enum.Parse(typeof(Category), (string)x);
+            _game.AddPoints(parseCategory);
+        }
+        private ObservableCollection<Dictionary<Category, int?>> UpdateScoreTable()
+        {
+            return new ObservableCollection<Dictionary<Category, int?>>(_game.GameStatus());
+        }
+        private void CalculateNewScore()
+        {
+            PartialScore = _game.PartialScore;
+            BonusScore = _game.BonusScore;
+            TotalScore = _game.TotalScore;
         }
     }
 }
