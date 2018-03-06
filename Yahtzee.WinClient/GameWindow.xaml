@@ -81,7 +81,7 @@
                     </TextBlock>
                 </Grid>
             </Border>
-            <TextBlock Margin="0 10" Text="Select available category on the table to score."/>
+            <TextBlock Margin="0 10" Text="{Binding MessageInfo}"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1">

@@ -616,5 +616,263 @@ namespace Yahtzee.ViewModels.UnitTests
 
             Assert.IsTrue(hasFired);
         }
+
+        [Test]
+        public void MessageInfo_InitialState_ReturnsWelcomeText()
+        {
+            var result = _vm.MessageInfo;
+            var expected = "Press \"Roll Dice\" button to begin!";
+
+            StringAssert.AreEqualIgnoringCase(expected, result);
+        }
+
+        [Test]
+        public void MessageInfo_RollDiceExecuted_ReturnsInfo()
+        {
+            _rollDiceCommand.Execute(null);
+            var result = _vm.MessageInfo;
+            var expected = "Available options:\n" +
+                "Pick dice you want to keep and roll the remaining ones.\n" +
+                "Pick available category on table to gain points.\n" +
+                "Rolls left: 2.";
+
+            StringAssert.AreEqualIgnoringCase(expected, result);
+        }
+
+        [Test]
+        public void MessageInfo_RollDiceExecuted2Times_ReturnsInfo()
+        {
+            _rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
+            var result = _vm.MessageInfo;
+            var expected = "Available options:\n" +
+                "Pick dice you want to keep and roll the remaining ones.\n" +
+                "Pick available category on table to gain points.\n" +
+                "Rolls left: 1.";
+
+            StringAssert.AreEqualIgnoringCase(expected, result);
+        }
+
+        [Test]
+        public void MessageInfo_RollDiceExecutedAndNoMoreRollsLeft_ReturnsInfo()
+        {
+            _rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
+            _rollDiceCommand.Execute(null);
+            var result = _vm.MessageInfo;
+            var expected = "Available options:\n" +
+                "Pick available category on table to gain points.";
+
+            StringAssert.AreEqualIgnoringCase(expected, result);
+        }
+
+        [Test]
+        public void MessageInfo_RollDiceCommandExecuted_PropertyChangedIsFired()
+        {
+            var hasFired = false;
+            _vm.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_vm.MessageInfo))
+                    hasFired = true;
+            };
+
+            _rollDiceCommand.Execute(null);
+
+            Assert.IsTrue(hasFired);
+        }
+
+        [Test]
+        public void MessageInfo_PickCategoryCommandExecuted_ReturnsInfo()
+        {
+            _rollDiceCommand.Execute(null);
+            _pickCategoryCommand.Execute("Aces");
+            var result = _vm.MessageInfo;
+            var expected = "Press \"Roll Dice\" button to begin!";
+
+            StringAssert.AreEqualIgnoringCase(expected, result);
+        }
+
+        [Test]
+        public void RollDiceCommand_GameIsOver_CommandIsDisabled()
+        {
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
+            ICommand rollDiceCommand = vm.RollDiceCommand;
+            ICommand pickCategoryCommand = vm.PickCategoryCommand;
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Twos");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Threes");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fours");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fives");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Sixes");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("ThreeOfKind");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FourOfKind");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FullHouse");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("SmallStraight");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("LargeStraight");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Chance");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Yahtzee");
+
+            var result = rollDiceCommand.CanExecute(null);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void MessageInfo_GameIsOverForOnePlayer_ReturnsWinner()
+        {
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A");
+            ICommand rollDiceCommand = vm.RollDiceCommand;
+            ICommand pickCategoryCommand = vm.PickCategoryCommand;
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Twos");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Threes");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fours");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fives");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Sixes");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("ThreeOfKind");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FourOfKind");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FullHouse");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("SmallStraight");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("LargeStraight");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Chance");
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Yahtzee");
+            var expected = "Player A is the winner!";
+            var result = vm.MessageInfo;
+
+            StringAssert.AreEqualIgnoringCase(expected, result);
+        }
+
+        [Test]
+        public void MessageInfo_GameIsOverForTwoPlayers_ReturnsWinner()
+        {
+            GameWindowViewModel vm = new GameWindowViewModel(_randomizer, "A", "B");
+            ICommand rollDiceCommand = vm.RollDiceCommand;
+            ICommand pickCategoryCommand = vm.PickCategoryCommand;
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Aces");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Twos");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Twos");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Threes");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Threes");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fours");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fours");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fives");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Fives");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Sixes");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Sixes");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("ThreeOfKind");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("ThreeOfKind");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FourOfKind");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FourOfKind");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FullHouse");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("FullHouse");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("SmallStraight");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("SmallStraight");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("LargeStraight");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("LargeStraight");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Chance");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Chance");
+
+            _randomizer.GetRandomNumber(1, 6).Returns(1);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Yahtzee");
+            _randomizer.GetRandomNumber(1, 6).Returns(2);
+            rollDiceCommand.Execute(null);
+            pickCategoryCommand.Execute("Yahtzee");
+            var expected = "Player B is the winner!";
+            var result = vm.MessageInfo;
+
+            StringAssert.AreEqualIgnoringCase(expected, result);
+        }
     }
 }

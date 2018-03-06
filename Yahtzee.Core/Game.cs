@@ -17,6 +17,7 @@ namespace Yahtzee.Core
         public int?[] PartialScore { get; protected set; }
         public int?[] BonusScore { get; protected set; }
         public int?[] TotalScore { get; protected set; }
+        public string GameWinner { get; protected set; }
 
         public Game(IRandomizer randomizer)
         {
@@ -101,27 +102,6 @@ namespace Yahtzee.Core
             return scores;
         }
 
-        //public Dictionary<Category, int>[] GameStatus()
-        //{
-        //    Dictionary<Category, int>[] dictionary = new Dictionary<Category, int>[4]
-        //    {
-        //        new Dictionary<Category, int>(),
-        //        new Dictionary<Category, int>(),
-        //        new Dictionary<Category, int>(),
-        //        new Dictionary<Category, int>()
-        //    };
-
-        //    for (int i = 0; i < _gameStatus.Length; i++)
-        //    {
-        //        foreach (var item in _gameStatus[i])
-        //        {
-        //            int ee = item.Value.HasValue ? (int)item.Value : 0;
-        //            dictionary[i].Add(item.Key,ee );
-        //        }
-        //    }
-        //    return dictionary;
-        //}
-
         public Dictionary<Category, int?>[] GameStatus()
         {
             return _gameStatus;
@@ -149,6 +129,22 @@ namespace Yahtzee.Core
             PartialScore[ActivePlayer] = _yahtzeeScorer.CalculatePartialScore(_gameStatus[ActivePlayer]);
             BonusScore[ActivePlayer] = _yahtzeeScorer.CalculateBonusScore(_gameStatus[ActivePlayer]);
             TotalScore[ActivePlayer] = _yahtzeeScorer.CalculateTotalScore(_gameStatus[ActivePlayer]);
+            GetWinner();
+        }
+
+        private void GetWinner()
+        {
+            if (TotalScore.All(x => x.HasValue))
+            {
+                for (int i = 0; i < Players.Length; i++)
+                {
+                    if (TotalScore[i].Value == TotalScore.Max())
+                    {
+                        GameWinner = Players[i];
+                        break;
+                    }
+                }
+            }
         }
     }
 }

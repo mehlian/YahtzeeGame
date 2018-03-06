@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Yahtzee.Core;
@@ -34,6 +35,7 @@ namespace Yahtzee.ViewModels
                 if (IsLastRoll())
                     IsPlayerAllowedToRollDice = false;
 
+                UpdateMessageInfo();
             }).ObservesCanExecute(() => IsPlayerAllowedToRollDice);
 
             PickCategoryCommand = new DelegateCommand<object>((x) =>
@@ -43,9 +45,19 @@ namespace Yahtzee.ViewModels
                 IsPickCategoryCommandAvailable = DisablePickCategoryCommand();
 
                 ActivePlayer = Players[_game.ActivePlayer];
-                IsPlayerAllowedToRollDice = true;
                 CalculateNewScore();
                 UnlockAllDice();
+
+                if (string.IsNullOrEmpty(_game.GameWinner))
+                {
+                    IsPlayerAllowedToRollDice = true;
+                    MessageInfo = "Press \"Roll Dice\" button to begin!";
+                }
+                else
+                {
+                    IsPlayerAllowedToRollDice = false;
+                    MessageInfo = $"Player {_game.GameWinner} is the winner!";
+                }
 
                 InvokeDiceProperty();
             });
@@ -137,6 +149,17 @@ namespace Yahtzee.ViewModels
             }
         }
 
+        private string _messageInfo;
+        public string MessageInfo
+        {
+            get { return _messageInfo; }
+            protected set
+            {
+                _messageInfo = value;
+                OnPropertyChanged();
+            }
+        }
+
         private ObservableCollection<Dictionary<Category, bool>> isPickCategoryCommandAvailable;
         public ObservableCollection<Dictionary<Category, bool>> IsPickCategoryCommandAvailable
         {
@@ -159,6 +182,7 @@ namespace Yahtzee.ViewModels
             ScoreTable = UpdateScoreTable();
             IsPickCategoryCommandAvailable = DisablePickCategoryCommand();
             IsPlayerAllowedToRollDice = true;
+            MessageInfo = "Press \"Roll Dice\" button to begin!";
         }
         private void InvokeDiceProperty()
         {
@@ -270,6 +294,17 @@ namespace Yahtzee.ViewModels
             PartialScore = _game.PartialScore;
             BonusScore = _game.BonusScore;
             TotalScore = _game.TotalScore;
+        }
+        private void UpdateMessageInfo()
+        {
+            if (_game.RollsLeft == 0)
+                MessageInfo = "Available options:\n" +
+                              "Pick available category on table to gain points.";
+            else
+                MessageInfo = "Available options:\n" +
+                "Pick dice you want to keep and roll the remaining ones.\n" +
+                "Pick available category on table to gain points.\n" +
+                $"Rolls left: {_game.RollsLeft}."; ;
         }
     }
 }
