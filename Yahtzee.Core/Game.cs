@@ -28,7 +28,7 @@ namespace Yahtzee.Core
         public void NewGame(params string[] playerName)
         {
             if (playerName.Length > 4)
-                throw new ArgumentException("Max number of players is 4.");
+                throw new ArgumentException("Max number of supported players is 4.");
 
             RestartGame(playerName);
         }
@@ -38,7 +38,7 @@ namespace Yahtzee.Core
                 throw new InvalidOperationException($"Player {Players[ActivePlayer]} has exceeded the maximum number of dice rolls in this turn.");
 
             if (dice.Length != 5)
-                throw new ArgumentException("Only set of five dice is supported.");
+                throw new RankException("Only rank of 5 dices is supported.");
 
             foreach (var die in dice)
             {
