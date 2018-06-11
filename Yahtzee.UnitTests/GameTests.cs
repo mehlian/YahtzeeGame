@@ -176,6 +176,7 @@ namespace Yahtzee.UnitTests
         [TestCase(1, 1, 2, 2, 2, Category.FullHouse, 25)]
         [TestCase(1, 1, 2, 2, 3, Category.FullHouse, 0)]
         [TestCase(2, 3, 2, 2, 2, Category.FullHouse, 0)]
+        [TestCase(2, 6, 4, 3, 1, Category.SmallStraight, 30)]
         [TestCase(1, 2, 3, 4, 1, Category.SmallStraight, 30)]
         [TestCase(2, 3, 4, 5, 2, Category.SmallStraight, 30)]
         [TestCase(2, 3, 4, 6, 2, Category.SmallStraight, 0)]

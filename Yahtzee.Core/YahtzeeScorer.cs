@@ -93,17 +93,17 @@ namespace Yahtzee.Core
         private int CalculateScoreForSmallStraight()
         {
             var master = new int[] { 1, 2, 3, 4, 5, 6 };
-            var sub = _rollResult.Select(x => x).Distinct().OrderBy(x => x).ToArray();
-            return sub.Length > 3 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
-                        .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 30 : 0;
+            var sub = _rollResult.Distinct().OrderBy(x => x);
+            return sub.Count() > 3 && master.SkipWhile((x, i) => !master.Skip(i).Take(4).SequenceEqual(sub.Take(4)))
+                        .Take(4).DefaultIfEmpty().SequenceEqual(sub.Take(4)) ? 30 : 0;
         }
 
         private int CalculateScoreForLargeStraight()
         {
             var master = new int[] { 1, 2, 3, 4, 5, 6 };
-            var sub = _rollResult.Select(x => x).Distinct().OrderBy(x => x).ToArray();
-            return sub.Length == 5 && master.SkipWhile((x, i) => !master.Skip(i).Take(sub.Length).SequenceEqual(sub))
-                        .Take(sub.Length).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
+            var sub = _rollResult.Distinct().OrderBy(x => x);
+            return sub.Count() == 5 && master.SkipWhile((x, i) => !master.Skip(i).Take(5).SequenceEqual(sub))
+                        .Take(5).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
         }
 
         private int CalculateScoreForChance()
