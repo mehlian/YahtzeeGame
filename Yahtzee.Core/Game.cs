@@ -51,18 +51,47 @@ namespace Yahtzee.Core
         public Dictionary<Category, int?> GetAvailableCategories()
         {
             var scores = new Dictionary<Category, int?>();
+            var scorer = ScorerFactory.GetScorer(_hasYahtzee[ActivePlayer]);
+
             foreach (Category category in Enum.GetValues(typeof(Category)))
             {
                 if (_gameStatus[ActivePlayer][category] == null)
                 {
                     int[] rollResult = RollResult.Select(x => x.Result).ToArray();
-                    var scorer = ScorerFactory.GetScorer(_hasYahtzee[ActivePlayer]);
+                    var scorerResult = scorer.CalculateCategoryScore(category, rollResult);
 
-                    scores.Add(category, scorer.CalculateCategoryScore(category, rollResult));
+                    scores.Add(category, scorerResult);
                 }
                 else
                 {
                     scores.Add(category, null);
+                }
+            }
+
+            if (_hasYahtzee[ActivePlayer] && scores.Take(6).Any(x => x.Value > 0))
+            {
+                Category? yahtzeeCategory = null;
+                var results = scores.Take(6);
+                foreach (var item in results)
+                {
+                    if (item.Value != null && item.Value > 0)
+                        yahtzeeCategory = item.Key;
+                }
+
+                scores.Clear();
+                foreach (Category category in Enum.GetValues(typeof(Category)))
+                {
+                    if (yahtzeeCategory !=null && category == yahtzeeCategory)
+                    {
+                        int[] rollResult = RollResult.Select(x => x.Result).ToArray();
+                        var scorerResult = scorer.CalculateCategoryScore(category, rollResult);
+
+                        scores.Add(category, scorerResult);
+                    }
+                    else
+                    {
+                        scores.Add(category, null);
+                    }
                 }
             }
 
@@ -87,7 +116,7 @@ namespace Yahtzee.Core
             {
                 _hasYahtzee[ActivePlayer] = true;
             }
-            else if(_hasYahtzee[ActivePlayer] && new RegularScorer().CalculateCategoryScore(Category.Yahtzee, rollResult) == 50)
+            else if (_hasYahtzee[ActivePlayer] && new RegularScorer().CalculateCategoryScore(Category.Yahtzee, rollResult) == 50)
             {
                 _gameStatus[ActivePlayer][Category.Yahtzee] += 100;
             }

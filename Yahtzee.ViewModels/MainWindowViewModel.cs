@@ -120,6 +120,7 @@ namespace Yahtzee.ViewModels
             var players = Players.ToArray();
             SetDefaultValues();
             IRandomizer randomizer = new Randomizer();
+            //IRandomizer randomizer = new FakeRandomizer();
             var viewModel = new GameWindowViewModel(randomizer, players);
             bool? result = _gameWindowService.ShowDialog(viewModel);
 

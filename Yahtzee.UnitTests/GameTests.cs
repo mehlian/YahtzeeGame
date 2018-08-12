@@ -1049,6 +1049,71 @@ namespace Yahtzee.UnitTests
         }
 
         [TestCase]
+        public void GetAvailableCategories_RolledYahtzeeTwice_ReturnsCalculatedScoreOnlyForSimpleCategory()
+        {
+            _randomizer.GetRandomNumber(MIN_VALUE, MAX_VALUE).Returns(1);
+            var dices = MakeNewDiceSet();
+            _game.NewGame("A");
+            _game.RollDice(dices);
+            _game.AddPoints(Category.Yahtzee);
+            _game.RollDice(dices);
+
+            var expected = new Dictionary<Category, int?>()
+            {
+                { Category.Aces, 5 },
+                { Category.Twos, null },
+                { Category.Threes, null },
+                { Category.Fours, null },
+                { Category.Fives, null },
+                { Category.Sixes, null },
+                { Category.ThreeOfKind, null },
+                { Category.FourOfKind, null },
+                { Category.FullHouse, null },
+                { Category.SmallStraight, null },
+                { Category.LargeStraight, null },
+                { Category.Chance, null },
+                { Category.Yahtzee, null },
+            };
+            var result = _game.GetAvailableCategories();
+
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        [TestCase]
+        public void GetAvailableCategories_RolledYahtzeeTwicePickedSimleCategoryAndRolledDifferentYahtzee_ReturnsCalculatedScoreOnlyForSimpleCategory()
+        {
+            _randomizer.GetRandomNumber(MIN_VALUE, MAX_VALUE).Returns(1);
+            var dices = MakeNewDiceSet();
+            _game.NewGame("A");
+            _game.RollDice(dices);
+            _game.AddPoints(Category.Yahtzee);
+            _game.RollDice(dices);
+            _game.AddPoints(Category.Aces);
+            _randomizer.GetRandomNumber(MIN_VALUE, MAX_VALUE).Returns(2);
+            _game.RollDice(dices);
+
+            var expected = new Dictionary<Category, int?>()
+            {
+                { Category.Aces, null },
+                { Category.Twos, 10 },
+                { Category.Threes, null },
+                { Category.Fours, null },
+                { Category.Fives, null },
+                { Category.Sixes, null },
+                { Category.ThreeOfKind, null },
+                { Category.FourOfKind, null },
+                { Category.FullHouse, null },
+                { Category.SmallStraight, null },
+                { Category.LargeStraight, null },
+                { Category.Chance, null },
+                { Category.Yahtzee, null },
+            };
+            var result = _game.GetAvailableCategories();
+
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        [TestCase]
         public void GetAvailableCategories_OneCategoryPickedThenRolledYahtzeeTwice_ReturnsCalculatedScoreForRemainingCategories()
         {
             _randomizer.GetRandomNumber(MIN_VALUE, MAX_VALUE).Returns(1, 2, 3, 4, 5);
@@ -1083,7 +1148,7 @@ namespace Yahtzee.UnitTests
         }
 
         [TestCase]
-        public void GameStatus_PlayerGets2ndYahtzee_YahtzeeScoreIsIncreasedBy100()
+        public void GameStatus_PlayerGets2ndYahtzeeAfterSimpleCategoryTaken_YahtzeeScoreIsIncreasedBy100()
         {
             _randomizer.GetRandomNumber(MIN_VALUE, MAX_VALUE).Returns(1, 2, 3, 4, 5);
             var dices = MakeNewDiceSet();

@@ -72,7 +72,7 @@ namespace Yahtzee.Core
 
         private int CalculateScoreForGivenSideNumber(int side)
         {
-            return 0;
+            return _rollResult.Where(x => x == side).Sum();
         }
 
         private int CalculateScoreForThreeOfKind()
