@@ -8,12 +8,11 @@ namespace Yahtzee.Core
     {
         private IRandomizer _randomizer;
         private Dictionary<Category, int?>[] _gameStatus;
-        private YahtzeeScorer _yahtzeeScorer;
+        private bool[] _hasYahtzee;
 
         public Game(IRandomizer randomizer)
         {
             _randomizer = randomizer;
-            _yahtzeeScorer = new YahtzeeScorer();
         }
 
         public string[] Players { get; protected set; }
@@ -28,7 +27,7 @@ namespace Yahtzee.Core
         public void NewGame(params string[] playerName)
         {
             if (playerName.Length > 4)
-                throw new ArgumentException("Max number of players is 4.");
+                throw new ArgumentException("Max number of supported players is 4.");
 
             RestartGame(playerName);
         }
@@ -38,7 +37,7 @@ namespace Yahtzee.Core
                 throw new InvalidOperationException($"Player {Players[ActivePlayer]} has exceeded the maximum number of dice rolls in this turn.");
 
             if (dice.Length != 5)
-                throw new ArgumentException("Only set of five dice is supported.");
+                throw new RankException("Only rank of 5 dices is supported.");
 
             foreach (var die in dice)
             {
@@ -52,16 +51,47 @@ namespace Yahtzee.Core
         public Dictionary<Category, int?> GetAvailableCategories()
         {
             var scores = new Dictionary<Category, int?>();
+            var scorer = ScorerFactory.GetScorer(_hasYahtzee[ActivePlayer]);
+
             foreach (Category category in Enum.GetValues(typeof(Category)))
             {
                 if (_gameStatus[ActivePlayer][category] == null)
                 {
                     int[] rollResult = RollResult.Select(x => x.Result).ToArray();
-                    scores.Add(category, _yahtzeeScorer.CalculateCategoryScore(category, rollResult));
+                    var scorerResult = scorer.CalculateCategoryScore(category, rollResult);
+
+                    scores.Add(category, scorerResult);
                 }
                 else
                 {
                     scores.Add(category, null);
+                }
+            }
+
+            if (_hasYahtzee[ActivePlayer] && scores.Take(6).Any(x => x.Value > 0))
+            {
+                Category? yahtzeeCategory = null;
+                var results = scores.Take(6);
+                foreach (var item in results)
+                {
+                    if (item.Value != null && item.Value > 0)
+                        yahtzeeCategory = item.Key;
+                }
+
+                scores.Clear();
+                foreach (Category category in Enum.GetValues(typeof(Category)))
+                {
+                    if (yahtzeeCategory !=null && category == yahtzeeCategory)
+                    {
+                        int[] rollResult = RollResult.Select(x => x.Result).ToArray();
+                        var scorerResult = scorer.CalculateCategoryScore(category, rollResult);
+
+                        scores.Add(category, scorerResult);
+                    }
+                    else
+                    {
+                        scores.Add(category, null);
+                    }
                 }
             }
 
@@ -77,9 +107,19 @@ namespace Yahtzee.Core
                 throw new ArgumentException($"Category {category} already taken! Choose other category.");
 
             int[] rollResult = RollResult.Select(x => x.Result).ToArray();
-            _gameStatus[ActivePlayer][category] = _yahtzeeScorer.CalculateCategoryScore(category, rollResult);
+            var scorer = ScorerFactory.GetScorer(_hasYahtzee[ActivePlayer]);
+            _gameStatus[ActivePlayer][category] = scorer.CalculateCategoryScore(category, rollResult);
 
             CalculateScore();
+
+            if (!_hasYahtzee[ActivePlayer] && _gameStatus[ActivePlayer][Category.Yahtzee] == 50)
+            {
+                _hasYahtzee[ActivePlayer] = true;
+            }
+            else if (_hasYahtzee[ActivePlayer] && new RegularScorer().CalculateCategoryScore(Category.Yahtzee, rollResult) == 50)
+            {
+                _gameStatus[ActivePlayer][Category.Yahtzee] += 100;
+            }
 
             ActivePlayer++;
             RollsLeft = 3;
@@ -97,6 +137,7 @@ namespace Yahtzee.Core
             BonusScore = new int?[numberOfPlayers];
             PartialScore = new int?[numberOfPlayers];
             TotalScore = new int?[numberOfPlayers];
+            _hasYahtzee = new bool[numberOfPlayers];
 
             _gameStatus = new Dictionary<Category, int?>[numberOfPlayers];
             for (int i = 0; i < numberOfPlayers; i++)
@@ -121,9 +162,10 @@ namespace Yahtzee.Core
         }
         private void CalculateScore()
         {
-            PartialScore[ActivePlayer] = _yahtzeeScorer.CalculatePartialScore(_gameStatus[ActivePlayer]);
-            BonusScore[ActivePlayer] = _yahtzeeScorer.CalculateBonusScore(_gameStatus[ActivePlayer]);
-            TotalScore[ActivePlayer] = _yahtzeeScorer.CalculateTotalScore(_gameStatus[ActivePlayer]);
+            var scorer = ScorerFactory.GetScorer(_hasYahtzee[ActivePlayer]);
+            PartialScore[ActivePlayer] = scorer.CalculatePartialScore(_gameStatus[ActivePlayer]);
+            BonusScore[ActivePlayer] = scorer.CalculateBonusScore(_gameStatus[ActivePlayer]);
+            TotalScore[ActivePlayer] = scorer.CalculateTotalScore(_gameStatus[ActivePlayer]);
             GetWinner();
         }
         private void GetWinner()

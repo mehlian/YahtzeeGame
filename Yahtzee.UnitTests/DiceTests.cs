@@ -6,61 +6,67 @@ namespace Yahtzee.UnitTests
     [TestFixture]
     public class DiceTests
     {
-        private Dice dice;
+        private Dice _dice;
 
         [SetUp]
         public void Setup()
         {
-            dice = new Dice();
+            _dice = new Dice();
         }
 
-        [Test]
+        [TestCase]
         public void Dice_CanBeCreated()
         {
             Dice dice = new Dice();
         }
 
-        [Test]
-        public void Dice_SideNumber_Returns6()
+        [TestCase]
+        public void SideNumber_InitialState_ReturnsDefaultValue()
         {
-            var result = dice.SideNumber;
+            var expectedDefaultValue = 6;
 
-            Assert.AreEqual(6, result);
+            var result = _dice.SideNumber;
+
+            Assert.AreEqual(expectedDefaultValue, result);
         }
 
-        [Test]
+        [TestCase]
         public void IsUnlocked_InitialState_ReturnsTrue()
         {
-            bool result = dice.IsUnlocked;
+            var result = _dice.IsUnlocked;
 
             Assert.IsTrue(result);
         }
 
-        [Test]
-        public void Lock_ChangeDiceStateToLocked_IsUnlockedReturnsFalse()
+        [TestCase]
+        public void Lock_DiceStateChangedToLocked_IsUnlockedReturnsFalse()
         {
-            dice.Lock();
-            bool result = dice.IsUnlocked;
+            _dice.Lock();
 
-            Assert.AreEqual(false, result);
+            var result = _dice.IsUnlocked;
+
+            Assert.IsFalse(result);
         }
 
-        [Test]
-        public void Unlock_ChangeDiceStateToUnlocked_IsUnlockedReturnsTrue()
+        [TestCase]
+        public void Unlock_DiceStateChangedToUnlocked_IsUnlockedReturnsTrue()
         {
-            dice.Lock();
-            dice.Unlock();
-            bool result = dice.IsUnlocked;
+            _dice.Lock();
+            _dice.Unlock();
 
-            Assert.AreEqual(true, result);
+            var result = _dice.IsUnlocked;
+
+            Assert.IsTrue(result);
         }
 
-        [Test]
-        public void Result_GivenNumberAsRollResult_NumberIsSaved()
+        [TestCase]
+        public void Result_GivenNumberAsRollResult_NumberIsStored()
         {
-            dice.Result = 1;
+            _dice.Result = 1;
 
-            Assert.AreEqual(1, dice.Result);
+            var result = _dice.Result;
+
+            Assert.AreEqual(1, result);
         }
     }
 }

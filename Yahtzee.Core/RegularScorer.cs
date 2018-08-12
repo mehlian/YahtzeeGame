@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Yahtzee.Core
 {
-    internal class YahtzeeScorer : Scorer
+    internal class RegularScorer :Scorer
     {
         private int[] _rollResult;
 
@@ -77,27 +77,33 @@ namespace Yahtzee.Core
 
         private int CalculateScoreForThreeOfKind()
         {
-            return _rollResult.Sum();
+            return _rollResult.GroupBy(x => x).Any(x => x.Count() >= 3) ? _rollResult.Sum() : 0;
         }
 
         private int CalculateScoreForFourOfKind()
         {
-            return _rollResult.Sum();
+            return _rollResult.GroupBy(x => x).Any(x => x.Count() >= 4) ? _rollResult.Sum() : 0;
         }
 
         private int CalculateScoreForFullHouse()
         {
-            return 25;
+            return _rollResult.GroupBy(x => x).Count() == 2 && _rollResult.GroupBy(x => x).Any(x => x.Count() == 2) ? 25 : 0;
         }
 
         private int CalculateScoreForSmallStraight()
         {
-            return 30;
+            var master = new int[] { 1, 2, 3, 4, 5, 6 };
+            var sub = _rollResult.Distinct().OrderBy(x => x);
+            return sub.Count() > 3 && master.SkipWhile((x, i) => !master.Skip(i).Take(4).SequenceEqual(sub.Take(4)))
+                        .Take(4).DefaultIfEmpty().SequenceEqual(sub.Take(4)) ? 30 : 0;
         }
 
         private int CalculateScoreForLargeStraight()
         {
-            return 40;
+            var master = new int[] { 1, 2, 3, 4, 5, 6 };
+            var sub = _rollResult.Distinct().OrderBy(x => x);
+            return sub.Count() == 5 && master.SkipWhile((x, i) => !master.Skip(i).Take(5).SequenceEqual(sub))
+                        .Take(5).DefaultIfEmpty().SequenceEqual(sub) ? 40 : 0;
         }
 
         private int CalculateScoreForChance()
@@ -107,7 +113,7 @@ namespace Yahtzee.Core
 
         private int CalculateScoreForYahtzee()
         {
-            return 50;
+            return _rollResult.GroupBy(x => x).Count() == 1 ? 50 : 0;
         }
     }
 }
